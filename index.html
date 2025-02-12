@@ -10,14 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Particles.js (optional) -->
+  <!-- Optional Particles.js for subtle background animation -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    /* Global Styles & Pastel/Penn State Color Palette */
+    /* Global Styles & Color Palette */
     body {
       font-family: 'Open Sans', sans-serif;
       margin: 0;
-      background-color: #f4f8fb;
+      background-color: #f4f8fb; /* light pastel blue */
       scroll-behavior: smooth;
     }
     a { color: #0d6efd; text-decoration: none; }
@@ -48,6 +48,7 @@
       background-color: #212529;
       color: #fff;
       font-size: 0.9rem;
+      padding: 5px 0;
     }
     .top-bar a { color: #fff; }
     .top-bar .container {
@@ -67,22 +68,19 @@
       margin-left: 5px;
     }
     
-    /* Navbar with PSU Logo & Penn State Blue */
+    /* Navbar with PSU Logo and Penn State Blue */
     .navbar {
       background-color: #002663;
+      padding: 0.5rem 1rem;
     }
     .navbar-brand, .nav-link { color: #fff !important; }
-    .nav-link:hover { color: #d4d4d4 !important; }
     .navbar-brand img {
       height: 40px;
       margin-right: 10px;
     }
+    .navbar-nav .nav-item { margin: 0 5px; }
     
-    /* Compact Section & Card Spacing */
-    section { padding: 40px 0; }
-    .card { margin-bottom: 15px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    
-    /* Header Section with Cover Image (Old Main) */
+    /* Header Section with Cover Image */
     header {
       position: relative;
       height: 40vh;
@@ -94,11 +92,12 @@
       content: "";
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       background-color: rgba(0,0,0,0.5);
       z-index: 1;
     }
-    /* Profile Container at Top Left in Header */
+    /* Compact Profile Container in Header (Top Left) */
     .header-profile {
       position: absolute;
       top: 20px;
@@ -120,16 +119,22 @@
     }
     .header-profile h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 1.8rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }
     .header-profile p {
       margin: 5px 0 0;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
+    /* Social Media Icons in Header */
+    .header-icons a {
+      margin-right: 10px;
+      font-size: 1.4rem;
+      color: #ffc107;
+    }
     
-    /* Moving News Ticker with Bigger, Pop-Out Text */
+    /* Moving News Ticker (Larger & Brighter) */
     .marquee-container {
       width: 100%;
       overflow: hidden;
@@ -155,16 +160,18 @@
     
     /* Section Titles */
     .section-title {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       text-align: center;
       color: #002663;
       font-weight: 700;
     }
+    section { padding: 30px 0; }
     .bg-light { background-color: #f8f9fa !important; }
+    .card { margin-bottom: 15px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
     /* Publication Filter Dropdown */
-    .pub-filter { max-width: 300px; margin: 0 auto 20px auto; }
+    .pub-filter { max-width: 300px; margin: 0 auto 20px; }
     
     /* Expandable Content for Experience */
     .more-content { display: none; }
@@ -178,9 +185,13 @@
       text-align: center;
     }
     
-    /* Compact Navbar Spacing */
-    .navbar-nav .nav-item {
-      margin: 0 5px;
+    /* Instagram Gallery (Compact Grid) */
+    .insta-gallery img {
+      width: 100%;
+      border-radius: 4px;
+    }
+    .insta-gallery .col-4 {
+      padding: 2px;
     }
   </style>
 </head>
@@ -237,9 +248,9 @@
     </div>
   </nav>
   
-  <!-- Header Section with Cover Image & Profile at Top Left -->
+  <!-- Header Section with Cover Image -->
   <header>
-    <!-- Profile Container (Top Left) -->
+    <!-- Profile Container at Top Left -->
     <div class="header-profile">
       <img src="profile-pic.jpg" alt="Profile Picture">
       <div>
@@ -270,13 +281,14 @@
     </div>
   </header>
   
-  <!-- About Section (with Research Interests Embedded) -->
+  <!-- About Section with Embedded Research Interests -->
   <section id="about">
     <div class="container">
       <h2 class="section-title">About Me</h2>
       <p>
-        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My research interests include:
+        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. I focus on developing continuous learning systems, energy‐harvesting architectures, and intelligent edge solutions that bridge academia and industry.
       </p>
+      <h4 class="mt-3">Research Interests</h4>
       <ul>
         <li>Deep Learning at the Edge</li>
         <li>Continuous Learning Systems</li>
@@ -603,23 +615,23 @@
     <div class="container">
       <h2 class="section-title">Side Interests & Social Media</h2>
       <div class="row">
-        <!-- Instagram Gallery (Placeholder Images) -->
+        <!-- Instagram Gallery -->
         <div class="col-md-6">
           <h4>Instagram Feed</h4>
-          <div class="row">
-            <div class="col-4 mb-2">
+          <div class="row insta-gallery">
+            <div class="col-4">
               <a href="https://www.instagram.com/cyansubhra/" target="_blank">
-                <img src="https://via.placeholder.com/150" class="img-fluid" alt="Instagram Photo 1">
+                <img src="https://via.placeholder.com/300" alt="Instagram Photo 1">
               </a>
             </div>
-            <div class="col-4 mb-2">
+            <div class="col-4">
               <a href="https://www.instagram.com/cyansubhra/" target="_blank">
-                <img src="https://via.placeholder.com/150" class="img-fluid" alt="Instagram Photo 2">
+                <img src="https://via.placeholder.com/300" alt="Instagram Photo 2">
               </a>
             </div>
-            <div class="col-4 mb-2">
+            <div class="col-4">
               <a href="https://www.instagram.com/cyansubhra/" target="_blank">
-                <img src="https://via.placeholder.com/150" class="img-fluid" alt="Instagram Photo 3">
+                <img src="https://via.placeholder.com/300" alt="Instagram Photo 3">
               </a>
             </div>
           </div>
