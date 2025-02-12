@@ -5,88 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cyan Subhra Mishra – Academic Portfolio</title>
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Optional Particles.js for subtle background animation -->
+  <!-- Optional Particles.js for background animation -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    /* Global Styles & Color Palette */
+    /* CSS Variables for a consistent palette */
+    :root {
+      --primary-color: #002663;
+      --secondary-color: #0d6efd;
+      --accent-color: #ffc107;
+      --bg-color: #f4f8fb;
+      --text-color: #333;
+      --header-overlay: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Global Styles */
     body {
       font-family: 'Open Sans', sans-serif;
+      background-color: var(--bg-color);
       margin: 0;
-      background-color: #f4f8fb; /* light pastel blue */
       scroll-behavior: smooth;
+      color: var(--text-color);
     }
-    a { color: #0d6efd; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    
-    /* Optional Particles Background */
-    #particles-js {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      z-index: -3;
-      top: 0;
-      left: 0;
+    a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color 0.3s;
     }
-    
-    /* Opportunity Banner (highlighted) */
+    a:hover {
+      color: var(--accent-color);
+    }
+
+    /* Opportunity Banner */
     .opportunity-banner {
       background: linear-gradient(135deg, #dc3545, #ff6b6b);
       color: #fff;
-      padding: 10px 0;
+      padding: 15px;
       text-align: center;
-      font-size: 1.1rem;
-      font-weight: bold;
+      font-size: 1.2rem;
+      font-weight: 700;
     }
-    
-    /* Top Bar with Contact & Resume Buttons */
+
+    /* Top Bar */
     .top-bar {
       background-color: #212529;
       color: #fff;
       font-size: 0.9rem;
-      padding: 5px 0;
+      padding: 8px 0;
     }
     .top-bar a { color: #fff; }
-    .top-bar .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
     .top-bar .contact-links a:not(:last-child)::after {
       content: " | ";
     }
     .btn-contact, .btn-resume {
-      background-color: #0d6efd;
+      background-color: var(--secondary-color);
       border: none;
       color: #fff;
-      padding: 5px 10px;
-      border-radius: 4px;
-      margin-left: 5px;
+      padding: 8px 15px;
+      border-radius: 5px;
+      margin-left: 10px;
+      transition: background-color 0.3s;
     }
-    
-    /* Navbar with PSU Logo and Penn State Blue */
+    .btn-contact:hover, .btn-resume:hover {
+      background-color: var(--accent-color);
+    }
+
+    /* Navbar */
     .navbar {
-      background-color: #002663;
-      padding: 0.5rem 1rem;
+      background-color: var(--primary-color);
+      padding: 0.8rem 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .navbar-brand, .nav-link { color: #fff !important; }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+    }
     .navbar-brand img {
-      height: 40px;
+      height: 45px;
       margin-right: 10px;
     }
-    .navbar-nav .nav-item { margin: 0 5px; }
-    
-    /* Header Section with Cover Image */
+    .navbar-nav .nav-item { margin: 0 7px; }
+    .navbar-toggler { border: none; }
+    .navbar-toggler-icon { filter: invert(1); }
+
+    /* Header Section */
     header {
       position: relative;
-      height: 40vh;
+      height: 50vh;
       background: url('https://upload.wikimedia.org/wikipedia/commons/7/70/Old_Main_-_Penn_State.png') no-repeat center center/cover;
       color: #fff;
-      padding: 20px;
     }
     header::before {
       content: "";
@@ -94,24 +106,23 @@
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 1;
+      background: var(--header-overlay);
     }
-    /* Compact Profile Container in Header (Top Left) */
     .header-profile {
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 30px;
+      left: 30px;
       z-index: 2;
       display: flex;
       align-items: center;
-      background-color: rgba(0,0,0,0.7);
-      padding: 10px;
-      border-radius: 8px;
+      background-color: rgba(0,0,0,0.6);
+      padding: 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
     }
     .header-profile img {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       object-fit: cover;
       border-radius: 50%;
       border: 3px solid #fff;
@@ -120,26 +131,27 @@
     .header-profile h1 {
       margin: 0;
       font-size: 1.8rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
     .header-profile p {
       margin: 5px 0 0;
-      font-size: 1.1rem;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+      font-size: 1rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
-    /* Social Media Icons in Header */
     .header-icons a {
       margin-right: 10px;
       font-size: 1.4rem;
-      color: #ffc107;
+      color: var(--accent-color);
+      transition: transform 0.3s;
     }
-    
-    /* Moving News Ticker (Larger & Brighter) */
+    .header-icons a:hover {
+      transform: scale(1.1);
+    }
     .marquee-container {
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
-      background-color: rgba(0,0,0,0.85);
+      background-color: rgba(0,0,0,0.7);
       position: absolute;
       bottom: 0;
       left: 0;
@@ -149,7 +161,7 @@
       display: inline-block;
       padding-left: 100%;
       color: #FFEA00;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: bold;
       animation: marquee 20s linear infinite;
     }
@@ -157,42 +169,62 @@
       0% { transform: translate(0, 0); }
       100% { transform: translate(-100%, 0); }
     }
-    
+
     /* Section Titles */
     .section-title {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       text-align: center;
-      color: #002663;
+      color: var(--primary-color);
       font-weight: 700;
+      font-size: 2rem;
+      position: relative;
     }
-    section { padding: 30px 0; }
+    .section-title::after {
+      content: "";
+      width: 60px;
+      height: 4px;
+      background: var(--secondary-color);
+      display: block;
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+    section { padding: 50px 0; }
     .bg-light { background-color: #f8f9fa !important; }
-    .card { margin-bottom: 15px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    ul { list-style: disc inside; padding-left: 1.25rem; }
-    
+    .card {
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    ul { list-style: disc; padding-left: 1.5rem; }
+
     /* Publication Filter Dropdown */
-    .pub-filter { max-width: 300px; margin: 0 auto 20px; }
-    
+    .pub-filter { max-width: 300px; margin: 0 auto 30px; }
+
     /* Expandable Content for Experience */
     .more-content { display: none; }
-    .read-more { color: #0d6efd; cursor: pointer; }
-    
+    .read-more {
+      color: var(--secondary-color);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
     /* Footer */
     footer {
-      background-color: #002663;
+      background-color: var(--primary-color);
       color: #fff;
-      padding: 20px 0;
+      padding: 30px 0;
       text-align: center;
     }
-    
-    /* Instagram Gallery (Compact Grid) */
+
+    /* Instagram Gallery */
     .insta-gallery img {
       width: 100%;
-      border-radius: 4px;
+      border-radius: 8px;
     }
-    .insta-gallery .col-4 {
-      padding: 2px;
-    }
+    .insta-gallery .col-4 { padding: 2px; }
   </style>
 </head>
 <body>
@@ -201,12 +233,12 @@
   
   <!-- Opportunity Banner -->
   <div class="opportunity-banner">
-    <span>Actively seeking new academic &amp; research-driven industry opportunities – Let's collaborate!</span>
+    Actively seeking new academic &amp; research-driven industry opportunities – Let's collaborate!
   </div>
   
-  <!-- Top Bar with Contact & Resume Buttons -->
-  <div class="top-bar py-2">
-    <div class="container">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
       <div class="contact-links">
         <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>
         <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a>
@@ -221,7 +253,7 @@
     </div>
   </div>
   
-  <!-- Navbar with PSU Logo -->
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="#">
@@ -248,9 +280,8 @@
     </div>
   </nav>
   
-  <!-- Header Section with Cover Image -->
+  <!-- Header Section -->
   <header>
-    <!-- Profile Container at Top Left -->
     <div class="header-profile">
       <img src="profile-pic.jpg" alt="Profile Picture">
       <div>
@@ -275,20 +306,19 @@
         </div>
       </div>
     </div>
-    <!-- Moving News Ticker -->
     <div class="marquee-container">
       <span class="marquee-text" id="marqueeText">Stay tuned and keep in touch for collaborations</span>
     </div>
   </header>
   
-  <!-- About Section with Embedded Research Interests -->
+  <!-- About Section -->
   <section id="about">
     <div class="container">
       <h2 class="section-title">About Me</h2>
       <p>
         I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. I focus on developing continuous learning systems, energy‐harvesting architectures, and intelligent edge solutions that bridge academia and industry.
       </p>
-      <h4 class="mt-3">Research Interests</h4>
+      <h4 class="mt-4">Research Interests</h4>
       <ul>
         <li>Deep Learning at the Edge</li>
         <li>Continuous Learning Systems</li>
@@ -303,38 +333,36 @@
   <section id="education">
     <div class="container">
       <h2 class="section-title">Education</h2>
-      <div class="card mb-3">
+      <div class="card p-3 mb-4">
         <div class="card-body">
           <h5 class="card-title">The Pennsylvania State University</h5>
           <p class="card-text"><strong>Ph.D. in Computer Science and Engineering</strong> (Aug 2018 – Aug 2025, Expected) | University Park, PA</p>
           <p class="card-text">
             Advisors: 
             <a href="http://www.cse.psu.edu/~mtk/" target="_blank">Dr. Mahmut Taylan Kandemir</a>, 
-            <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a> &nbsp;|&nbsp;
-            GPA: 3.7/4.00
+            <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a> | GPA: 3.7/4.00
           </p>
         </div>
       </div>
-      <div class="card">
+      <div class="card p-3">
         <div class="card-body">
           <h5 class="card-title">National Institute of Technology, Rourkela</h5>
           <p class="card-text"><strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong> (Aug 2011 – May 2016) | Rourkela, Odisha, India</p>
           <p class="card-text">
             Advisors: 
             <a href="https://www.nitrkl.ac.in" target="_blank">Dr. Sarat Kumar Patra</a>, 
-            <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a> &nbsp;|&nbsp;
-            CGPA: 8.39/10.00 <em>(Honors)</em>
+            <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a> | CGPA: 8.39/10.00 <em>(Honors)</em>
           </p>
         </div>
       </div>
     </div>
   </section>
   
-  <!-- Publications Section with Filter -->
+  <!-- Publications Section -->
   <section id="publications">
     <div class="container">
       <h2 class="section-title">Publications</h2>
-      <div class="pub-filter">
+      <div class="pub-filter mb-4">
         <label for="pubFilter" class="form-label">Filter by Topic:</label>
         <select class="form-select" id="pubFilter">
           <option value="all" selected>All</option>
@@ -368,7 +396,7 @@
           </li>
         </ul>
         <!-- Conference Papers -->
-        <h4>Conference Papers</h4>
+        <h4 class="mt-4">Conference Papers</h4>
         <ul>
           <li data-topic="ml">
             [ICLR-2025] Cyan Subhra Mishra, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
@@ -411,7 +439,7 @@
           </li>
         </ul>
         <!-- Journal Papers -->
-        <h4>Journal Papers</h4>
+        <h4 class="mt-4">Journal Papers</h4>
         <ul>
           <li data-topic="manufacturing">
             [ASTM-SSMS-2022-0031] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, Cyan Subhra Mishra, Soundar R. T. Kumara, Anil Srivastava, Hui Yang, Vijaykrishnan Narayanan, John Morgan Sampson, Mahmut Taylan Kandemir, Kye-Hwan Lee, Tanna Marie Pugh, Amy Jorden, Gautam Natarajan, Dinakar Sagapuram, Satish T. S. Bukkapatnam. “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a>
@@ -445,8 +473,7 @@
   <section id="experience">
     <div class="container">
       <h2 class="section-title">Experience</h2>
-      <!-- Graduate Research Assistant -->
-      <div class="card mb-3">
+      <div class="card p-3 mb-4">
         <div class="card-body">
           <h5 class="card-title">Graduate Research Assistant</h5>
           <p class="card-text"><strong>Microsystems Design Lab, Penn State</strong> | University Park, PA<br>
@@ -465,8 +492,7 @@
           </div>
         </div>
       </div>
-      <!-- Research Intern at Bell Labs -->
-      <div class="card mb-3">
+      <div class="card p-3 mb-4">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Bell Labs</strong> | Murray Hill, NJ<br>
@@ -483,8 +509,7 @@
           </div>
         </div>
       </div>
-      <!-- Design Engineer at Intel -->
-      <div class="card mb-3">
+      <div class="card p-3 mb-4">
         <div class="card-body">
           <h5 class="card-title">Design Engineer</h5>
           <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>
@@ -502,8 +527,7 @@
           </div>
         </div>
       </div>
-      <!-- Research Intern at Intel -->
-      <div class="card mb-3">
+      <div class="card p-3 mb-4">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>
@@ -519,8 +543,7 @@
           </div>
         </div>
       </div>
-      <!-- Research Intern at CSRE, IIT Bombay -->
-      <div class="card mb-3">
+      <div class="card p-3 mb-4">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>CSRE, IIT Bombay</strong> | Mumbai, India<br>
@@ -536,8 +559,7 @@
           </div>
         </div>
       </div>
-      <!-- Research Intern at Centre for AI and Robotics -->
-      <div class="card">
+      <div class="card p-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Centre for Artificial Intelligence and Robotics</strong> | Bengaluru, India<br>
@@ -610,12 +632,11 @@
     </div>
   </section>
   
-  <!-- Social Interests Section (Instagram Gallery & X Handle) -->
+  <!-- Social Interests Section -->
   <section id="social-interests">
     <div class="container">
       <h2 class="section-title">Side Interests & Social Media</h2>
       <div class="row">
-        <!-- Instagram Gallery -->
         <div class="col-md-6">
           <h4>Instagram Feed</h4>
           <div class="row insta-gallery">
@@ -636,7 +657,6 @@
             </div>
           </div>
         </div>
-        <!-- X (Twitter) Handle -->
         <div class="col-md-6">
           <h4>Connect on X</h4>
           <p>
@@ -671,8 +691,8 @@
   </footer>
   
   <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Random Particles Animation -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Particles.js Initialization -->
   <script>
     const particleConfigs = [
       {
@@ -690,45 +710,11 @@
           "events": { "onhover": { "enable": true, "mode": "repulse" } }
         },
         "retina_detect": true
-      },
-      {
-        "particles": {
-          "number": { "value": 60, "density": { "enable": true, "value_area": 700 } },
-          "color": { "value": "#28a745" },
-          "shape": { "type": "edge" },
-          "opacity": { "value": 0.3 },
-          "size": { "value": 4, "random": true },
-          "line_linked": { "enable": true, "distance": 120, "color": "#28a745", "opacity": 0.5, "width": 1 },
-          "move": { "enable": true, "speed": 4 }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": { "onhover": { "enable": true, "mode": "grab" } }
-        },
-        "retina_detect": true
-      },
-      {
-        "particles": {
-          "number": { "value": 100, "density": { "enable": true, "value_area": 900 } },
-          "color": { "value": "#ffc107" },
-          "shape": { "type": "triangle" },
-          "opacity": { "value": 0.4 },
-          "size": { "value": 3, "random": true },
-          "line_linked": { "enable": false },
-          "move": { "enable": true, "speed": 5 }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": { "onhover": { "enable": true, "mode": "bubble" } }
-        },
-        "retina_detect": true
       }
     ];
-    const randomConfig = particleConfigs[Math.floor(Math.random() * particleConfigs.length)];
-    particlesJS("particles-js", randomConfig);
-  </script>
-  <!-- Toggle Expand/Collapse for Experience Details -->
-  <script>
+    particlesJS("particles-js", particleConfigs[0]);
+
+    // Toggle for Read More/Read Less
     function toggleContent(el) {
       const content = el.nextElementSibling;
       if (content.style.display === "block") {
@@ -739,9 +725,8 @@
         el.textContent = "Read Less...";
       }
     }
-  </script>
-  <!-- Publication Filter Script -->
-  <script>
+
+    // Publication Filter Script
     document.getElementById('pubFilter').addEventListener('change', function() {
       const filter = this.value;
       const items = document.querySelectorAll('#pubList ul li');
@@ -753,9 +738,8 @@
         }
       });
     });
-  </script>
-  <!-- Load Moving News from news.txt -->
-  <script>
+
+    // Load Moving News from news.txt
     fetch('news.txt')
       .then(response => response.text())
       .then(data => {
