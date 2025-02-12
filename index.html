@@ -11,7 +11,7 @@
   <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    /* Global Styles with textured background */
+    /* Global Styles with a textured background */
     body {
       font-family: 'Open Sans', sans-serif;
       margin: 0;
@@ -27,21 +27,24 @@
       position: fixed;
       width: 100%;
       height: 100%;
-      z-index: -2;
+      z-index: -3;
       top: 0;
       left: 0;
     }
 
-    /* Top Banner for Opportunities */
+    /* Opportunity Banner with subtle pulse animation */
     .opportunity-banner {
       background-color: #dc3545;
       color: #fff;
       padding: 8px 0;
       text-align: center;
       font-size: 1rem;
+      animation: pulse 3s infinite;
     }
-    .opportunity-banner span {
-      font-weight: 600;
+    @keyframes pulse {
+      0% { opacity: 0.9; }
+      50% { opacity: 1; }
+      100% { opacity: 0.9; }
     }
 
     /* Top Bar with Contact & Resume */
@@ -51,16 +54,21 @@
       font-size: 0.9rem;
     }
     .top-bar a { color: #fff; }
-    .top-bar .container { display: flex; justify-content: space-between; align-items: center; }
+    .top-bar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .top-bar .contact-links a:not(:last-child)::after {
       content: " | ";
     }
-    .top-bar .btn-contact {
+    .btn-contact, .btn-resume {
       background-color: #0d6efd;
       border: none;
       color: #fff;
       padding: 5px 10px;
       border-radius: 4px;
+      margin-left: 5px;
     }
 
     /* Navbar */
@@ -70,16 +78,23 @@
     .navbar-brand, .nav-link { color: #fff !important; }
     .nav-link:hover { color: #d4d4d4 !important; }
 
-    /* Header Section (shorter, with Penn State background) */
+    /* Header Section with Penn State Old Main background and zoom animation */
     header {
       position: relative;
       height: 40vh;
       background: url('https://upload.wikimedia.org/wikipedia/commons/4/49/Old_Main_Penn_State.jpg') no-repeat center center/cover;
+      animation: zoomIn 20s ease infinite;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
+      align-items: center;
       color: #fff;
       text-align: center;
+    }
+    @keyframes zoomIn {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
     header::before {
       content: "";
@@ -95,13 +110,20 @@
     }
     header h1 {
       font-size: 2.75rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }
     header p {
       font-size: 1.25rem;
-      margin-bottom: 0;
+      margin-bottom: 0.5rem;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    }
+    /* Header News Ticker */
+    .header-news {
+      font-size: 1rem;
+      font-style: italic;
+      color: #ffc107;
+      margin-top: 0.5rem;
     }
 
     /* Section Titles */
@@ -111,23 +133,18 @@
       color: #343a40;
       font-weight: 700;
     }
-    /* Section Styles */
     section { padding: 60px 0; }
     .bg-light { background-color: #f8f9fa !important; }
-    /* Cards */
     .card { margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
     ul { list-style: disc inside; padding-left: 1.25rem; }
-    /* Expandable content */
+
+    /* Publication Filter Dropdown */
+    .pub-filter { max-width: 300px; margin: 0 auto 20px auto; }
+
+    /* Expandable content for Experience */
     .more-content { display: none; }
     .read-more { color: #0d6efd; cursor: pointer; }
-    /* News Sidebar */
-    .news-sidebar {
-      background-color: #fff;
-      padding: 15px;
-      border: 1px solid #ddd;
-      max-height: 300px;
-      overflow-y: auto;
-    }
+
     /* Footer */
     footer {
       background-color: #343a40;
@@ -146,17 +163,17 @@
     <span>Actively seeking new academic &amp; research-driven industry opportunities – Let's collaborate!</span>
   </div>
 
-  <!-- Top Bar with Contact, Resume & Get in Touch -->
+  <!-- Top Bar with Contact & Resume Buttons -->
   <div class="top-bar py-2">
     <div class="container">
       <div class="contact-links">
         <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>
         <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a>
         <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">LinkedIn</a>
-        <a href="resume.pdf" target="_blank">Resume</a>
       </div>
       <div>
-        <button class="btn btn-contact" onclick="window.location.href='mailto:cyan@psu.edu'">Get in Touch</button>
+        <button class="btn-resume" onclick="window.location.href='resume.pdf'">View Resume</button>
+        <button class="btn-contact" onclick="window.location.href='mailto:cyan@psu.edu'">Get in Touch</button>
       </div>
     </div>
   </div>
@@ -177,7 +194,6 @@
           <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
           <li class="nav-item"><a class="nav-link" href="#teaching">Teaching</a></li>
           <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
           <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
           <li class="nav-item"><a class="nav-link" href="#coursework">Coursework</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
@@ -186,11 +202,12 @@
     </div>
   </nav>
 
-  <!-- Header Section -->
+  <!-- Header Section with News Ticker -->
   <header>
     <div class="header-content">
       <h1>Cyan Subhra Mishra</h1>
       <p>Ph.D. Candidate, CSE, Penn State</p>
+      <div class="header-news" id="headerNews">Stay tuned and keep in touch for collaborations</div>
     </div>
   </header>
 
@@ -199,7 +216,7 @@
     <div class="container">
       <h2 class="section-title">About Me</h2>
       <p>
-        I am a dedicated Ph.D. candidate at Penn State, specializing in the convergence of deep learning, edge computing, and sustainable system design. My research focuses on developing innovative, energy‐efficient solutions—from continuous learning systems to hardware–software co–design—that address real–world challenges. Welcome to my academic portfolio where research meets innovation.
+        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My research encompasses continuous learning systems, energy-harvesting architectures, and intelligent edge solutions that bridge academia and industry.
       </p>
     </div>
   </section>
@@ -235,40 +252,58 @@
     </div>
   </section>
 
-  <!-- Publications Section -->
+  <!-- Publications Section with Filter -->
   <section id="publications">
     <div class="container">
       <h2 class="section-title">Publications</h2>
-      <h4>arXiv Preprints</h4>
-      <ul>
-        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir. “Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers” – <a href="https://arxiv.org/abs/2410.05435" target="_blank">arXiv:2410.05435</a> (2024).</li>
-        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks” – <a href="https://arxiv.org/abs/2408.14379" target="_blank">arXiv:2408.14379</a> (2024).</li>
-        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers” – <a href="https://arxiv.org/abs/2408.13696" target="_blank">arXiv:2408.13696</a> (2024).</li>
-        <li>[arXiv-2020] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition” – <a href="https://arxiv.org/abs/2204.13106" target="_blank">arXiv:2204.13106</a> (2022).</li>
-        <li>[arXiv-2020] Jashwant Raj Gunasekaran, Prashanth Thinakaran, <strong>Cyan Subhra Mishra</strong>, Mahmut Taylan Kandemir, Chita R. Das. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud” – <a href="https://arxiv.org/abs/2008.09491" target="_blank">arXiv:2008.09491</a> (2020).</li>
-      </ul>
-      <h4>Conference Papers</h4>
-      <ul>
-        <li>[ICLR-2025] <strong>Cyan Subhra Mishra</strong>, et al. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a></li>
-        <li>[IPDPS-2025] Wahid Uz Zaman, <strong>Cyan Subhra Mishra</strong>, et al. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear] – <a href="#" target="_blank">Link coming soon</a></li>
-        <li>[HPCA-2024] <strong>Cyan Subhra Mishra</strong>, et al. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – <a href="#" target="_blank">IEEE Xplore</a></li>
-        <li>[ICDCS-2022] Ziyu Ying, et al. “Exploiting Frame Similarity for Efficient Inference on Edge Devices” – <a href="#" target="_blank">IEEE Xplore</a></li>
-        <li>[MICRO-2022] Ziyu Ying, et al. “Pushing Point Cloud Compression to Edge” – <a href="#" target="_blank">IEEE Xplore</a></li>
-        <li>[NSDI-2022] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>, et al. “Cocktail: A Multidimensional Optimization for Model Serving in Cloud” – <a href="#" target="_blank">USENIX</a></li>
-        <li>[NAS-2021] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>. “MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance” – <a href="#" target="_blank">Link coming soon</a></li>
-        <li>[SoCC-2021] Vivek M. Bhas, et al. “Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms” – <a href="#" target="_blank">ACM Digital Library</a></li>
-        <li>[MICRO-2021] Shulin Zhao, et al. “HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality” – <a href="#" target="_blank">IEEE Xplore</a></li>
-        <li>[DATE-2021] <strong>Cyan Subhra Mishra</strong>, et al. “Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a> <em>[Best Paper Nominee]</em></li>
-        <li>[WoSC-2020] Jashwant Raj Gunasekaran, et al. “Implications Of Public Cloud Resource Heterogeneity for Inference Serving” – <a href="#" target="_blank">Link coming soon</a></li>
-        <li>[ISCA-2020] Shulin Zhao, et al. “Déjà view: Spatio-temporal Compute Reuse for Energy-Efficient 360° VR Video Streaming” – <a href="#" target="_blank">ACM Digital Library</a></li>
-        <li>[HPCA-2020] Keni Qiu, et al. “ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors” – <a href="#" target="_blank">IEEE Xplore</a></li>
-      </ul>
-      <h4>Journal Papers</h4>
-      <ul>
-        <li>[ASTM-SSMS-2022-0031] <strong>Cyan Subhra Mishra</strong>, et al. “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a></li>
-        <li>[IEEE-ESL-2022] Tianyi Shen, <strong>Cyan Subhra Mishra</strong>, et al. “An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a></li>
-        <li>[Defence Science Journal-2015] Narayan Panigrahi, <strong>Cyan Subhra Mishra</strong>. “A Generic Method for Azimuthal Map Projection” – <a href="#" target="_blank">Link coming soon</a></li>
-      </ul>
+      <div class="pub-filter">
+        <label for="pubFilter" class="form-label">Filter by Topic:</label>
+        <select class="form-select" id="pubFilter">
+          <option value="all" selected>All</option>
+          <option value="edge">Edge Systems</option>
+          <option value="cloud">Cloud</option>
+          <option value="ml">Machine Learning</option>
+          <option value="ar">Augmented Reality</option>
+          <option value="mapping">Mapping</option>
+          <option value="manufacturing">Manufacturing</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div id="pubList">
+        <!-- arXiv Preprints -->
+        <h4>arXiv Preprints</h4>
+        <ul>
+          <li data-topic="edge">[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, et al. “Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers” – <a href="https://arxiv.org/abs/2410.05435" target="_blank">arXiv:2410.05435</a> (2024).</li>
+          <li data-topic="edge">[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, et al. “Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks” – <a href="https://arxiv.org/abs/2408.14379" target="_blank">arXiv:2408.14379</a> (2024).</li>
+          <li data-topic="ml">[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, et al. “Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers” – <a href="https://arxiv.org/abs/2408.13696" target="_blank">arXiv:2408.13696</a> (2024).</li>
+          <li data-topic="edge">[arXiv-2020] <strong>Cyan Subhra Mishra</strong>, et al. “Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition” – <a href="https://arxiv.org/abs/2204.13106" target="_blank">arXiv:2204.13106</a> (2022).</li>
+          <li data-topic="cloud">[arXiv-2020] Jashwant Raj Gunasekaran, et al. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud” – <a href="https://arxiv.org/abs/2008.09491" target="_blank">arXiv:2008.09491</a> (2020).</li>
+        </ul>
+        <!-- Conference Papers -->
+        <h4>Conference Papers</h4>
+        <ul>
+          <li data-topic="ml">[ICLR-2025] <strong>Cyan Subhra Mishra</strong>, et al. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a></li>
+          <li data-topic="edge">[IPDPS-2025] Wahid Uz Zaman, <strong>Cyan Subhra Mishra</strong>, et al. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear] – <a href="#" target="_blank">Link coming soon</a></li>
+          <li data-topic="edge">[HPCA-2024] <strong>Cyan Subhra Mishra</strong>, et al. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – <a href="#" target="_blank">IEEE Xplore</a></li>
+          <li data-topic="edge">[ICDCS-2022] Ziyu Ying, et al. “Exploiting Frame Similarity for Efficient Inference on Edge Devices” – <a href="#" target="_blank">IEEE Xplore</a></li>
+          <li data-topic="edge">[MICRO-2022] Ziyu Ying, et al. “Pushing Point Cloud Compression to Edge” – <a href="#" target="_blank">IEEE Xplore</a></li>
+          <li data-topic="cloud">[NSDI-2022] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>, et al. “Cocktail: A Multidimensional Optimization for Model Serving in Cloud” – <a href="#" target="_blank">USENIX</a></li>
+          <li data-topic="ml">[NAS-2021] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>. “MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance” – <a href="#" target="_blank">Link coming soon</a></li>
+          <li data-topic="cloud">[SoCC-2021] Vivek M. Bhas, et al. “Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms” – <a href="#" target="_blank">ACM Digital Library</a></li>
+          <li data-topic="ar">[MICRO-2021] Shulin Zhao, et al. “HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality” – <a href="#" target="_blank">IEEE Xplore</a></li>
+          <li data-topic="edge">[DATE-2021] <strong>Cyan Subhra Mishra</strong>, et al. “Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a> <em>[Best Paper Nominee]</em></li>
+          <li data-topic="cloud">[WoSC-2020] Jashwant Raj Gunasekaran, et al. “Implications Of Public Cloud Resource Heterogeneity for Inference Serving” – <a href="#" target="_blank">Link coming soon</a></li>
+          <li data-topic="other">[ISCA-2020] Shulin Zhao, et al. “Déjà view: Spatio-temporal Compute Reuse for Energy-Efficient 360° VR Video Streaming” – <a href="#" target="_blank">ACM Digital Library</a></li>
+          <li data-topic="edge">[HPCA-2020] Keni Qiu, et al. “ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors” – <a href="#" target="_blank">IEEE Xplore</a></li>
+        </ul>
+        <!-- Journal Papers -->
+        <h4>Journal Papers</h4>
+        <ul>
+          <li data-topic="manufacturing">[ASTM-SSMS-2022-0031] <strong>Cyan Subhra Mishra</strong>, et al. “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a></li>
+          <li data-topic="edge">[IEEE-ESL-2022] Tianyi Shen, <strong>Cyan Subhra Mishra</strong>, et al. “An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a></li>
+          <li data-topic="mapping">[Defence Science Journal-2015] Narayan Panigrahi, <strong>Cyan Subhra Mishra</strong>. “A Generic Method for Azimuthal Map Projection” – <a href="#" target="_blank">Link coming soon</a></li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -286,7 +321,7 @@
     </div>
   </section>
 
-  <!-- Experience Section with Expandable Details -->
+  <!-- Experience Section -->
   <section id="experience">
     <div class="container">
       <h2 class="section-title">Experience</h2>
@@ -298,14 +333,14 @@
           December 2018 – Present</p>
           <ul>
             <li>Investigated architectural and algorithmic innovations in energy-harvesting wireless sensor networks.</li>
-            <li>Developed efficient strategies and systems for on–device intelligence with non–volatile processors.</li>
+            <li>Developed efficient strategies for on-device intelligence using non-volatile processors and intermittent computing.</li>
           </ul>
           <span class="read-more" onclick="toggleContent(this)">Read More...</span>
           <div class="more-content">
             <ul>
-              <li>Collaborated with interdisciplinary teams to publish in top-tier conferences.</li>
-              <li>Led initiatives in intermittent computing and sustainable system design.</li>
-              <li>Mentored junior researchers and assisted with grant proposals.</li>
+              <li>Collaborated with interdisciplinary teams leading to multiple high-impact publications.</li>
+              <li>Led research initiatives in intermittent computing and sustainable system design.</li>
+              <li>Mentored junior researchers and assisted in securing research funding.</li>
             </ul>
           </div>
         </div>
@@ -317,13 +352,13 @@
           <p class="card-text"><strong>Bell Labs</strong> | Murray Hill, NJ<br>
           June 2021 – Aug 2021</p>
           <ul>
-            <li>Optimized deep neural networks for autonomous inference serving on heterogeneous platforms.</li>
+            <li>Optimized deep neural network models for autonomous inference serving on heterogeneous platforms.</li>
           </ul>
           <span class="read-more" onclick="toggleContent(this)">Read More...</span>
           <div class="more-content">
             <ul>
-              <li>Implemented performance improvements leading to a 15% reduction in inference latency.</li>
-              <li>Collaborated with experts to bridge research and industry solutions.</li>
+              <li>Implemented performance improvements that reduced inference latency by 15%.</li>
+              <li>Worked closely with experts to translate research into practical solutions.</li>
             </ul>
           </div>
         </div>
@@ -335,51 +370,53 @@
           <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>
           June 2016 – June 2018</p>
           <ul>
-            <li>Designed accelerators for machine learning, computer vision, and bioinformatics using FPGAs.</li>
-            <li>Engaged in hardware–software co–design projects for few-shot learning.</li>
+            <li>Designed accelerators for machine learning, computer vision, and bioinformatics applications using FPGAs.</li>
+            <li>Engaged in hardware–software co-design projects to optimize few-shot learning algorithms.</li>
           </ul>
           <span class="read-more" onclick="toggleContent(this)">Read More...</span>
           <div class="more-content">
             <ul>
-              <li>Improved system efficiency by integrating novel algorithmic optimizations.</li>
-              <li>Coordinated cross-functional teams to integrate advanced computing techniques.</li>
+              <li>Improved system efficiency with novel algorithmic optimizations.</li>
+              <li>Coordinated with cross-functional teams to integrate advanced computing techniques.</li>
             </ul>
           </div>
         </div>
       </div>
-      <!-- Additional Positions -->
+      <!-- Research Intern at Intel -->
       <div class="card mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>
           Dec 2015 – June 2016</p>
           <ul>
-            <li>Designed FPGA-based hardware accelerators for protein search algorithms.</li>
+            <li>Developed FPGA-based hardware accelerators for protein search algorithms.</li>
           </ul>
           <span class="read-more" onclick="toggleContent(this)">Read More...</span>
           <div class="more-content">
             <ul>
-              <li>Contributed to algorithm enhancements that increased throughput by 20%.</li>
+              <li>Enhanced processing throughput by optimizing data pipelines.</li>
             </ul>
           </div>
         </div>
       </div>
+      <!-- Research Intern at CSRE, IIT Bombay -->
       <div class="card mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>CSRE, IIT Bombay</strong> | Mumbai, India<br>
           May 2014 – July 2014</p>
           <ul>
-            <li>Developed a computational model for pre-processing hyper-spectral images.</li>
+            <li>Developed computational models for pre-processing hyper-spectral images.</li>
           </ul>
           <span class="read-more" onclick="toggleContent(this)">Read More...</span>
           <div class="more-content">
             <ul>
-              <li>Enhanced data processing pipelines that improved image analysis accuracy.</li>
+              <li>Enhanced image analysis accuracy by refining data processing techniques.</li>
             </ul>
           </div>
         </div>
       </div>
+      <!-- Research Intern at Centre for AI and Robotics -->
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
@@ -391,7 +428,7 @@
           <span class="read-more" onclick="toggleContent(this)">Read More...</span>
           <div class="more-content">
             <ul>
-              <li>Created robust algorithms adopted in preliminary research projects.</li>
+              <li>Contributed to foundational research that informed subsequent projects.</li>
             </ul>
           </div>
         </div>
@@ -430,24 +467,6 @@
     </div>
   </section>
 
-  <!-- News Section with Sidebar (loads from news.txt) -->
-  <section id="news" class="bg-light">
-    <div class="container">
-      <h2 class="section-title">Latest News</h2>
-      <div class="row">
-        <div class="col-md-8">
-          <p>Check out the latest updates from my research and academic engagements below.</p>
-        </div>
-        <div class="col-md-4">
-          <div class="news-sidebar" id="newsSidebar">
-            <!-- News items loaded via JavaScript from news.txt -->
-            <em>Loading news...</em>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Skills Section -->
   <section id="skills">
     <div class="container">
@@ -478,7 +497,6 @@
       <p><strong>Email:</strong> <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>, <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a></p>
       <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">Visit my LinkedIn</a></p>
       <p><strong>Current Webpage:</strong> <a href="https://sites.google.com/view/cyansubhramishra/" target="_blank">View my Google Site</a></p>
-      <p><strong>Resume:</strong> <a href="resume.pdf" target="_blank">Download PDF</a></p>
     </div>
   </section>
 
@@ -546,7 +564,7 @@
     const randomConfig = particleConfigs[Math.floor(Math.random() * particleConfigs.length)];
     particlesJS("particles-js", randomConfig);
   </script>
-  <!-- Expand/Collapse for Experience Details -->
+  <!-- Toggle Expand/Collapse for Experience Details -->
   <script>
     function toggleContent(el) {
       const content = el.nextElementSibling;
@@ -559,17 +577,35 @@
       }
     }
   </script>
-  <!-- Load News from news.txt into the sidebar -->
+  <!-- Publication Filter Script -->
+  <script>
+    document.getElementById('pubFilter').addEventListener('change', function() {
+      const filter = this.value;
+      const items = document.querySelectorAll('#pubList ul li');
+      items.forEach(item => {
+        if (filter === 'all' || item.getAttribute('data-topic') === filter) {
+          item.style.display = 'list-item';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  </script>
+  <!-- Load Header News from news.txt -->
   <script>
     fetch('news.txt')
       .then(response => response.text())
       .then(data => {
-        const newsSidebar = document.getElementById('newsSidebar');
+        const headerNews = document.getElementById('headerNews');
         const newsItems = data.split('\n').filter(line => line.trim() !== '');
-        newsSidebar.innerHTML = newsItems.map(item => `<p>${item}</p>`).join('');
+        if(newsItems.length > 0) {
+          headerNews.textContent = newsItems[0];
+        } else {
+          headerNews.textContent = "Stay tuned and keep in touch for collaborations";
+        }
       })
       .catch(error => {
-        document.getElementById('newsSidebar').innerHTML = "<p>No news available.</p>";
+        document.getElementById('headerNews').textContent = "Stay tuned and keep in touch for collaborations";
       });
   </script>
 </body>
