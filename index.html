@@ -3,26 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cyan Subhra Mishra – Academic Portfolio & Open Opportunities</title>
+  <title>Cyan Subhra Mishra – Academic Portfolio</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O0r+U2YFStXoJ1e6jWJggh0dzG8T1VxwRbI3+KjW2V0W3IoX5E+1Z0E8XGr9sXhGKoXGv/cgL79RRo4r0FA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    /* Global Styles with a textured background */
+    /* Global Styles & Pastel Color Palette */
     body {
       font-family: 'Open Sans', sans-serif;
       margin: 0;
-      background-color: #ececec;
-      background-image: url('https://www.transparenttextures.com/patterns/linen.png');
+      background-color: #f4f8fb;
+      /* Light pastel blue background */
       scroll-behavior: smooth;
     }
     a { color: #0d6efd; text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* Particles Background */
+    /* Particles Background (optional for added aesthetic) */
     #particles-js {
       position: fixed;
       width: 100%;
@@ -32,7 +34,7 @@
       left: 0;
     }
 
-    /* Opportunity Banner with subtle pulse animation */
+    /* Opportunity Banner */
     .opportunity-banner {
       background-color: #dc3545;
       color: #fff;
@@ -47,7 +49,7 @@
       100% { opacity: 0.9; }
     }
 
-    /* Top Bar with Contact & Resume */
+    /* Top Bar with Contact Links */
     .top-bar {
       background-color: #212529;
       color: #fff;
@@ -71,9 +73,9 @@
       margin-left: 5px;
     }
 
-    /* Navbar with PSU logo */
+    /* Navbar with PSU Logo */
     .navbar {
-      background-color: #343a40;
+      background-color: #002663; /* Penn State blue */
     }
     .navbar-brand, .nav-link { color: #fff !important; }
     .nav-link:hover { color: #d4d4d4 !important; }
@@ -82,23 +84,17 @@
       margin-right: 10px;
     }
 
-    /* Header Section with Penn State Old Main background and zoom animation */
+    /* Header Section using Cover Image */
     header {
       position: relative;
       height: 40vh;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/4/49/Old_Main_Penn_State.jpg') no-repeat center center/cover;
-      animation: zoomIn 20s ease infinite;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/7/70/Old_Main_-_Penn_State.png') no-repeat center center/cover;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       color: #fff;
-      text-align: center;
-    }
-    @keyframes zoomIn {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+      text-align: left;
+      padding: 20px;
     }
     header::before {
       content: "";
@@ -108,24 +104,40 @@
       background-color: rgba(0, 0, 0, 0.5);
       z-index: 1;
     }
-    /* Header Text Container with Semi-Transparent Background */
+    /* Header Content Container */
     .header-content {
       position: relative;
       z-index: 2;
       background-color: rgba(0, 0, 0, 0.6);
-      padding: 15px 20px;
+      padding: 15px;
       border-radius: 8px;
+      max-width: 800px;
+      width: 100%;
     }
-    header h1 {
-      font-size: 2.75rem;
-      margin-bottom: 0.25rem;
+    .header-content .profile-pic {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-right: 15px;
+    }
+    .header-content h1 {
+      font-size: 2.5rem;
+      margin: 0;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }
-    header p {
+    .header-content p {
       font-size: 1.25rem;
-      margin-bottom: 0.5rem;
+      margin: 5px 0 10px;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
+    .header-icons a {
+      margin-right: 15px;
+      color: #ffc107;
+      font-size: 1.5rem;
+    }
+
     /* Moving News Ticker */
     .marquee-container {
       width: 100%;
@@ -153,7 +165,7 @@
     .section-title {
       margin-bottom: 40px;
       text-align: center;
-      color: #343a40;
+      color: #002663;
       font-weight: 700;
     }
     section { padding: 60px 0; }
@@ -170,7 +182,7 @@
 
     /* Footer */
     footer {
-      background-color: #343a40;
+      background-color: #002663;
       color: #fff;
       padding: 20px 0;
       text-align: center;
@@ -178,7 +190,7 @@
   </style>
 </head>
 <body>
-  <!-- Particles Background -->
+  <!-- Particles Background (optional) -->
   <div id="particles-js"></div>
 
   <!-- Opportunity Banner -->
@@ -196,7 +208,9 @@
       </div>
       <div>
         <button class="btn-resume" onclick="window.location.href='CyanResumePublic.pdf'">View Resume</button>
-        <button class="btn-contact" onclick="window.location.href='mailto:cyan@psu.edu'">Get in Touch</button>
+        <button class="btn-contact" onclick="window.location.href='mailto:cyan@psu.edu'">
+          <i class="fa fa-envelope"></i> Get in Touch
+        </button>
       </div>
     </div>
   </div>
@@ -228,12 +242,29 @@
     </div>
   </nav>
 
-  <!-- Header Section with Moving News Ticker -->
+  <!-- Header Section with Cover Image and Simple Text -->
   <header>
-    <div class="header-content p-3">
-      <h1>Cyan Subhra Mishra</h1>
-      <p>Ph.D. Candidate, CSE, Penn State</p>
+    <div class="header-content container d-flex align-items-center">
+      <!-- Profile Thumbnail (Replace 'profile-pic.jpg' with your resized image) -->
+      <img src="profile-pic.jpg" alt="Profile Picture" class="profile-pic me-3">
+      <div>
+        <h1>Cyan Subhra Mishra</h1>
+        <p>Ph.D. Candidate, CSE, Penn State</p>
+        <!-- Icon Links for Scholar, LinkedIn, and Email -->
+        <div class="header-icons">
+          <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank" title="Google Scholar">
+            <i class="fa fa-graduation-cap"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank" title="LinkedIn">
+            <i class="fa fa-linkedin"></i>
+          </a>
+          <a href="mailto:cyan@psu.edu" title="Email">
+            <i class="fa fa-envelope"></i>
+          </a>
+        </div>
+      </div>
     </div>
+    <!-- Moving News Ticker -->
     <div class="marquee-container">
       <span class="marquee-text" id="marqueeText">Stay tuned and keep in touch for collaborations</span>
     </div>
@@ -244,13 +275,29 @@
     <div class="container">
       <h2 class="section-title">About Me</h2>
       <p>
-        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My research focuses on continuous learning systems, energy-harvesting architectures, and intelligent edge solutions that bridge academia and industry.
+        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work focuses on developing continuous learning systems, energy‐harvesting architectures, and intelligent edge solutions that bridge academia and industry.
       </p>
     </div>
   </section>
 
+  <!-- Research Interests Section -->
+  <section id="research-interests" class="bg-light">
+    <div class="container">
+      <h2 class="section-title">Research Interests</h2>
+      <ul>
+        <li>Deep Learning at the Edge</li>
+        <li>Continuous Learning Systems</li>
+        <li>Intermittent Computing</li>
+        <li>Non-volatile Processors</li>
+        <li>Sustainable Computing</li>
+        <li>Energy Harvesting Wireless Sensor Networks</li>
+        <li>Computational Storage</li>
+      </ul>
+    </div>
+  </section>
+
   <!-- Education Section -->
-  <section id="education" class="bg-light">
+  <section id="education">
     <div class="container">
       <h2 class="section-title">Education</h2>
       <div class="card mb-3">
@@ -566,6 +613,9 @@
       <h2 class="section-title">Contact</h2>
       <p><strong>Email:</strong> <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>, <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a></p>
       <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">Visit my LinkedIn</a></p>
+      <p><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank">
+        <i class="fa fa-graduation-cap"></i> View Google Scholar
+      </a></p>
       <p><strong>Current Webpage:</strong> <a href="https://sites.google.com/view/cyansubhramishra/" target="_blank">View my Google Site</a></p>
     </div>
   </section>
