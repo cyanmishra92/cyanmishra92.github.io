@@ -71,12 +71,16 @@
       margin-left: 5px;
     }
 
-    /* Navbar */
+    /* Navbar with PSU logo */
     .navbar {
       background-color: #343a40;
     }
     .navbar-brand, .nav-link { color: #fff !important; }
     .nav-link:hover { color: #d4d4d4 !important; }
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 10px;
+    }
 
     /* Header Section with Penn State Old Main background and zoom animation */
     header {
@@ -118,12 +122,27 @@
       margin-bottom: 0.5rem;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
-    /* Header News Ticker */
-    .header-news {
-      font-size: 1rem;
-      font-style: italic;
+    /* Moving News Ticker */
+    .marquee-container {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      background-color: rgba(0, 0, 0, 0.7);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 5px 0;
+    }
+    .marquee-text {
+      display: inline-block;
+      padding-left: 100%;
       color: #ffc107;
-      margin-top: 0.5rem;
+      font-size: 1rem;
+      animation: marquee 20s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
     }
 
     /* Section Titles */
@@ -178,10 +197,13 @@
     </div>
   </div>
 
-  <!-- Navbar -->
+  <!-- Navbar with PSU Logo -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand" href="#">Cyan Subhra Mishra</a>
+      <a class="navbar-brand" href="#">
+        <img src="https://upload.wikimedia.org/wikipedia/en/8/89/Penn_State_logo.svg" alt="PSU Logo">
+        Cyan Subhra Mishra
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -202,12 +224,14 @@
     </div>
   </nav>
 
-  <!-- Header Section with News Ticker -->
+  <!-- Header Section with Moving News Ticker -->
   <header>
     <div class="header-content">
       <h1>Cyan Subhra Mishra</h1>
       <p>Ph.D. Candidate, CSE, Penn State</p>
-      <div class="header-news" id="headerNews">Stay tuned and keep in touch for collaborations</div>
+    </div>
+    <div class="marquee-container">
+      <span class="marquee-text" id="marqueeText">Stay tuned and keep in touch for collaborations</span>
     </div>
   </header>
 
@@ -216,7 +240,7 @@
     <div class="container">
       <h2 class="section-title">About Me</h2>
       <p>
-        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My research encompasses continuous learning systems, energy-harvesting architectures, and intelligent edge solutions that bridge academia and industry.
+        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My research focuses on continuous learning systems, energy-harvesting architectures, and intelligent edge solutions that bridge academia and industry.
       </p>
     </div>
   </section>
@@ -633,21 +657,21 @@
       });
     });
   </script>
-  <!-- Load Header News from news.txt (ignoring lines that start with "<!DOCTYPE") -->
+  <!-- Load Moving News from news.txt -->
   <script>
     fetch('news.txt')
       .then(response => response.text())
       .then(data => {
-        const headerNews = document.getElementById('headerNews');
+        const marqueeText = document.getElementById('marqueeText');
         const newsItems = data.split('\n').filter(line => line.trim() !== '' && !line.trim().startsWith('<!DOCTYPE'));
         if(newsItems.length > 0) {
-          headerNews.textContent = newsItems[0];
+          marqueeText.textContent = newsItems.join(" | ");
         } else {
-          headerNews.textContent = "Stay tuned and keep in touch for collaborations";
+          marqueeText.textContent = "Stay tuned and keep in touch for collaborations";
         }
       })
       .catch(error => {
-        document.getElementById('headerNews').textContent = "Stay tuned and keep in touch for collaborations";
+        document.getElementById('marqueeText').textContent = "Stay tuned and keep in touch for collaborations";
       });
   </script>
 </body>
