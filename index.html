@@ -3,54 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cyan Subhra Mishra - Academic Portfolio</title>
+  <title>Cyan Subhra Mishra – Academic Portfolio & Opportunities</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Google Font -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    /* Base Styles */
+    /* Global Styles */
     body {
       font-family: 'Open Sans', sans-serif;
-      line-height: 1.6;
+      margin: 0;
       background-color: #f9f9f9;
       scroll-behavior: smooth;
     }
-    a {
-      color: #0d6efd;
-      text-decoration: none;
+    a { color: #0d6efd; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Particles Background */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      top: 0;
+      left: 0;
     }
-    a:hover {
-      text-decoration: underline;
+
+    /* Top Bar for Contact & Opportunities */
+    .top-bar {
+      background-color: #212529;
+      color: #fff;
+      font-size: 0.9rem;
     }
+    .top-bar a { color: #fff; }
+    .top-bar .container { display: flex; justify-content: space-between; align-items: center; }
+
     /* Navbar */
     .navbar {
       background-color: #343a40;
     }
-    .navbar-brand, .nav-link {
-      color: #fff !important;
-    }
-    .nav-link:hover {
-      color: #d4d4d4 !important;
-    }
-    /* Header Section */
+    .navbar-brand, .nav-link { color: #fff !important; }
+    .nav-link:hover { color: #d4d4d4 !important; }
+
+    /* Header with Overlay */
     header {
+      position: relative;
+      height: 60vh;
       background: url('https://source.unsplash.com/1600x900/?technology,university') no-repeat center center/cover;
-      color: #fff;
-      height: 50vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #fff;
       text-align: center;
     }
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+    header .header-content {
+      position: relative;
+      z-index: 2;
+    }
     header h1 {
-      font-size: 3rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      font-size: 3.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }
     header p {
-      font-size: 1.25rem;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+      font-size: 1.5rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
+
     /* Section Titles */
     .section-title {
       margin-bottom: 40px;
@@ -58,15 +86,12 @@
       color: #343a40;
       font-weight: 700;
     }
-    /* Cards & Lists */
-    .card {
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-    ul {
-      list-style: disc inside;
-      padding-left: 1.25rem;
-    }
+    /* Sections */
+    section { padding: 60px 0; }
+    .bg-light { background-color: #f8f9fa !important; }
+    /* Cards */
+    .card { margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    ul { list-style: disc inside; padding-left: 1.25rem; }
     /* Footer */
     footer {
       background-color: #343a40;
@@ -74,15 +99,28 @@
       padding: 20px 0;
       text-align: center;
     }
-    /* Section Padding */
-    section {
-      padding: 60px 0;
-    }
   </style>
 </head>
 <body>
+  <!-- Particles Background -->
+  <div id="particles-js"></div>
+
+  <!-- Top Bar -->
+  <div class="top-bar py-2">
+    <div class="container">
+      <div>
+        <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>
+        <span class="mx-2">|</span>
+        <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">LinkedIn</a>
+      </div>
+      <div>
+        <span>Open to New Opportunities & Collaborations!</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg fixed-top">
+  <nav class="navbar navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="#">Cyan Subhra Mishra</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -97,7 +135,8 @@
           <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
           <li class="nav-item"><a class="nav-link" href="#teaching">Teaching</a></li>
           <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="#awards">Awards</a></li>
+          <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
+          <li class="nav-item"><a class="nav-link" href="#opportunities">Opportunities</a></li>
           <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
           <li class="nav-item"><a class="nav-link" href="#coursework">Coursework</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
@@ -108,7 +147,7 @@
 
   <!-- Header Section -->
   <header>
-    <div class="container">
+    <div class="header-content">
       <h1>Cyan Subhra Mishra</h1>
       <p>Ph.D. Candidate, Department of CSE, Penn State</p>
     </div>
@@ -118,7 +157,7 @@
   <section id="about">
     <div class="container">
       <h2 class="section-title">About Me</h2>
-      <p>Hello, I'm Cyan Subhra Mishra. I am a Ph.D. candidate at Penn State with research interests in Deep Learning at the Edge, Continuous Learning Systems, Intermittent Computing, Non-volatile Processors, Sustainable Computing, Energy Harvesting Wireless Sensor Networks, and Computational Storage. Welcome to my academic portfolio where you can explore my education, publications, projects, and professional experiences.</p>
+      <p>Hello, I’m Cyan Subhra Mishra—a Ph.D. candidate at Penn State whose research spans Deep Learning at the Edge, Continuous Learning Systems, Intermittent Computing, Non-volatile Processors, Sustainable Computing, Energy Harvesting Wireless Sensor Networks, and Computational Storage. Welcome to my academic portfolio and job market page.</p>
     </div>
   </section>
 
@@ -130,16 +169,24 @@
         <div class="card-body">
           <h5 class="card-title">The Pennsylvania State University</h5>
           <p class="card-text"><strong>Ph.D. in Computer Science and Engineering</strong> (Aug 2018 – Aug 2025, Expected) | University Park, PA</p>
-          <p class="card-text">Advisors: Dr. Mahmut Taylan Kandemir, Dr. Jack Sampson</p>
-          <p class="card-text">GPA: 3.7/4.00</p>
+          <p class="card-text">
+            Advisors: 
+            <a href="http://www.cse.psu.edu/~mtk/" target="_blank">Dr. Mahmut Taylan Kandemir</a>,
+            <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a> &nbsp;|&nbsp;
+            GPA: 3.7/4.00
+          </p>
         </div>
       </div>
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">National Institute of Technology, Rourkela</h5>
           <p class="card-text"><strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong> (Aug 2011 – May 2016) | Rourkela, Odisha, India</p>
-          <p class="card-text">Advisors: Dr. Sarat Kumar Patra, Tarjinder Singh (Intel)</p>
-          <p class="card-text">CGPA: 8.39/10.00 <em>(Honors)</em></p>
+          <p class="card-text">
+            Advisors: 
+            <a href="https://www.nitrkl.ac.in" target="_blank">Dr. Sarat Kumar Patra</a>,
+            <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a> &nbsp;|&nbsp;
+            CGPA: 8.39/10.00 <em>(Honors)</em>
+          </p>
         </div>
       </div>
     </div>
@@ -151,34 +198,34 @@
       <h2 class="section-title">Publications</h2>
       <h4>arXiv Preprints</h4>
       <ul>
-        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir. <em>“Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers”</em> arXiv:2410.05435 (2024).</li>
-        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. <em>“Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks”</em> arXiv:2408.14379 (2024).</li>
-        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. <em>“Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers”</em> arXiv:2408.13696 (2024).</li>
-        <li>[arXiv-2020] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. <em>“Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition”</em> arXiv:2204.13106 (2022).</li>
-        <li>[arXiv-2020] Jashwant Raj Gunasekaran, Prashanth Thinakaran, <strong>Cyan Subhra Mishra</strong>, Mahmut Taylan Kandemir, Chita R. Das. <em>“Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud”</em> arXiv:2008.09491 (2020).</li>
-        <li>[arXiv-2020] Jashwant Raj Gunasekaran, Prashanth Thinakaran, <strong>Cyan Subhra Mishra</strong>, Mahmut Taylan Kandemir, Chita R. Das. <em>“Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud”</em></li>
+        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir. “Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers” – <a href="https://arxiv.org/abs/2410.05435" target="_blank">arXiv:2410.05435</a> (2024).</li>
+        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks” – <a href="https://arxiv.org/abs/2408.14379" target="_blank">arXiv:2408.14379</a> (2024).</li>
+        <li>[arXiv-2024] <strong>Cyan Subhra Mishra</strong>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers” – <a href="https://arxiv.org/abs/2408.13696" target="_blank">arXiv:2408.13696</a> (2024).</li>
+        <li>[arXiv-2020] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition” – <a href="https://arxiv.org/abs/2204.13106" target="_blank">arXiv:2204.13106</a> (2022).</li>
+        <li>[arXiv-2020] Jashwant Raj Gunasekaran, Prashanth Thinakaran, <strong>Cyan Subhra Mishra</strong>, Mahmut Taylan Kandemir, Chita R. Das. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud” – <a href="https://arxiv.org/abs/2008.09491" target="_blank">arXiv:2008.09491</a> (2020).</li>
+        <li>[arXiv-2020] Jashwant Raj Gunasekaran, Prashanth Thinakaran, <strong>Cyan Subhra Mishra</strong>, Mahmut Taylan Kandemir, Chita R. Das. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud”</li>
       </ul>
       <h4>Conference Papers</h4>
       <ul>
-        <li>[ICLR-2025] <strong>Cyan Subhra Mishra</strong>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. <em>“Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers”</em> [To Appear].</li>
-        <li>[IPDPS-2025] Wahid Uz Zaman, <strong>Cyan Subhra Mishra</strong>, Saleh AlSaleh, Abutalib Aghayev, Mahmut Taylan Kandemir. <em>“CORD: Parallelizing Query Processing across Multiple Computational Storage Devices”</em> [To Appear].</li>
-        <li>[HPCA-2024] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan, Chita R. Das. <em>“Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers”</em> In IEEE HPCA 2024, pp. 891-907.</li>
-        <li>[ICDCS-2022] Ziyu Ying, Shulin Zhao, Haibo Zhang, <strong>Cyan Subhra Mishra</strong>, Sandeepa Bhuyan, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. <em>“Exploiting Frame Similarity for Efficient Inference on Edge Devices”</em> In ICDCS 2022, pp. 1073-1084.</li>
-        <li>[MICRO-2022] Ziyu Ying, Shulin Zhao, Sandeepa Bhuyan, <strong>Cyan Subhra Mishra</strong>, Mahmut Kandemir, Chita R. Das. <em>“Pushing Point Cloud Compression to Edge”</em> In MICRO 2022, pp. 282-299.</li>
-        <li>[NSDI-2022] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>, Prashanth Thinakaran, Bikash Sharma, Mahmut T Kandemir, Chita R. Das. <em>“Cocktail: A Multidimensional Optimization for Model Serving in Cloud”</em> In NSDI 2022.</li>
-        <li>[NAS-2021] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>. <em>“MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance”</em> In NAS 2021.</li>
-        <li>[SoCC-2021] Vivek M. Bhas, Jashwant Raj Gunasekaran, Prashanth Thinakaran, <strong>Cyan Subhra Mishra</strong>, Mahmut T Kandemir, Chita R. Das. <em>“Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms”</em> In SoCC 2021.</li>
-        <li>[MICRO-2021] Shulin Zhao, Haibo Zhang, <strong>Cyan Subhra Mishra</strong>, Sandeepa Bhuyan, Ziyu Ying, Mahmut T Kandemir, Chita R. Das. <em>“HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality”</em> In MICRO 2021.</li>
-        <li>[DATE-2021] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut T Kandemir, Vijaykrishnan Narayanan. <em>“Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks”</em> In DATE 2021. <em>[Best Paper Nominee]</em></li>
-        <li>[WoSC-2020] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>, Prashanth Thinakaran, Mahmut T Kandemir, Chita R. Das. <em>“Implications Of Public Cloud Resource Heterogeneity for Inference Serving”</em> In WoSC 2020.</li>
-        <li>[ISCA-2020] Shulin Zhao, Haibo Zhang, Sandeepa Bhuyan, <strong>Cyan Subhra Mishra</strong>, Ziyu Ying, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. <em>“Déjà view: Spatio-temporal compute reuse for energy-efficient 360° VR video streaming”</em> In ISCA 2020.</li>
-        <li>[HPCA-2020] Keni Qiu, Nicholas Jao, Mengying Zhao, <strong>Cyan Subhra Mishra</strong>, Gulsum Gudukbay, Sethu Jose, Jack Sampson, Mahmut T Kandemir, Vijaykrishnan Narayanan. <em>“ResiRCA: A resilient energy harvesting ReRAM-based accelerator for intelligent embedded processors”</em> In HPCA 2020.</li>
+        <li>[ICLR-2025] <strong>Cyan Subhra Mishra</strong>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear].</li>
+        <li>[IPDPS-2025] Wahid Uz Zaman, <strong>Cyan Subhra Mishra</strong>, Saleh AlSaleh, Abutalib Aghayev, Mahmut Taylan Kandemir. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear].</li>
+        <li>[HPCA-2024] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan, Chita R. Das. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – In IEEE HPCA 2024, pp. 891-907.</li>
+        <li>[ICDCS-2022] Ziyu Ying, Shulin Zhao, Haibo Zhang, <strong>Cyan Subhra Mishra</strong>, Sandeepa Bhuyan, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Exploiting Frame Similarity for Efficient Inference on Edge Devices” – In ICDCS 2022, pp. 1073-1084.</li>
+        <li>[MICRO-2022] Ziyu Ying, Shulin Zhao, Sandeepa Bhuyan, <strong>Cyan Subhra Mishra</strong>, Mahmut Kandemir, Chita R. Das. “Pushing Point Cloud Compression to Edge” – In MICRO 2022, pp. 282-299.</li>
+        <li>[NSDI-2022] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>, Prashanth Thinakaran, Bikash Sharma, Mahmut T Kandemir, Chita R. Das. “Cocktail: A Multidimensional Optimization for Model Serving in Cloud” – In NSDI 2022.</li>
+        <li>[NAS-2021] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>. “MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance” – In NAS 2021.</li>
+        <li>[SoCC-2021] Vivek M. Bhas, Jashwant Raj Gunasekaran, Prashanth Thinakaran, <strong>Cyan Subhra Mishra</strong>, Mahmut T Kandemir, Chita R. Das. “Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms” – In SoCC 2021.</li>
+        <li>[MICRO-2021] Shulin Zhao, Haibo Zhang, <strong>Cyan Subhra Mishra</strong>, Sandeepa Bhuyan, Ziyu Ying, Mahmut T Kandemir, Chita R. Das. “HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality” – In MICRO 2021.</li>
+        <li>[DATE-2021] <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut T Kandemir, Vijaykrishnan Narayanan. “Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks” – In DATE 2021. <em>[Best Paper Nominee]</em></li>
+        <li>[WoSC-2020] Jashwant Raj Gunasekaran, <strong>Cyan Subhra Mishra</strong>, Prashanth Thinakaran, Mahmut T Kandemir, Chita R. Das. “Implications Of Public Cloud Resource Heterogeneity for Inference Serving” – In WoSC 2020.</li>
+        <li>[ISCA-2020] Shulin Zhao, Haibo Zhang, Sandeepa Bhuyan, <strong>Cyan Subhra Mishra</strong>, Ziyu Ying, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Déjà view: Spatio-temporal compute reuse for energy-efficient 360° VR video streaming” – In ISCA 2020.</li>
+        <li>[HPCA-2020] Keni Qiu, Nicholas Jao, Mengying Zhao, <strong>Cyan Subhra Mishra</strong>, Gulsum Gudukbay, Sethu Jose, Jack Sampson, Mahmut T Kandemir, Vijaykrishnan Narayanan. “ResiRCA: A resilient energy harvesting ReRAM-based accelerator for intelligent embedded processors” – In HPCA 2020.</li>
       </ul>
       <h4>Journal Papers</h4>
       <ul>
-        <li>[ASTM-SSMS-2022-0031] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, <strong>Cyan Subhra Mishra</strong>, Soundar R. T. Kumara, Anil Srivastava, Hui Yang, Vijaykrishnan Narayanan, John Morgan Sampson, Mahmut Taylan Kandemir, Kye-Hwan Lee, Tanna Marie Pugh, Amy Jorden, Gautam Natarajan, Dinakar Sagapuram, Satish T. S. Bukkapatnam. <em>“A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing”</em></li>
-        <li>[IEEE-ESL-2022] Tianyi Shen, <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. <em>“An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks”</em></li>
-        <li>[Defence Science Journal-2015] Narayan Panigrahi, <strong>Cyan Subhra Mishra</strong>. <em>“A Generic Method for Azimuthal Map Projection”</em></li>
+        <li>[ASTM-SSMS-2022-0031] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, <strong>Cyan Subhra Mishra</strong>, Soundar R. T. Kumara, Anil Srivastava, Hui Yang, Vijaykrishnan Narayanan, John Morgan Sampson, Mahmut Taylan Kandemir, Kye-Hwan Lee, Tanna Marie Pugh, Amy Jorden, Gautam Natarajan, Dinakar Sagapuram, Satish T. S. Bukkapatnam. “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing.”</li>
+        <li>[IEEE-ESL-2022] Tianyi Shen, <strong>Cyan Subhra Mishra</strong>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks.”</li>
+        <li>[Defence Science Journal-2015] Narayan Panigrahi, <strong>Cyan Subhra Mishra</strong>. “A Generic Method for Azimuthal Map Projection.”</li>
       </ul>
     </div>
   </section>
@@ -288,28 +335,68 @@
       <ul>
         <li><strong>Dynamic Dropout for Intermittent Systems:</strong> <a href="https://github.com/cyanmishra92/DynDrop" target="_blank">GitHub Link</a> – Integration of dynamic dropout techniques for training intermittent systems.</li>
         <li><strong>Branch Prediction Simulator:</strong> <a href="https://github.com/cyanmishra92/PyBrachPredSim" target="_blank">GitHub Link</a> – Python-based simulation tool for evaluating branch prediction algorithms.</li>
-        <li><strong>Few-shot Facial Recognition:</strong> <a href="https://github.com/cyanmishra92/FewShotEye" target="_blank">GitHub Link</a> – Implementation of few-shot learning techniques for facial recognition on edge devices.</li>
-        <li><strong>Distributed File System Management:</strong> Development of a distributed file system using RPC calls for both client and server sides.</li>
+        <li><strong>Few-shot Facial Recognition:</strong> <a href="https://github.com/cyanmishra92/FewShotEye" target="_blank">GitHub Link</a> – Implementation of few-shot learning for facial recognition on edge devices.</li>
+        <li><strong>Distributed File System Management:</strong> Development of a distributed file system using RPC calls.</li>
         <li><strong>Synchronization using Path Expressions:</strong> Solving the bounded-buffer and readers-writers synchronization problems using path expressions.</li>
-        <li><strong>Compression of DNNs:</strong> Exploring sparsity, pruning, quantization, coresets, SVD, and knowledge distillation for optimizing deep neural networks on low-power devices.</li>
-        <li><strong>AcuLive Classifier:</strong> <a href="https://github.com/cyanmishra92/AcuLive" target="_blank">GitHub Link</a> – A naive classifier to distinguish recorded voice from live voice for digital personal assistants.</li>
+        <li><strong>Compression of DNNs:</strong> Exploring sparsity, pruning, quantization, coresets, SVD, and knowledge distillation to optimize deep neural networks on low-power devices.</li>
+        <li><strong>AcuLive Classifier:</strong> <a href="https://github.com/cyanmishra92/AcuLive" target="_blank">GitHub Link</a> – A classifier to distinguish recorded voice from live voice for digital personal assistants.</li>
       </ul>
     </div>
   </section>
 
-  <!-- Awards Section -->
-  <section id="awards" class="bg-light">
+  <!-- News Section (Dynamic Carousel) -->
+  <section id="news" class="bg-light">
     <div class="container">
-      <h2 class="section-title">Honors & Awards</h2>
-      <ul>
-        <li>2021 – Student Travel Award for NAS'21</li>
-        <li>2021 – Best Paper Nomination for DATE'21</li>
-      </ul>
+      <h2 class="section-title">Latest News & Updates</h2>
+      <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://source.unsplash.com/1200x400/?research,conference" class="d-block w-100" alt="Conference">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Upcoming Conference Talk</h5>
+              <p>Stay tuned for my next talk on energy harvesting and deep learning at the edge.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="https://source.unsplash.com/1200x400/?academic,research" class="d-block w-100" alt="Publication">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>New Publication Released</h5>
+              <p>Check out my latest arXiv preprint on efficient edge-host communication.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="https://source.unsplash.com/1200x400/?career,job" class="d-block w-100" alt="Job Opportunities">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Open to Opportunities</h5>
+              <p>I’m actively exploring new research collaborations and industry opportunities.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Opportunities Section -->
+  <section id="opportunities">
+    <div class="container">
+      <h2 class="section-title">Opportunities</h2>
+      <p class="text-center">I am actively seeking new research collaborations and industry positions. If you have an exciting opportunity, please <a href="mailto:cyan@psu.edu">contact me</a> or connect on <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">LinkedIn</a>.</p>
+      <div class="text-center">
+        <a class="btn btn-primary btn-lg" href="mailto:cyan@psu.edu">Get in Touch</a>
+      </div>
     </div>
   </section>
 
   <!-- Skills Section -->
-  <section id="skills">
+  <section id="skills" class="bg-light">
     <div class="container">
       <h2 class="section-title">Technical Skills</h2>
       <ul>
@@ -321,7 +408,7 @@
   </section>
 
   <!-- Coursework Section -->
-  <section id="coursework" class="bg-light">
+  <section id="coursework">
     <div class="container">
       <h2 class="section-title">Relevant Coursework</h2>
       <ul>
@@ -332,7 +419,7 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contact">
+  <section id="contact" class="bg-light">
     <div class="container">
       <h2 class="section-title">Contact</h2>
       <p><strong>Email:</strong> <a href="mailto:cyan@psu.edu">cyan@psu.edu</a></p>
@@ -351,5 +438,52 @@
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Initialize Particles.js -->
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": { "value": "#0d6efd" },
+        "shape": {
+          "type": "circle"
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": false
+        },
+        "size": {
+          "value": 3,
+          "random": true
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#0d6efd",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 6
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "repulse"
+          }
+        }
+      },
+      "retina_detect": true
+    });
+  </script>
 </body>
 </html>
