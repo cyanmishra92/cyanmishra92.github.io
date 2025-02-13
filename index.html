@@ -14,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <!-- i18next for translation -->
   <script src="https://unpkg.com/i18next@21.8.12/dist/umd/i18next.min.js"></script>
-  <!-- Instafeed.js for Instagram feed (if used) -->
+  <!-- Instafeed.js (optional for Instagram feed) -->
   <script src="https://cdn.jsdelivr.net/npm/instafeed.js@1.4.1"></script>
   <style>
     /* Global Styles & Color Palette */
@@ -37,7 +37,7 @@
       left: 0;
     }
     
-    /* Opportunity Banner – Improved Styling */
+    /* Opportunity Banner – Simple Blue Background */
     .opportunity-banner {
       background-color: #002663;
       color: #fff;
@@ -45,14 +45,6 @@
       text-align: center;
       font-size: 1.4rem;
       font-weight: bold;
-      border-bottom: 3px solid #0d6efd;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
-    .opportunity-banner span {
-      text-decoration: underline;
-      padding: 4px 8px;
-      border-radius: 4px;
-      background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
     }
     
     /* Top Bar with Contact, Resume & Language Options */
@@ -87,18 +79,17 @@
       font-size: 0.9rem;
     }
     
-    /* Navbar with PSU Logo and Single-Line Items */
+    /* Navbar with Reduced Items on Main Bar */
     .navbar {
       background-color: #002663;
       padding: 0.4rem 1rem;
     }
     .navbar-brand, .nav-link { color: #fff !important; white-space: nowrap; }
-    .navbar-brand img {
-      height: 35px;
-      margin-right: 8px;
-    }
+    .navbar-brand img { height: 35px; margin-right: 8px; }
     .navbar-nav { flex-wrap: nowrap; }
     .navbar-nav .nav-item { margin: 0 4px; }
+    /* More Dropdown for additional options */
+    .more-dropdown { margin-left: 8px; }
     /* Mobile Navbar: White text on Blue */
     @media (max-width: 768px) {
       .navbar-collapse { background-color: #002663; }
@@ -197,10 +188,10 @@
     .card { margin-bottom: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); padding: 10px; }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
-    /* Education: Side-by-Side Cards with Distinct Background Colors */
+    /* Education Cards: Distinct Backgrounds */
     #education .row > div { padding: 6px; position: relative; }
     .psu-card { background-color: #e7f1ff; }
-    .nit-card { background-color: #f0f8ff; }
+    .nit-card { background-color: #0033A0; color: #fff; }
     .edu-logo {
       position: absolute;
       bottom: 10px;
@@ -219,7 +210,12 @@
     .tag-journal { background-color: #dc3545; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
     .pub-name { font-weight: bold; text-decoration: underline; }
     
-    /* Experience: Compact Details */
+    /* Experience: Color Boxes by Place */
+    .exp-psu { background-color: #cce5ff; }
+    .exp-bell { background-color: #ffcccc; }
+    .exp-intel { background-color: #d9edf7; }
+    .exp-csre { background-color: #eeeeee; }
+    .exp-cair { background-color: #d4edda; }
     .experience-item { margin-bottom: 12px; }
     .experience-item ul { margin-bottom: 0; }
     
@@ -284,7 +280,7 @@
     </div>
   </div>
   
-  <!-- Navbar with PSU Logo -->
+  <!-- Navbar with Main Items and "More" Dropdown -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
       <a class="navbar-brand" href="#">
@@ -296,17 +292,24 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#about" data-i18n="about">About Me</a></li>
+          <!-- Main Items -->
           <li class="nav-item"><a class="nav-link" href="#education" data-i18n="education">Education</a></li>
-          <li class="nav-item"><a class="nav-link" href="#publications" data-i18n="publications">Publications</a></li>
-          <li class="nav-item"><a class="nav-link" href="#talks" data-i18n="talks">Talks</a></li>
           <li class="nav-item"><a class="nav-link" href="#experience" data-i18n="experience">Experience</a></li>
-          <li class="nav-item"><a class="nav-link" href="#teaching" data-i18n="teaching">Teaching Experience</a></li>
-          <li class="nav-item"><a class="nav-link" href="#projects" data-i18n="projects">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="#skills" data-i18n="skills">Technical Skills</a></li>
-          <li class="nav-item"><a class="nav-link" href="#coursework" data-i18n="coursework">Relevant Coursework</a></li>
-          <li class="nav-item"><a class="nav-link" href="#social-interests" data-i18n="social">Social & Media</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact" data-i18n="contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="#publications" data-i18n="publications">Publications</a></li>
+          <li class="nav-item"><a class="nav-link" href="#social-interests" data-i18n="social">Social</a></li>
+          <!-- "More" Dropdown for the rest -->
+          <li class="nav-item dropdown more-dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown">More</a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreDropdown">
+              <li><a class="dropdown-item" href="#about" data-i18n="about">About Me</a></li>
+              <li><a class="dropdown-item" href="#talks" data-i18n="talks">Talks</a></li>
+              <li><a class="dropdown-item" href="#teaching" data-i18n="teaching">Teaching Experience</a></li>
+              <li><a class="dropdown-item" href="#projects" data-i18n="projects">Projects</a></li>
+              <li><a class="dropdown-item" href="#skills" data-i18n="skills">Technical Skills</a></li>
+              <li><a class="dropdown-item" href="#coursework" data-i18n="coursework">Relevant Coursework</a></li>
+              <li><a class="dropdown-item" href="#contact" data-i18n="contact">Contact</a></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
@@ -350,7 +353,7 @@
     <div class="container">
       <h2 class="section-title" data-i18n="about">About Me</h2>
       <p data-i18n="aboutText">
-        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work explores innovative topics like <span class="highlight">Deep Learning at the Edge</span>, <span class="highlight">Continuous Learning Systems</span>, <span class="highlight">Intermittent Computing &amp; Non-volatile Processors</span>, <span class="highlight">Sustainable Computing &amp; Energy Harvesting</span>, and <span class="highlight">Computational Storage</span> – all aimed at bridging cutting-edge research with impactful industry solutions.
+        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work explores innovative topics like Deep Learning at the Edge, Continuous Learning Systems, Intermittent Computing & Non-volatile Processors, Sustainable Computing & Energy Harvesting, and Computational Storage – all aimed at bridging cutting-edge research with impactful industry solutions.
       </p>
     </div>
   </section>
@@ -503,12 +506,12 @@
     </div>
   </section>
   
-  <!-- Experience Section (Compact, Expanded Details) -->
+  <!-- Experience Section (Compact, Expanded Details with Custom Colors) -->
   <section id="experience">
     <div class="container">
       <h2 class="section-title" data-i18n="experience">Experience</h2>
-      <!-- Graduate Research Assistant -->
-      <div class="experience-item card mb-3">
+      <!-- Graduate Research Assistant (PSU) -->
+      <div class="experience-item card exp-psu mb-3">
         <div class="card-body">
           <h5 class="card-title">Graduate Research Assistant</h5>
           <p class="card-text"><strong>Microsystems Design Lab, Penn State</strong> | University Park, PA<br>December 2018 – Present</p>
@@ -522,7 +525,7 @@
         </div>
       </div>
       <!-- Research Intern at Bell Labs -->
-      <div class="experience-item card mb-3">
+      <div class="experience-item card exp-bell mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Bell Labs</strong> | Murray Hill, NJ<br>June 2021 – Aug 2021</p>
@@ -534,7 +537,7 @@
         </div>
       </div>
       <!-- Design Engineer at Intel -->
-      <div class="experience-item card mb-3">
+      <div class="experience-item card exp-intel mb-3">
         <div class="card-body">
           <h5 class="card-title">Design Engineer</h5>
           <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>June 2016 – June 2018</p>
@@ -546,7 +549,7 @@
         </div>
       </div>
       <!-- Research Intern at Intel -->
-      <div class="experience-item card mb-3">
+      <div class="experience-item card exp-intel mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>Dec 2015 – June 2016</p>
@@ -557,7 +560,7 @@
         </div>
       </div>
       <!-- Research Intern at CSRE, IIT Bombay -->
-      <div class="experience-item card mb-3">
+      <div class="experience-item card exp-csre mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>CSRE, IIT Bombay</strong> | Mumbai, India<br>May 2014 – July 2014</p>
@@ -568,7 +571,7 @@
         </div>
       </div>
       <!-- Research Intern at Centre for AI and Robotics -->
-      <div class="experience-item card">
+      <div class="experience-item card exp-cair">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Centre for Artificial Intelligence and Robotics</strong> | Bengaluru, India<br>May 2013 – July 2013</p>
@@ -789,7 +792,7 @@
     var userFeed = new Instafeed({
       get: 'user',
       userId: 'YOUR_USER_ID', // Replace with your Instagram User ID
-      accessToken: 'YOUR_ACCESS_TOKEN', // Replace with your Access Token if desired
+      accessToken: 'YOUR_ACCESS_TOKEN', // Replace with your Access Token (if desired)
       limit: 6,
       template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a>'
     });
