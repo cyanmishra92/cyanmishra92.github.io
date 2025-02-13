@@ -10,8 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Optional Particles.js for subtle background animation -->
+  <!-- Optional Particles.js for background animation -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <!-- Instafeed.js can be added later if desired -->
   <style>
     /* Global Styles & Color Palette */
     body {
@@ -33,9 +34,9 @@
       left: 0;
     }
     
-    /* Opportunity Banner */
+    /* Opportunity Banner (Penn State Blue) */
     .opportunity-banner {
-      background: linear-gradient(135deg, #dc3545, #ff6b6b);
+      background-color: #002663;
       color: #fff;
       padding: 12px 0;
       text-align: center;
@@ -43,7 +44,7 @@
       font-weight: bold;
     }
     
-    /* Top Bar with Contact & Resume Buttons */
+    /* Top Bar with Contact, Resume & Language Options */
     .top-bar {
       background-color: #212529;
       color: #fff;
@@ -56,7 +57,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    .top-bar .contact-links a:not(:last-child)::after {
+    .contact-links a:not(:last-child)::after {
       content: " | ";
     }
     .btn-contact, .btn-resume {
@@ -66,6 +67,14 @@
       padding: 4px 8px;
       border-radius: 4px;
       margin-left: 5px;
+      font-size: 0.9rem;
+    }
+    /* Language Dropdown */
+    .language-select select {
+      width: auto;
+      display: inline-block;
+      margin-left: 10px;
+      padding: 2px 4px;
       font-size: 0.9rem;
     }
     
@@ -149,7 +158,7 @@
     .marquee-text {
       display: inline-block;
       padding-left: 100%;
-      color: #ffff00; /* brighter yellow */
+      color: #ffff33; /* brighter yellow */
       font-size: 2rem;
       font-weight: bold;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
@@ -160,7 +169,7 @@
       100% { transform: translate(-100%, 0); }
     }
     
-    /* Section Titles & Reduced White Space */
+    /* Section Titles & Compact Layout */
     .section-title {
       margin-bottom: 12px;
       text-align: center;
@@ -173,7 +182,7 @@
     .card { margin-bottom: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); padding: 10px; }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
-    /* Education: side-by-side cards with logos */
+    /* Education: Side-by-Side Cards with Logos */
     #education .row > div { padding: 6px; position: relative; }
     .edu-logo {
       position: absolute;
@@ -183,23 +192,18 @@
       opacity: 0.8;
     }
     
-    /* About Section: integrate Research Interests in fluid writing */
-    #about p {
-      font-size: 1rem;
-    }
-    .highlight {
-      font-weight: bold;
-      color: #0d6efd;
-    }
+    /* About Section: Fluid Bio with Inline Highlighted Research Interests */
+    #about p { font-size: 1rem; }
+    .highlight { font-weight: bold; color: #0d6efd; }
     
-    /* Publications: highlight my name */
+    /* Publications: Highlight My Name */
     .pub-name { font-weight: bold; text-decoration: underline; }
     
-    /* Experience: compact details, all expanded */
+    /* Experience: Compact Details, All Expanded */
     .experience-item { margin-bottom: 12px; }
     .experience-item ul { margin-bottom: 0; }
     
-    /* Instagram Gallery: live feed container */
+    /* Instagram Gallery: Live Feed Container */
     #instafeed { display: flex; flex-wrap: wrap; gap: 4px; }
     #instafeed img { width: calc(33.33% - 4px); border-radius: 4px; }
     
@@ -233,13 +237,23 @@
     <span>Actively seeking new academic &amp; research-driven industry opportunities – Let's collaborate!</span>
   </div>
   
-  <!-- Top Bar with Contact & Resume Buttons -->
+  <!-- Top Bar with Contact, Resume & Language Options -->
   <div class="top-bar py-2">
     <div class="container">
-      <div class="contact-links">
-        <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>
-        <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a>
-        <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">LinkedIn</a>
+      <div class="d-flex align-items-center">
+        <div class="contact-links">
+          <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>
+          <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a>
+          <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">LinkedIn</a>
+        </div>
+        <div class="language-select ms-3">
+          <select class="form-select form-select-sm">
+            <option value="en" selected>English</option>
+            <option value="zh">简体中文</option>
+            <option value="es">Español</option>
+            <option value="hi">हिंदी</option>
+          </select>
+        </div>
       </div>
       <div>
         <button class="btn-resume" onclick="window.location.href='CyanResumePublic.pdf'">View Resume</button>
@@ -316,12 +330,12 @@
     <div class="container">
       <h2 class="section-title">About Me</h2>
       <p>
-        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My research spans innovative topics such as <span class="highlight">Deep Learning at the Edge</span>, <span class="highlight">Continuous Learning Systems</span>, <span class="highlight">Intermittent Computing &amp; Non-volatile Processors</span>, <span class="highlight">Sustainable Computing &amp; Energy Harvesting</span>, and <span class="highlight">Computational Storage</span> – all of which fuel my passion for bridging cutting-edge academic research with impactful industry solutions.
+        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work explores innovative topics like <span class="highlight">Deep Learning at the Edge</span>, <span class="highlight">Continuous Learning Systems</span>, <span class="highlight">Intermittent Computing &amp; Non-volatile Processors</span>, <span class="highlight">Sustainable Computing &amp; Energy Harvesting</span>, and <span class="highlight">Computational Storage</span> – all aimed at bridging cutting-edge research with impactful industry solutions.
       </p>
     </div>
   </section>
   
-  <!-- Education Section (Side by Side Cards with Logos) -->
+  <!-- Education Section (Side-by-Side Cards with Logos) -->
   <section id="education">
     <div class="container">
       <h2 class="section-title">Education</h2>
@@ -350,7 +364,8 @@
                 <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a><br>
                 CGPA: 8.39/10.00 <em>(Honors)</em>
               </p>
-              <img src="nit-rourkela-logo.png" alt="NIT Rourkela Logo" class="edu-logo">
+              <!-- Updated NIT Rourkela logo using the Wikipedia media link -->
+              <img src="https://en.wikipedia.org/wiki/National_Institute_of_Technology,_Rourkela#/media/File:NIT_Rourkela_Colour_Logo.svg" alt="NIT Rourkela Logo" class="edu-logo">
             </div>
           </div>
         </div>
@@ -496,7 +511,7 @@
           June 2021 – Aug 2021</p>
           <ul>
             <li>Optimized deep neural network models for autonomous inference serving on heterogeneous platforms.</li>
-            <li>Implemented optimizations that reduced inference latency by 15%.</li>
+            <li>Implemented optimizations reducing inference latency by 15%.</li>
             <li>Collaborated with experts to translate research into practical solutions.</li>
           </ul>
         </div>
@@ -635,8 +650,7 @@
       <h2 class="section-title">Contact</h2>
       <p><strong>Email:</strong> <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>, <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a></p>
       <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">Visit my LinkedIn</a></p>
-      <p><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank">
-        <i class="fa fa-graduation-cap"></i> View Google Scholar</a></p>
+      <p><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank"><i class="fa fa-graduation-cap"></i> View Google Scholar</a></p>
       <p><strong>Current Webpage:</strong> <a href="https://sites.google.com/view/cyansubhramishra/" target="_blank">View my Google Site</a></p>
     </div>
   </section>
