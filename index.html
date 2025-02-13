@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cyan Subhra Mishra – Academic Portfolio</title>
-  <!-- Bootstrap CSS -->
+  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    /* CSS Variables for Consistent Styling */
+    /* CSS Variables */
     :root {
       --primary: #002663;
       --secondary: #0d6efd;
       --accent: #ffc107;
-      --bg-light: #f4f8fb;
+      --bg: #f4f8fb;
       --text: #333;
     }
     body {
@@ -33,9 +33,8 @@
       text-decoration: none;
       transition: color 0.3s;
     }
-    a:hover {
-      color: var(--accent);
-    }
+    a:hover { color: var(--accent); }
+
     /* Sticky Navbar */
     .navbar {
       background: var(--primary);
@@ -47,12 +46,12 @@
     }
     .navbar-toggler { border: none; }
     .navbar-toggler-icon { filter: invert(1); }
-    
+
     /* Hero Section */
     .hero {
       position: relative;
       height: 100vh;
-      background: var(--bg-light);
+      background: var(--bg);
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -60,13 +59,19 @@
       text-align: center;
       padding: 20px;
     }
+    #particles-js {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+    }
     .hero-content {
       position: relative;
       z-index: 2;
       max-width: 800px;
     }
     .hero h1 {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
       margin-bottom: 20px;
@@ -78,17 +83,16 @@
     }
     .hero .btn {
       margin: 0 10px;
-      padding: 10px 20px;
+      padding: 12px 25px;
       font-size: 1rem;
       border-radius: 5px;
+      transition: background 0.3s;
     }
     .btn-primary {
       background: var(--secondary);
       border: none;
     }
-    .btn-primary:hover {
-      background: var(--accent);
-    }
+    .btn-primary:hover { background: var(--accent); }
     .btn-outline-primary {
       border: 2px solid var(--secondary);
       color: var(--secondary);
@@ -98,14 +102,22 @@
       background: var(--secondary);
       color: #fff;
     }
-    /* Particles Background confined to Hero */
-    #particles-js {
+    /* Scroll Down Arrow */
+    .scroll-down {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem;
+      color: var(--secondary);
+      cursor: pointer;
+      animation: bounce 2s infinite;
+      z-index: 2;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+      40% { transform: translateX(-50%) translateY(-10px); }
+      60% { transform: translateX(-50%) translateY(-5px); }
     }
     
     /* Section Titles */
@@ -127,11 +139,9 @@
       margin: 10px auto 0;
       border-radius: 2px;
     }
-    section {
-      padding: 60px 0;
-    }
+    section { padding: 60px 0; }
     
-    /* Compact Card Styles */
+    /* Compact Card Layouts */
     .card {
       border: none;
       border-radius: 10px;
@@ -141,13 +151,7 @@
     }
     .card:hover { transform: translateY(-5px); }
     .card-body { padding: 20px; }
-    
-    /* Read More Toggle */
-    .read-more {
-      color: var(--secondary);
-      cursor: pointer;
-      font-weight: 600;
-    }
+    .read-more { color: var(--secondary); cursor: pointer; font-weight: 600; }
     .more-content { display: none; }
     
     /* Social Feed Section */
@@ -156,19 +160,13 @@
       flex-wrap: wrap;
       gap: 20px;
     }
-    .social-feed > div {
-      flex: 1 1 300px;
-    }
-    /* Compact Instagram Grid */
+    .social-feed > div { flex: 1 1 300px; }
     .insta-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 5px;
     }
-    .insta-grid img {
-      width: 100%;
-      border-radius: 5px;
-    }
+    .insta-grid img { width: 100%; border-radius: 5px; }
     
     /* Footer */
     footer {
@@ -212,8 +210,13 @@
       <h1>Welcome to My Portfolio</h1>
       <div>
         <button class="btn btn-primary" onclick="window.location.href='CyanResumePublic.pdf'">View Resume</button>
-        <button class="btn btn-outline-primary" onclick="window.location.href='mailto:cyan@psu.edu'"><i class="fa fa-envelope"></i> Get in Touch</button>
+        <button class="btn btn-outline-primary" onclick="window.location.href='mailto:cyan@psu.edu'">
+          <i class="fa fa-envelope"></i> Get in Touch
+        </button>
       </div>
+    </div>
+    <div class="scroll-down" onclick="document.getElementById('about').scrollIntoView({ behavior: 'smooth' });">
+      <i class="fa fa-angle-down"></i>
     </div>
   </section>
   
@@ -247,7 +250,7 @@
     <div class="container">
       <h2 class="section-title">Experience &amp; Education</h2>
       <div class="row">
-        <!-- Experience Cards -->
+        <!-- Experience -->
         <div class="col-lg-6">
           <h4 class="mb-3">Experience</h4>
           <div class="card">
@@ -268,25 +271,9 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Research Intern, Bell Labs</h5>
-              <p class="card-text">Murray Hill, NJ<br>Jun 2021 – Aug 2021</p>
-              <ul>
-                <li>Optimized deep neural network models for autonomous inference.</li>
-              </ul>
-              <span class="read-more" onclick="toggleContent(this)">Read More...</span>
-              <div class="more-content">
-                <ul>
-                  <li>Reduced inference latency by 15% with performance improvements.</li>
-                  <li>Translated research into practical solutions.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
           <!-- Additional experience cards can be added here -->
         </div>
-        <!-- Education Cards -->
+        <!-- Education -->
         <div class="col-lg-6">
           <h4 class="mb-3">Education</h4>
           <div class="card">
@@ -312,7 +299,7 @@
   <section id="publications">
     <div class="container">
       <h2 class="section-title">Publications</h2>
-      <div class="pub-filter mb-4 text-center">
+      <div class="text-center mb-4">
         <label for="pubFilter" class="form-label">Filter by Topic:</label>
         <select class="form-select w-auto d-inline-block" id="pubFilter">
           <option value="all" selected>All</option>
