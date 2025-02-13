@@ -14,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <!-- i18next for translation -->
   <script src="https://unpkg.com/i18next@21.8.12/dist/umd/i18next.min.js"></script>
-  <!-- Instafeed.js (optional for Instagram feed) -->
+  <!-- Instafeed.js for Instagram feed (if used) -->
   <script src="https://cdn.jsdelivr.net/npm/instafeed.js@1.4.1"></script>
   <style>
     /* Global Styles & Color Palette */
@@ -37,7 +37,7 @@
       left: 0;
     }
     
-    /* Opportunity Banner – Simple Blue Background */
+    /* Opportunity Banner – Clean Blue */
     .opportunity-banner {
       background-color: #002663;
       color: #fff;
@@ -45,6 +45,13 @@
       text-align: center;
       font-size: 1.4rem;
       font-weight: bold;
+      border-bottom: 3px solid #0d6efd;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .opportunity-banner span {
+      /* Removed extra highlight styling */
+      padding: 4px 8px;
+      border-radius: 4px;
     }
     
     /* Top Bar with Contact, Resume & Language Options */
@@ -79,7 +86,7 @@
       font-size: 0.9rem;
     }
     
-    /* Navbar with Reduced Items on Main Bar */
+    /* Navigation Bar: Main Items + "More" Dropdown */
     .navbar {
       background-color: #002663;
       padding: 0.4rem 1rem;
@@ -88,15 +95,14 @@
     .navbar-brand img { height: 35px; margin-right: 8px; }
     .navbar-nav { flex-wrap: nowrap; }
     .navbar-nav .nav-item { margin: 0 4px; }
-    /* More Dropdown for additional options */
+    /* More Dropdown */
     .more-dropdown { margin-left: 8px; }
-    /* Mobile Navbar: White text on Blue */
     @media (max-width: 768px) {
       .navbar-collapse { background-color: #002663; }
       .navbar-collapse .nav-link { color: #fff !important; }
     }
     
-    /* Header Section with Cover Image (Reduced Height) */
+    /* Header Section with Cover Image */
     header {
       position: relative;
       height: 30vh;
@@ -113,7 +119,6 @@
       background-color: rgba(0,0,0,0.5);
       z-index: 1;
     }
-    /* Compact Profile Container in Header */
     .header-profile {
       position: absolute;
       top: 10px;
@@ -143,7 +148,6 @@
       font-size: 0.9rem;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
-    /* Social Media Icons in Header */
     .header-icons a {
       margin-right: 8px;
       font-size: 1.2rem;
@@ -175,23 +179,39 @@
       100% { transform: translate(-100%, 0); }
     }
     
-    /* Section Titles & Compact Layout */
+    /* Section Titles with Underline */
     .section-title {
       margin-bottom: 12px;
       text-align: center;
       color: #002663;
       font-weight: 700;
       font-size: 1.8rem;
+      position: relative;
+    }
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 3px;
+      background-color: #002663;
+      margin: 8px auto 0;
     }
     section { padding: 16px 0; }
     .bg-light { background-color: #f8f9fa !important; }
-    .card { margin-bottom: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); padding: 10px; }
+    .card {
+      margin-bottom: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      padding: 10px;
+      border-radius: 6px;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: scale(1.02); }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
-    /* Education Cards: Distinct Backgrounds */
+    /* Education Cards */
     #education .row > div { padding: 6px; position: relative; }
     .psu-card { background-color: #e7f1ff; }
-    .nit-card { background-color: #0033A0; color: #fff; }
+    .nit-card { background-color: #F7DAD0; } /* light brick color for NIT */
     .edu-logo {
       position: absolute;
       bottom: 10px;
@@ -200,30 +220,32 @@
       opacity: 0.8;
     }
     
-    /* About Section: Fluid Bio with Inline Highlighted Research Interests */
+    /* About Section */
     #about p { font-size: 1rem; }
     .highlight { font-weight: bold; color: #0d6efd; }
     
-    /* Publications: Colored Tags for Each Type */
+    /* Publications Tags */
     .tag-arxiv { background-color: #0d6efd; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
     .tag-conf { background-color: #28a745; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
     .tag-journal { background-color: #dc3545; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
     .pub-name { font-weight: bold; text-decoration: underline; }
     
-    /* Experience: Color Boxes by Place */
+    /* Experience Cards – Date on Same Line */
+    .experience-item { margin-bottom: 12px; }
+    .experience-item .card-text { font-size: 0.95rem; }
+    .exp-date { float: right; font-weight: normal; color: #555; }
+    /* Experience Colors for each institution */
     .exp-psu { background-color: #cce5ff; }
     .exp-bell { background-color: #ffcccc; }
     .exp-intel { background-color: #d9edf7; }
     .exp-csre { background-color: #eeeeee; }
     .exp-cair { background-color: #d4edda; }
-    .experience-item { margin-bottom: 12px; }
-    .experience-item ul { margin-bottom: 0; }
     
-    /* Instagram Gallery: Live Feed Container */
+    /* Instagram Gallery */
     #instafeed { display: flex; flex-wrap: wrap; gap: 4px; }
     #instafeed img { width: calc(33.33% - 4px); border-radius: 4px; }
     
-    /* Social & Media Section: Social Icons */
+    /* Social & Media Section */
     #social-interests .social-icons {
       text-align: center;
       margin-top: 12px;
@@ -297,7 +319,7 @@
           <li class="nav-item"><a class="nav-link" href="#experience" data-i18n="experience">Experience</a></li>
           <li class="nav-item"><a class="nav-link" href="#publications" data-i18n="publications">Publications</a></li>
           <li class="nav-item"><a class="nav-link" href="#social-interests" data-i18n="social">Social</a></li>
-          <!-- "More" Dropdown for the rest -->
+          <!-- "More" Dropdown for remaining options -->
           <li class="nav-item dropdown more-dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown">More</a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreDropdown">
@@ -367,11 +389,10 @@
           <div class="card psu-card">
             <div class="card-body" style="position: relative;">
               <h5 class="card-title">The Pennsylvania State University</h5>
-              <p class="card-text"><strong>Ph.D. in Computer Science and Engineering</strong><br>Aug 2018 – Aug 2025 (Expected) | University Park, PA</p>
+              <p class="card-text"><strong>Ph.D. in Computer Science and Engineering</strong> | University Park, PA <span class="exp-date">Aug 2018 – Aug 2025 (Expected)</span></p>
               <p class="card-text">
                 Advisors: <a href="http://www.cse.psu.edu/~mtk/" target="_blank">Dr. Mahmut Taylan Kandemir</a>, 
-                <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a><br>
-                GPA: 3.7/4.00
+                <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a> | GPA: 3.7/4.00
               </p>
               <img src="psu-logo.svg" alt="PSU Logo" class="edu-logo">
             </div>
@@ -381,11 +402,10 @@
           <div class="card nit-card">
             <div class="card-body" style="position: relative;">
               <h5 class="card-title">National Institute of Technology, Rourkela</h5>
-              <p class="card-text"><strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong><br>Aug 2011 – May 2016 | Rourkela, Odisha, India</p>
+              <p class="card-text"><strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong> | Rourkela, Odisha, India <span class="exp-date">Aug 2011 – May 2016</span></p>
               <p class="card-text">
                 Advisors: <a href="https://www.nitrkl.ac.in" target="_blank">Dr. Sarat Kumar Patra</a>, 
-                <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a><br>
-                CGPA: 8.39/10.00 <em>(Honors)</em>
+                <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a> | CGPA: 8.39/10.00 <em>(Honors)</em>
               </p>
               <img src="nit-logo.svg" alt="NIT Rourkela Logo" class="edu-logo">
             </div>
@@ -506,7 +526,7 @@
     </div>
   </section>
   
-  <!-- Experience Section (Compact, Expanded Details with Custom Colors) -->
+  <!-- Experience Section (Compact, Expanded Details with Date Next to Place) -->
   <section id="experience">
     <div class="container">
       <h2 class="section-title" data-i18n="experience">Experience</h2>
@@ -514,7 +534,7 @@
       <div class="experience-item card exp-psu mb-3">
         <div class="card-body">
           <h5 class="card-title">Graduate Research Assistant</h5>
-          <p class="card-text"><strong>Microsystems Design Lab, Penn State</strong> | University Park, PA<br>December 2018 – Present</p>
+          <p class="card-text"><strong>Microsystems Design Lab, Penn State</strong> <span class="exp-date">| University Park, PA | Dec 2018 – Present</span></p>
           <ul>
             <li>Investigated architectural and algorithmic innovations in energy-harvesting wireless sensor networks using non-volatile processors.</li>
             <li>Designed efficient strategies to enable on-device intelligence at the edge.</li>
@@ -528,7 +548,7 @@
       <div class="experience-item card exp-bell mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
-          <p class="card-text"><strong>Bell Labs</strong> | Murray Hill, NJ<br>June 2021 – Aug 2021</p>
+          <p class="card-text"><strong>Bell Labs</strong> <span class="exp-date">| Murray Hill, NJ | Jun 2021 – Aug 2021</span></p>
           <ul>
             <li>Optimized deep neural network models for autonomous inference serving on heterogeneous platforms.</li>
             <li>Implemented optimizations reducing inference latency by 15%.</li>
@@ -540,7 +560,7 @@
       <div class="experience-item card exp-intel mb-3">
         <div class="card-body">
           <h5 class="card-title">Design Engineer</h5>
-          <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>June 2016 – June 2018</p>
+          <p class="card-text"><strong>Intel</strong> <span class="exp-date">| Bengaluru, India | Jun 2016 – Jun 2018</span></p>
           <ul>
             <li>Designed accelerators for machine learning, computer vision, and bioinformatics using FPGAs.</li>
             <li>Engaged in hardware–software co-design to optimize few-shot learning algorithms.</li>
@@ -552,7 +572,7 @@
       <div class="experience-item card exp-intel mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
-          <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>Dec 2015 – June 2016</p>
+          <p class="card-text"><strong>Intel</strong> <span class="exp-date">| Bengaluru, India | Dec 2015 – Jun 2016</span></p>
           <ul>
             <li>Developed FPGA-based hardware accelerators for protein search algorithms.</li>
             <li>Enhanced processing throughput by optimizing data pipelines.</li>
@@ -563,7 +583,7 @@
       <div class="experience-item card exp-csre mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
-          <p class="card-text"><strong>CSRE, IIT Bombay</strong> | Mumbai, India<br>May 2014 – July 2014</p>
+          <p class="card-text"><strong>CSRE, IIT Bombay</strong> <span class="exp-date">| Mumbai, India | May 2014 – Jul 2014</span></p>
           <ul>
             <li>Developed computational models for pre-processing hyperspectral images.</li>
             <li>Enhanced image analysis accuracy by refining data processing techniques.</li>
@@ -574,7 +594,7 @@
       <div class="experience-item card exp-cair">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
-          <p class="card-text"><strong>Centre for Artificial Intelligence and Robotics</strong> | Bengaluru, India<br>May 2013 – July 2013</p>
+          <p class="card-text"><strong>Centre for Artificial Intelligence and Robotics</strong> <span class="exp-date">| Bengaluru, India | May 2013 – Jul 2013</span></p>
           <ul>
             <li>Developed a generic method for azimuthal map projection.</li>
             <li>Contributed to foundational research that informed subsequent projects.</li>
@@ -733,7 +753,6 @@
         "retina_detect": true
       },
       {
-        // New configuration: polygon particles with a different effect.
         "particles": {
           "number": { "value": 50, "density": { "enable": true, "value_area": 1000 } },
           "color": { "value": "#ff6b6b" },
