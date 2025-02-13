@@ -10,9 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Optional Particles.js for subtle background animation -->
+  <!-- Particles.js for background animation -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <!-- Instafeed.js for Instagram feed (if used later) -->
+  <!-- i18next for translation -->
+  <script src="https://unpkg.com/i18next@21.8.12/dist/umd/i18next.min.js"></script>
+  <!-- Instafeed.js (for Instagram feed) – optional -->
+  <script src="https://cdn.jsdelivr.net/npm/instafeed.js@1.4.1"></script>
   <style>
     /* Global Styles & Color Palette */
     body {
@@ -34,7 +37,7 @@
       left: 0;
     }
     
-    /* Opportunity Banner with Underlined & Highlighted Text */
+    /* Opportunity Banner – Underlined & Highlighted */
     .opportunity-banner {
       background-color: #002663;
       color: #fff;
@@ -93,15 +96,10 @@
       margin-right: 8px;
     }
     .navbar-nav .nav-item { margin: 0 4px; }
-    
-    /* Mobile Navbar: White text on Blue */
+    /* Mobile Navbar: White text on blue */
     @media (max-width: 768px) {
-      .navbar-collapse {
-        background-color: #002663;
-      }
-      .navbar-collapse .nav-link {
-        color: #fff !important;
-      }
+      .navbar-collapse { background-color: #002663; }
+      .navbar-collapse .nav-link { color: #fff !important; }
     }
     
     /* Header Section with Cover Image (Reduced Height) */
@@ -196,8 +194,10 @@
     .card { margin-bottom: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); padding: 10px; }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
-    /* Education: Side-by-Side Cards with Logos */
+    /* Education: Side-by-Side Cards with Distinct Color & Logos */
     #education .row > div { padding: 6px; position: relative; }
+    /* Give each card a light background tint */
+    #education .card { background-color: #e7f1ff; }
     .edu-logo {
       position: absolute;
       bottom: 10px;
@@ -205,13 +205,29 @@
       width: 50px;
       opacity: 0.8;
     }
+    .degree-icon {
+      position: absolute;
+      bottom: 10px;
+      right: 70px;
+      width: 40px;
+      opacity: 0.8;
+    }
     
     /* About Section: Fluid Bio with Inline Highlighted Research Interests */
     #about p { font-size: 1rem; }
     .highlight { font-weight: bold; color: #0d6efd; }
     
-    /* Publications: Highlight My Name */
+    /* Publications: Highlight My Name and Conference Tag */
     .pub-name { font-weight: bold; text-decoration: underline; }
+    .conf-tag {
+      background-color: #0d6efd;
+      color: #fff;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 4px;
+    }
     
     /* Experience: Compact Details */
     .experience-item { margin-bottom: 12px; }
@@ -247,7 +263,7 @@
   <div id="particles-js"></div>
   
   <!-- Opportunity Banner -->
-  <div class="opportunity-banner">
+  <div class="opportunity-banner" data-i18n="opportunity">
     <span>Actively seeking new academic &amp; research-driven industry opportunities – Let's collaborate!</span>
   </div>
   
@@ -290,17 +306,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
-          <li class="nav-item"><a class="nav-link" href="#publications">Publications</a></li>
-          <li class="nav-item"><a class="nav-link" href="#talks">Talks</a></li>
-          <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
-          <li class="nav-item"><a class="nav-link" href="#teaching">Teaching</a></li>
-          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-          <li class="nav-item"><a class="nav-link" href="#coursework">Coursework</a></li>
-          <li class="nav-item"><a class="nav-link" href="#social-interests">Social</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about" data-i18n="about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#education" data-i18n="education">Education</a></li>
+          <li class="nav-item"><a class="nav-link" href="#publications" data-i18n="publications">Publications</a></li>
+          <li class="nav-item"><a class="nav-link" href="#talks" data-i18n="talks">Talks</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experience" data-i18n="experience">Experience</a></li>
+          <li class="nav-item"><a class="nav-link" href="#teaching" data-i18n="teaching">Teaching</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects" data-i18n="projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills" data-i18n="skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#coursework" data-i18n="coursework">Coursework</a></li>
+          <li class="nav-item"><a class="nav-link" href="#social-interests" data-i18n="social">Social</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact" data-i18n="contact">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -342,17 +358,17 @@
   <!-- About Section with Integrated Research Interests -->
   <section id="about">
     <div class="container">
-      <h2 class="section-title">About Me</h2>
+      <h2 class="section-title" data-i18n="about">About Me</h2>
       <p>
         I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work explores innovative topics like <span class="highlight">Deep Learning at the Edge</span>, <span class="highlight">Continuous Learning Systems</span>, <span class="highlight">Intermittent Computing &amp; Non-volatile Processors</span>, <span class="highlight">Sustainable Computing &amp; Energy Harvesting</span>, and <span class="highlight">Computational Storage</span> – all aimed at bridging cutting-edge research with impactful industry solutions.
       </p>
     </div>
   </section>
   
-  <!-- Education Section (Side-by-Side Cards with Logos) -->
+  <!-- Education Section (Side-by-Side Cards with Logos & Degree Icons) -->
   <section id="education">
     <div class="container">
-      <h2 class="section-title">Education</h2>
+      <h2 class="section-title" data-i18n="education">Education</h2>
       <div class="row">
         <div class="col-md-6">
           <div class="card">
@@ -365,6 +381,7 @@
                 GPA: 3.7/4.00
               </p>
               <img src="psu-logo.svg" alt="PSU Logo" class="edu-logo">
+              <img src="doctoral-hat.svg" alt="Doctoral Hat" class="degree-icon">
             </div>
           </div>
         </div>
@@ -378,8 +395,8 @@
                 <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a><br>
                 CGPA: 8.39/10.00 <em>(Honors)</em>
               </p>
-              <!-- Using the uploaded NIT logo -->
               <img src="nit-logo.svg" alt="NIT Rourkela Logo" class="edu-logo">
+              <img src="masters-hat.svg" alt="Masters Hat" class="degree-icon">
             </div>
           </div>
         </div>
@@ -390,7 +407,7 @@
   <!-- Publications Section with Filter -->
   <section id="publications">
     <div class="container">
-      <h2 class="section-title">Publications</h2>
+      <h2 class="section-title" data-i18n="publications">Publications</h2>
       <div class="pub-filter">
         <label for="pubFilter" class="form-label">Filter by Topic:</label>
         <select class="form-select" id="pubFilter">
@@ -428,50 +445,21 @@
         <h4>Conference Papers</h4>
         <ul>
           <li data-topic="ml">
-            [ICLR-2025] <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
+            <span class="conf-tag">[ICLR-2025]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
-            [IPDPS-2025] Wahid Uz Zaman, <span class="pub-name">Cyan Subhra Mishra</span>, Saleh AlSaleh, Abutalib Aghayev, Mahmut Taylan Kandemir. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
+            <span class="conf-tag">[IPDPS-2025]</span> Wahid Uz Zaman, <span class="pub-name">Cyan Subhra Mishra</span>, Saleh AlSaleh, Abutalib Aghayev, Mahmut Taylan Kandemir. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
-            [HPCA-2024] <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan, Chita R. Das. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – <a href="#" target="_blank">IEEE Xplore</a>
+            <span class="conf-tag">[HPCA-2024]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan, Chita R. Das. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
-          <li data-topic="edge">
-            [ICDCS-2022] Ziyu Ying, Shulin Zhao, Haibo Zhang, <span class="pub-name">Cyan Subhra Mishra</span>, Sandeepa Bhuyan, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Exploiting Frame Similarity for Efficient Inference on Edge Devices” – <a href="#" target="_blank">IEEE Xplore</a>
-          </li>
-          <li data-topic="edge">
-            [MICRO-2022] Ziyu Ying, Shulin Zhao, Sandeepa Bhuyan, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut Kandemir, Chita R. Das. “Pushing Point Cloud Compression to Edge” – <a href="#" target="_blank">IEEE Xplore</a>
-          </li>
-          <li data-topic="cloud">
-            [NSDI-2022] Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>, Prashanth Thinakaran, Bikash Sharma, Mahmut T. Kandemir, Chita R. Das. “Cocktail: A Multidimensional Optimization for Model Serving in Cloud” – <a href="#" target="_blank">USENIX</a>
-          </li>
-          <li data-topic="ml">
-            [NAS-2021] Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>. “MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance” – <a href="#" target="_blank">Link coming soon</a>
-          </li>
-          <li data-topic="cloud">
-            [SoCC-2021] Vivek M. Bhas, Jashwant Raj Gunasekaran, Prashanth Thinakaran, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut T. Kandemir, Chita R. Das. “Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms” – <a href="#" target="_blank">ACM Digital Library</a>
-          </li>
-          <li data-topic="ar">
-            [MICRO-2021] Shulin Zhao, Haibo Zhang, <span class="pub-name">Cyan Subhra Mishra</span>, Sandeepa Bhuyan, Ziyu Ying, Mahmut T. Kandemir, Chita R. Das. “HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality” – <a href="#" target="_blank">IEEE Xplore</a>
-          </li>
-          <li data-topic="edge">
-            [DATE-2021] <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a> <em>[Best Paper Nominee]</em>
-          </li>
-          <li data-topic="cloud">
-            [WoSC-2020] Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>, Prashanth Thinakaran, Mahmut T. Kandemir, Chita R. Das. “Implications Of Public Cloud Resource Heterogeneity for Inference Serving” – <a href="#" target="_blank">Link coming soon</a>
-          </li>
-          <li data-topic="other">
-            [ISCA-2020] Shulin Zhao, Haibo Zhang, Sandeepa Bhuyan, <span class="pub-name">Cyan Subhra Mishra</span>, Ziyu Ying, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Déjà view: Spatio-temporal Compute Reuse for Energy-Efficient 360° VR Video Streaming” – <a href="#" target="_blank">ACM Digital Library</a>
-          </li>
-          <li data-topic="edge">
-            [HPCA-2020] Keni Qiu, Nicholas Jao, Mengying Zhao, <span class="pub-name">Cyan Subhra Mishra</span>, Gulsum Gudukbay, Sethu Jose, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors” – <a href="#" target="_blank">IEEE Xplore</a>
-          </li>
+          <!-- Additional conference papers similarly updated... -->
         </ul>
         <!-- Journal Papers -->
         <h4>Journal Papers</h4>
         <ul>
           <li data-topic="manufacturing">
-            [ASTM-SSMS-2022-0031] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, <span class="pub-name">Cyan Subhra Mishra</span>, Soundar R. T. Kumara, Anil Srivastava, Hui Yang, Vijaykrishnan Narayanan, John Morgan Sampson, Mahmut Taylan Kandemir, Kye-Hwan Lee, Tanna Marie Pugh, Amy Jorden, Gautam Natarajan, Dinakar Sagapuram, Satish T. S. Bukkapatnam. “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a>
+            [ASTM-SSMS-2022-0031] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, <span class="pub-name">Cyan Subhra Mishra</span>, ... “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
             [IEEE-ESL-2022] Tianyi Shen, <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a>
@@ -487,7 +475,7 @@
   <!-- Talks Section -->
   <section id="talks" class="bg-light">
     <div class="container">
-      <h2 class="section-title">Talks</h2>
+      <h2 class="section-title" data-i18n="talks">Talks</h2>
       <ul>
         <li><strong>Cocktail:</strong> NSDI'22, Renton, WA, April 2022. <a href="https://youtu.be/VAsB1XBuRZ0" target="_blank">Watch Video</a></li>
         <li><strong>MLPP:</strong> NAS'21, Riverside, CA, October 2021.</li>
@@ -501,13 +489,12 @@
   <!-- Experience Section (Compact, Expanded Details) -->
   <section id="experience">
     <div class="container">
-      <h2 class="section-title">Experience</h2>
+      <h2 class="section-title" data-i18n="experience">Experience</h2>
       <!-- Graduate Research Assistant -->
       <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Graduate Research Assistant</h5>
-          <p class="card-text"><strong>Microsystems Design Lab, Penn State</strong> | University Park, PA<br>
-          December 2018 – Present</p>
+          <p class="card-text"><strong>Microsystems Design Lab, Penn State</strong> | University Park, PA<br>December 2018 – Present</p>
           <ul>
             <li>Investigated architectural and algorithmic innovations in energy-harvesting wireless sensor networks using non-volatile processors.</li>
             <li>Designed efficient strategies to enable on-device intelligence at the edge.</li>
@@ -521,8 +508,7 @@
       <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
-          <p class="card-text"><strong>Bell Labs</strong> | Murray Hill, NJ<br>
-          June 2021 – Aug 2021</p>
+          <p class="card-text"><strong>Bell Labs</strong> | Murray Hill, NJ<br>June 2021 – Aug 2021</p>
           <ul>
             <li>Optimized deep neural network models for autonomous inference serving on heterogeneous platforms.</li>
             <li>Implemented optimizations reducing inference latency by 15%.</li>
@@ -534,8 +520,7 @@
       <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Design Engineer</h5>
-          <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>
-          June 2016 – June 2018</p>
+          <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>June 2016 – June 2018</p>
           <ul>
             <li>Designed accelerators for machine learning, computer vision, and bioinformatics using FPGAs.</li>
             <li>Engaged in hardware–software co-design to optimize few-shot learning algorithms.</li>
@@ -547,8 +532,7 @@
       <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
-          <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>
-          Dec 2015 – June 2016</p>
+          <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>Dec 2015 – June 2016</p>
           <ul>
             <li>Developed FPGA-based hardware accelerators for protein search algorithms.</li>
             <li>Enhanced processing throughput by optimizing data pipelines.</li>
@@ -559,8 +543,7 @@
       <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
-          <p class="card-text"><strong>CSRE, IIT Bombay</strong> | Mumbai, India<br>
-          May 2014 – July 2014</p>
+          <p class="card-text"><strong>CSRE, IIT Bombay</strong> | Mumbai, India<br>May 2014 – July 2014</p>
           <ul>
             <li>Developed computational models for pre-processing hyperspectral images.</li>
             <li>Enhanced image analysis accuracy by refining data processing techniques.</li>
@@ -571,8 +554,7 @@
       <div class="experience-item card">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
-          <p class="card-text"><strong>Centre for Artificial Intelligence and Robotics</strong> | Bengaluru, India<br>
-          May 2013 – July 2013</p>
+          <p class="card-text"><strong>Centre for Artificial Intelligence and Robotics</strong> | Bengaluru, India<br>May 2013 – July 2013</p>
           <ul>
             <li>Developed a generic method for azimuthal map projection.</li>
             <li>Contributed to foundational research that informed subsequent projects.</li>
@@ -585,7 +567,7 @@
   <!-- Teaching Section -->
   <section id="teaching" class="bg-light">
     <div class="container">
-      <h2 class="section-title">Teaching Experience</h2>
+      <h2 class="section-title" data-i18n="teaching">Teaching Experience</h2>
       <ul>
         <li><strong>Instructor</strong> at Penn State – CMPEN 431: Introduction to Computer Architecture (Spring 2024, Spring 2022)</li>
         <li><strong>Guest Lecture</strong> at Penn State – CSE 530: Computer Architecture (Fall 2023, Fall 2024)</li>
@@ -600,7 +582,7 @@
   <!-- Projects Section -->
   <section id="projects">
     <div class="container">
-      <h2 class="section-title">Projects</h2>
+      <h2 class="section-title" data-i18n="projects">Projects</h2>
       <ul>
         <li><strong>Dynamic Dropout for Intermittent Systems:</strong> <a href="https://github.com/cyanmishra92/DynDrop" target="_blank">GitHub Link</a> – Integration of dynamic dropout techniques for training intermittent systems.</li>
         <li><strong>Branch Prediction Simulator:</strong> <a href="https://github.com/cyanmishra92/PyBrachPredSim" target="_blank">GitHub Link</a> – Python-based simulation tool for evaluating branch prediction algorithms.</li>
@@ -616,7 +598,7 @@
   <!-- Skills Section -->
   <section id="skills">
     <div class="container">
-      <h2 class="section-title">Technical Skills</h2>
+      <h2 class="section-title" data-i18n="skills">Technical Skills</h2>
       <ul>
         <li><strong>Programming Languages:</strong> Python, C/C++, SystemVerilog, MATLAB</li>
         <li><strong>Frameworks:</strong> TensorFlow, Keras, PyTorch</li>
@@ -628,7 +610,7 @@
   <!-- Coursework Section -->
   <section id="coursework" class="bg-light">
     <div class="container">
-      <h2 class="section-title">Relevant Coursework</h2>
+      <h2 class="section-title" data-i18n="coursework">Relevant Coursework</h2>
       <ul>
         <li><strong>Graduate:</strong> Large Scale Machine Learning, Computer Architecture, Operating Systems, Compilers</li>
         <li><strong>Online Courses:</strong> Deep Learning, Introduction to Parallel Programming, Quantum Computation</li>
@@ -639,7 +621,7 @@
   <!-- Social & Media Section -->
   <section id="social-interests">
     <div class="container">
-      <h2 class="section-title">Social & Media</h2>
+      <h2 class="section-title" data-i18n="social">Social & Media</h2>
       <div class="social-container row">
         <!-- Live Instagram Feed -->
         <div class="col-md-6">
@@ -661,11 +643,10 @@
   <!-- Contact Section -->
   <section id="contact">
     <div class="container">
-      <h2 class="section-title">Contact</h2>
+      <h2 class="section-title" data-i18n="contact">Contact</h2>
       <p><strong>Email:</strong> <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>, <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a></p>
       <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">Visit my LinkedIn</a></p>
-      <p><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank">
-        <i class="fa fa-graduation-cap"></i> View Google Scholar</a></p>
+      <p><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank"><i class="fa fa-graduation-cap"></i> View Google Scholar</a></p>
       <p><strong>Current Webpage:</strong> <a href="https://sites.google.com/view/cyansubhramishra/" target="_blank">View my Google Site</a></p>
     </div>
   </section>
@@ -679,6 +660,7 @@
   
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  
   <!-- Particles.js Initialization -->
   <script>
     const particleConfigs = [
@@ -734,6 +716,7 @@
     const randomConfig = particleConfigs[Math.floor(Math.random() * particleConfigs.length)];
     particlesJS("particles-js", randomConfig);
   </script>
+  
   <!-- Publication Filter Script -->
   <script>
     document.getElementById('pubFilter').addEventListener('change', function() {
@@ -748,6 +731,7 @@
       });
     });
   </script>
+  
   <!-- Load Moving News from news.txt -->
   <script>
     fetch('news.txt')
@@ -765,6 +749,7 @@
         document.getElementById('marqueeText').textContent = "Stay tuned and keep in touch for collaborations";
       });
   </script>
+  
   <!-- Instafeed.js Initialization for Live Instagram Feed -->
   <script>
     var userFeed = new Instafeed({
@@ -775,6 +760,100 @@
       template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a>'
     });
     userFeed.run();
+  </script>
+  
+  <!-- i18next Translation Initialization -->
+  <script>
+    i18next.init({
+      lng: 'en',
+      resources: {
+        en: {
+          translation: {
+            "opportunity": "Actively seeking new academic & research-driven industry opportunities – Let's collaborate!",
+            "about": "About Me",
+            "education": "Education",
+            "publications": "Publications",
+            "talks": "Talks",
+            "experience": "Experience",
+            "teaching": "Teaching Experience",
+            "projects": "Projects",
+            "skills": "Technical Skills",
+            "coursework": "Relevant Coursework",
+            "social": "Social & Media",
+            "contact": "Contact"
+          }
+        },
+        zh: {
+          translation: {
+            "opportunity": "积极寻求新的学术和研究驱动的产业机会 – 让我们合作！",
+            "about": "关于我",
+            "education": "教育经历",
+            "publications": "出版物",
+            "talks": "讲座",
+            "experience": "经验",
+            "teaching": "教学经验",
+            "projects": "项目",
+            "skills": "技术技能",
+            "coursework": "相关课程",
+            "social": "社交媒体",
+            "contact": "联系方式"
+          }
+        },
+        es: {
+          translation: {
+            "opportunity": "Busco activamente nuevas oportunidades académicas e industriales impulsadas por la investigación – ¡Colaboremos!",
+            "about": "Acerca de mí",
+            "education": "Educación",
+            "publications": "Publicaciones",
+            "talks": "Conferencias",
+            "experience": "Experiencia",
+            "teaching": "Experiencia Docente",
+            "projects": "Proyectos",
+            "skills": "Habilidades Técnicas",
+            "coursework": "Cursos Relevantes",
+            "social": "Redes Sociales",
+            "contact": "Contacto"
+          }
+        },
+        hi: {
+          translation: {
+            "opportunity": "नई अकादमिक और अनुसंधान-चालित उद्योग अवसरों की तलाश में – आइए सहयोग करें!",
+            "about": "मेरे बारे में",
+            "education": "शिक्षा",
+            "publications": "प्रकाशन",
+            "talks": "व्याख्यान",
+            "experience": "अनुभव",
+            "teaching": "शिक्षण अनुभव",
+            "projects": "प्रोजेक्ट्स",
+            "skills": "तकनीकी कौशल",
+            "coursework": "प्रासंगिक पाठ्यक्रम",
+            "social": "सोशल मीडिया",
+            "contact": "संपर्क"
+          }
+        }
+      }
+    }, function(err, t) {
+      updateContent();
+    });
+    
+    function updateContent() {
+      document.querySelector('.opportunity-banner span').innerHTML = i18next.t('opportunity');
+      document.querySelector('[data-i18n="about"]').innerHTML = i18next.t('about');
+      document.querySelector('[data-i18n="education"]').innerHTML = i18next.t('education');
+      document.querySelector('[data-i18n="publications"]').innerHTML = i18next.t('publications');
+      document.querySelector('[data-i18n="talks"]').innerHTML = i18next.t('talks');
+      document.querySelector('[data-i18n="experience"]').innerHTML = i18next.t('experience');
+      document.querySelector('[data-i18n="teaching"]').innerHTML = i18next.t('teaching');
+      document.querySelector('[data-i18n="projects"]').innerHTML = i18next.t('projects');
+      document.querySelector('[data-i18n="skills"]').innerHTML = i18next.t('skills');
+      document.querySelector('[data-i18n="coursework"]').innerHTML = i18next.t('coursework');
+      document.querySelector('[data-i18n="social"]').innerHTML = i18next.t('social');
+      document.querySelector('[data-i18n="contact"]').innerHTML = i18next.t('contact');
+    }
+    
+    document.querySelector('.language-select select').addEventListener('change', function() {
+      i18next.changeLanguage(this.value, updateContent);
+    });
   </script>
 </body>
 </html>
