@@ -54,7 +54,6 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
     .opportunity-banner span {
-      /* Removed extra highlight styling */
       padding: 4px 8px;
       border-radius: 4px;
     }
@@ -112,7 +111,6 @@
     .navbar-nav .nav-item { 
       margin: 0 4px; 
     }
-    /* More Dropdown */
     .more-dropdown { 
       margin-left: 8px; 
     }
@@ -231,7 +229,7 @@
     .card:hover { transform: scale(1.02); }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
-    /* Education Cards - New Styles for Date & GPA */
+    /* Education Cards - Left-Aligned Dates & GPA */
     #education .row > div { padding: 6px; position: relative; }
     .psu-card { background-color: #e7f1ff; }
     .nit-card { background-color: #F7DAD0; }
@@ -252,9 +250,9 @@
       opacity: 0.8;
     }
     
-    /* About Section - Highlight key research interests */
+    /* About Section - Research Interest Keywords in New Color */
     #about p { font-size: 1rem; }
-    .highlight { font-weight: bold; color: #0d6efd; }
+    .highlight { font-weight: bold; color: #ff6b6b; }
     
     /* Publications Tags */
     .tag-arxiv { background-color: #0d6efd; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
@@ -262,7 +260,15 @@
     .tag-journal { background-color: #dc3545; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
     .pub-name { font-weight: bold; text-decoration: underline; }
     
-    /* Work Experience: Remove float and set new styling via strong tags in markup */
+    /* Work Experience: Right-Aligned Place & Dates */
+    .exp-date { float: right; font-weight: bold; color: #555; }
+    
+    /* Restore Experience Box Colors */
+    .exp-psu { background-color: #cce5ff; }
+    .exp-bell { background-color: #ffcccc; }
+    .exp-intel { background-color: #d9edf7; }
+    .exp-csre { background-color: #eeeeee; }
+    .exp-cair { background-color: #d4edda; }
     
     /* Instagram Gallery */
     #instafeed { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -418,13 +424,13 @@
             <div class="card-body" style="position: relative;">
               <h5 class="card-title">The Pennsylvania State University</h5>
               <p class="card-text">
-                <strong>Ph.D. in Computer Science and Engineering</strong> | University Park, PA<br>
-                <span class="edu-date">Aug 2018 – Aug 2025 (Expected)</span>
+                <strong>Ph.D. in Computer Science and Engineering</strong> | University Park, PA 
+                <span class="exp-date">| Aug 2018 – Aug 2025 (Expected)</span>
               </p>
               <p class="card-text">
                 Advisors: <a href="http://www.cse.psu.edu/~mtk/" target="_blank">Dr. Mahmut Taylan Kandemir</a>, 
-                <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a><br>
-                <span class="edu-gpa">GPA: 3.7/4.00</span>
+                <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a> 
+                <span class="exp-date">| GPA: 3.7/4.00</span>
               </p>
               <img src="psu-logo.svg" alt="PSU Logo" class="edu-logo">
             </div>
@@ -435,13 +441,13 @@
             <div class="card-body" style="position: relative;">
               <h5 class="card-title">National Institute of Technology, Rourkela</h5>
               <p class="card-text">
-                <strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong> | Rourkela, Odisha, India<br>
-                <span class="edu-date">Aug 2011 – May 2016</span>
+                <strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong> | Rourkela, Odisha, India 
+                <span class="exp-date">| Aug 2011 – May 2016</span>
               </p>
               <p class="card-text">
                 Advisors: <a href="https://www.nitrkl.ac.in" target="_blank">Dr. Sarat Kumar Patra</a>, 
-                <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a><br>
-                <span class="edu-gpa">CGPA: 8.39/10.00 <em>(Honors)</em></span>
+                <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a> 
+                <span class="exp-date">| CGPA: 8.39/10.00 <em>(Honors)</em></span>
               </p>
               <img src="nit-logo.svg" alt="NIT Rourkela Logo" class="edu-logo">
             </div>
@@ -562,7 +568,7 @@
     </div>
   </section>
   
-  <!-- Work Experience Section with Bold Place & Time -->
+  <!-- Work Experience Section with Right-Aligned Place & Dates and Restored Colors -->
   <section id="experience">
     <div class="container">
       <h2 class="section-title" data-i18n="experience">Experience</h2>
@@ -571,8 +577,8 @@
         <div class="card-body">
           <h5 class="card-title">Graduate Research Assistant</h5>
           <p class="card-text">
-            <strong>Microsystems Design Lab, Penn State</strong><br>
-            <strong>University Park, PA | Dec 2018 – Present</strong>
+            <strong>Microsystems Design Lab, Penn State</strong>
+            <span class="exp-date">| University Park, PA | Dec 2018 – Present</span>
           </p>
           <ul>
             <li>Investigated architectural and algorithmic innovations in energy-harvesting wireless sensor networks using non-volatile processors.</li>
@@ -588,8 +594,8 @@
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text">
-            <strong>Bell Labs</strong><br>
-            <strong>Murray Hill, NJ | Jun 2021 – Aug 2021</strong>
+            <strong>Bell Labs</strong>
+            <span class="exp-date">| Murray Hill, NJ | Jun 2021 – Aug 2021</span>
           </p>
           <ul>
             <li>Optimized deep neural network models for autonomous inference serving on heterogeneous platforms.</li>
@@ -603,8 +609,8 @@
         <div class="card-body">
           <h5 class="card-title">Design Engineer</h5>
           <p class="card-text">
-            <strong>Intel</strong><br>
-            <strong>Bengaluru, India | Jun 2016 – Jun 2018</strong>
+            <strong>Intel</strong>
+            <span class="exp-date">| Bengaluru, India | Jun 2016 – Jun 2018</span>
           </p>
           <ul>
             <li>Designed accelerators for machine learning, computer vision, and bioinformatics using FPGAs.</li>
@@ -618,8 +624,8 @@
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text">
-            <strong>Intel</strong><br>
-            <strong>Bengaluru, India | Dec 2015 – Jun 2016</strong>
+            <strong>Intel</strong>
+            <span class="exp-date">| Bengaluru, India | Dec 2015 – Jun 2016</span>
           </p>
           <ul>
             <li>Developed FPGA-based hardware accelerators for protein search algorithms.</li>
@@ -632,8 +638,8 @@
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text">
-            <strong>CSRE, IIT Bombay</strong><br>
-            <strong>Mumbai, India | May 2014 – Jul 2014</strong>
+            <strong>CSRE, IIT Bombay</strong>
+            <span class="exp-date">| Mumbai, India | May 2014 – Jul 2014</span>
           </p>
           <ul>
             <li>Developed computational models for pre-processing hyperspectral images.</li>
@@ -646,8 +652,8 @@
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text">
-            <strong>Centre for Artificial Intelligence and Robotics</strong><br>
-            <strong>Bengaluru, India | May 2013 – Jul 2013</strong>
+            <strong>Centre for Artificial Intelligence and Robotics</strong>
+            <span class="exp-date">| Bengaluru, India | May 2013 – Jul 2013</span>
           </p>
           <ul>
             <li>Developed a generic method for azimuthal map projection.</li>
