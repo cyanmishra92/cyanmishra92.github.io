@@ -10,8 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Optional Particles.js for subtle background animation -->
+  <!-- Optional Particles.js for background animation -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <!-- Instafeed.js for live Instagram feed -->
+  <script src="https://cdn.jsdelivr.net/npm/instafeed.js@1.4.1"></script>
   <style>
     /* Global Styles & Color Palette */
     body {
@@ -37,9 +39,9 @@
     .opportunity-banner {
       background: linear-gradient(135deg, #dc3545, #ff6b6b);
       color: #fff;
-      padding: 8px 0;
+      padding: 12px 0;
       text-align: center;
-      font-size: 1rem;
+      font-size: 1.3rem;
       font-weight: bold;
     }
     
@@ -84,7 +86,7 @@
     /* Header Section with Cover Image (Reduced Height) */
     header {
       position: relative;
-      height: 30vh; /* reduced height for a more compact look */
+      height: 30vh;
       background: url('https://upload.wikimedia.org/wikipedia/commons/7/70/Old_Main_-_Penn_State.png') no-repeat center center/cover;
       color: #fff;
       padding: 10px;
@@ -98,7 +100,7 @@
       background-color: rgba(0,0,0,0.5);
       z-index: 1;
     }
-    /* Compact Profile Container in Header (Top Left) */
+    /* Compact Profile Container in Header */
     .header-profile {
       position: absolute;
       top: 10px;
@@ -144,13 +146,13 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      padding: 6px 0;
+      padding: 8px 0;
     }
     .marquee-text {
       display: inline-block;
       padding-left: 100%;
       color: #FFEA00;
-      font-size: 1.2rem;
+      font-size: 2rem;
       font-weight: bold;
       animation: marquee 20s linear infinite;
     }
@@ -165,43 +167,37 @@
       text-align: center;
       color: #002663;
       font-weight: 700;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
     section { padding: 20px 0; }
     .bg-light { background-color: #f8f9fa !important; }
-    .card { margin-bottom: 12px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    .card { margin-bottom: 12px; box-shadow: 0 0 8px rgba(0,0,0,0.1); padding: 10px; }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
-    /* Publication Filter Dropdown */
-    .pub-filter { max-width: 250px; margin: 0 auto 16px; }
+    /* Education: side by side cards */
+    #education .row > div { padding: 6px; }
     
-    /* Expandable Content */
-    .more-content { display: none; }
-    .read-more { color: #0d6efd; cursor: pointer; font-size: 0.9rem; }
+    /* Publications: highlight my name */
+    .pub-name { font-weight: bold; text-decoration: underline; }
     
-    /* Instagram Gallery (Compact Grid) */
-    .insta-gallery img {
-      width: 100%;
-      border-radius: 4px;
-    }
-    .insta-gallery .col-4 {
-      padding: 2px;
-    }
+    /* Experience: compact details, no read-more */
+    .experience-item { margin-bottom: 12px; }
+    .experience-item ul { margin-bottom: 0; }
     
-    /* Social & Media Section: Tightly integrate Instagram feed with social icons */
-    #social-interests .social-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-      justify-content: center;
-    }
-    #social-interests .social-container > div {
-      flex: 1 1 300px;
-    }
+    /* About Section: integrate Research Interests */
+    #about .about-content { display: flex; flex-wrap: wrap; gap: 16px; }
+    #about .bio { flex: 1 1 300px; }
+    #about .research { flex: 1 1 250px; background: #e9ecef; padding: 12px; border-radius: 4px; }
+    #about .research h4 { margin-top: 0; color: #dc3545; }
+    
+    /* Instagram Gallery (live feed container) */
+    #instafeed { display: flex; flex-wrap: wrap; gap: 4px; }
+    #instafeed img { width: calc(33.33% - 4px); border-radius: 4px; }
+    
+    /* Social & Media Section: Social Icons */
     #social-interests .social-icons {
       text-align: center;
-      margin-top: 8px;
+      margin-top: 12px;
     }
     #social-interests .social-icons a {
       font-size: 1.4rem;
@@ -220,7 +216,7 @@
   </style>
 </head>
 <body>
-  <!-- Optional Particles Background -->
+  <!-- Particles Background -->
   <div id="particles-js"></div>
   
   <!-- Opportunity Banner -->
@@ -275,7 +271,7 @@
   
   <!-- Header Section with Cover Image -->
   <header>
-    <!-- Profile Container at Top Left -->
+    <!-- Profile Container (Top Left) -->
     <div class="header-profile">
       <img src="profile-pic.jpg" alt="Profile Picture">
       <div>
@@ -306,50 +302,60 @@
     </div>
   </header>
   
-  <!-- About Section -->
+  <!-- About Section with Integrated Research Interests -->
   <section id="about">
     <div class="container">
       <h2 class="section-title">About Me</h2>
-      <p>
-        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. I focus on developing continuous learning systems, energy‐harvesting architectures, and intelligent edge solutions that bridge academia and industry.
-      </p>
-      <h4 class="mt-3">Research Interests</h4>
-      <ul>
-        <li>Deep Learning at the Edge</li>
-        <li>Continuous Learning Systems</li>
-        <li>Intermittent Computing &amp; Non-volatile Processors</li>
-        <li>Sustainable Computing &amp; Energy Harvesting</li>
-        <li>Computational Storage</li>
-      </ul>
+      <div class="about-content">
+        <div class="bio">
+          <p>
+            I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. I focus on developing continuous learning systems, energy‐harvesting architectures, and intelligent edge solutions that bridge academia and industry.
+          </p>
+        </div>
+        <div class="research">
+          <h4>Research Interests</h4>
+          <ul>
+            <li>Deep Learning at the Edge</li>
+            <li>Continuous Learning Systems</li>
+            <li>Intermittent Computing &amp; Non-volatile Processors</li>
+            <li>Sustainable Computing &amp; Energy Harvesting</li>
+            <li>Computational Storage</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
   
-  <!-- Education Section -->
+  <!-- Education Section (Side by Side Cards) -->
   <section id="education">
     <div class="container">
       <h2 class="section-title">Education</h2>
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">The Pennsylvania State University</h5>
-          <p class="card-text"><strong>Ph.D. in Computer Science and Engineering</strong> (Aug 2018 – Aug 2025, Expected) | University Park, PA</p>
-          <p class="card-text">
-            Advisors: 
-            <a href="http://www.cse.psu.edu/~mtk/" target="_blank">Dr. Mahmut Taylan Kandemir</a>, 
-            <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a> &nbsp;|&nbsp;
-            GPA: 3.7/4.00
-          </p>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">The Pennsylvania State University</h5>
+              <p class="card-text"><strong>Ph.D. in Computer Science and Engineering</strong><br>Aug 2018 – Aug 2025 (Expected) | University Park, PA</p>
+              <p class="card-text">
+                Advisors: <a href="http://www.cse.psu.edu/~mtk/" target="_blank">Dr. Mahmut Taylan Kandemir</a>, 
+                <a href="http://www.cse.psu.edu/~jsampson/" target="_blank">Dr. Jack Sampson</a><br>
+                GPA: 3.7/4.00
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">National Institute of Technology, Rourkela</h5>
-          <p class="card-text"><strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong> (Aug 2011 – May 2016) | Rourkela, Odisha, India</p>
-          <p class="card-text">
-            Advisors: 
-            <a href="https://www.nitrkl.ac.in" target="_blank">Dr. Sarat Kumar Patra</a>, 
-            <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a> &nbsp;|&nbsp;
-            CGPA: 8.39/10.00 <em>(Honors)</em>
-          </p>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">National Institute of Technology, Rourkela</h5>
+              <p class="card-text"><strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong><br>Aug 2011 – May 2016 | Rourkela, Odisha, India</p>
+              <p class="card-text">
+                Advisors: <a href="https://www.nitrkl.ac.in" target="_blank">Dr. Sarat Kumar Patra</a>, 
+                <a href="https://www.intel.com" target="_blank">Tarjinder Singh (Intel)</a><br>
+                CGPA: 8.39/10.00 <em>(Honors)</em>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -377,75 +383,75 @@
         <h4>arXiv Preprints</h4>
         <ul>
           <li data-topic="edge">
-            [arXiv-2024] Cyan Subhra Mishra, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir. “Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers” – <a href="https://arxiv.org/abs/2410.05435" target="_blank">arXiv:2410.05435</a> (2024).
+            [arXiv-2024] <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir. “Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers” – <a href="https://arxiv.org/abs/2410.05435" target="_blank">arXiv:2410.05435</a> (2024).
           </li>
           <li data-topic="edge">
-            [arXiv-2024] Cyan Subhra Mishra, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks” – <a href="https://arxiv.org/abs/2408.14379" target="_blank">arXiv:2408.14379</a> (2024).
+            [arXiv-2024] <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks” – <a href="https://arxiv.org/abs/2408.14379" target="_blank">arXiv:2408.14379</a> (2024).
           </li>
           <li data-topic="ml">
-            [arXiv-2024] Cyan Subhra Mishra, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers” – <a href="https://arxiv.org/abs/2408.13696" target="_blank">arXiv:2408.13696</a> (2024).
+            [arXiv-2024] <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers” – <a href="https://arxiv.org/abs/2408.13696" target="_blank">arXiv:2408.13696</a> (2024).
           </li>
           <li data-topic="edge">
-            [arXiv-2020] Cyan Subhra Mishra, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition” – <a href="https://arxiv.org/abs/2204.13106" target="_blank">arXiv:2204.13106</a> (2022).
+            [arXiv-2020] <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition” – <a href="https://arxiv.org/abs/2204.13106" target="_blank">arXiv:2204.13106</a> (2022).
           </li>
           <li data-topic="cloud">
-            [arXiv-2020] Jashwant Raj Gunasekaran, Prashanth Thinakaran, Cyan Subhra Mishra, Mahmut Taylan Kandemir, Chita R. Das. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud” – <a href="https://arxiv.org/abs/2008.09491" target="_blank">arXiv:2008.09491</a> (2020).
+            [arXiv-2020] Jashwant Raj Gunasekaran, Prashanth Thinakaran, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut Taylan Kandemir, Chita R. Das. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud” – <a href="https://arxiv.org/abs/2008.09491" target="_blank">arXiv:2008.09491</a> (2020).
           </li>
         </ul>
         <!-- Conference Papers -->
         <h4>Conference Papers</h4>
         <ul>
           <li data-topic="ml">
-            [ICLR-2025] Cyan Subhra Mishra, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
+            [ICLR-2025] <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
-            [IPDPS-2025] Wahid Uz Zaman, Cyan Subhra Mishra, Saleh AlSaleh, Abutalib Aghayev, Mahmut Taylan Kandemir. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
+            [IPDPS-2025] Wahid Uz Zaman, <span class="pub-name">Cyan Subhra Mishra</span>, Saleh AlSaleh, Abutalib Aghayev, Mahmut Taylan Kandemir. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
-            [HPCA-2024] Cyan Subhra Mishra, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan, Chita R. Das. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – <a href="#" target="_blank">IEEE Xplore</a>
+            [HPCA-2024] <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan, Chita R. Das. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
           <li data-topic="edge">
-            [ICDCS-2022] Ziyu Ying, Shulin Zhao, Haibo Zhang, Cyan Subhra Mishra, Sandeepa Bhuyan, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Exploiting Frame Similarity for Efficient Inference on Edge Devices” – <a href="#" target="_blank">IEEE Xplore</a>
+            [ICDCS-2022] Ziyu Ying, Shulin Zhao, Haibo Zhang, <span class="pub-name">Cyan Subhra Mishra</span>, Sandeepa Bhuyan, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Exploiting Frame Similarity for Efficient Inference on Edge Devices” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
           <li data-topic="edge">
-            [MICRO-2022] Ziyu Ying, Shulin Zhao, Sandeepa Bhuyan, Cyan Subhra Mishra, Mahmut Kandemir, Chita R. Das. “Pushing Point Cloud Compression to Edge” – <a href="#" target="_blank">IEEE Xplore</a>
+            [MICRO-2022] Ziyu Ying, Shulin Zhao, Sandeepa Bhuyan, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut Kandemir, Chita R. Das. “Pushing Point Cloud Compression to Edge” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
           <li data-topic="cloud">
-            [NSDI-2022] Jashwant Raj Gunasekaran, Cyan Subhra Mishra, Prashanth Thinakaran, Bikash Sharma, Mahmut T. Kandemir, Chita R. Das. “Cocktail: A Multidimensional Optimization for Model Serving in Cloud” – <a href="#" target="_blank">USENIX</a>
+            [NSDI-2022] Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>, Prashanth Thinakaran, Bikash Sharma, Mahmut T. Kandemir, Chita R. Das. “Cocktail: A Multidimensional Optimization for Model Serving in Cloud” – <a href="#" target="_blank">USENIX</a>
           </li>
           <li data-topic="ml">
-            [NAS-2021] Jashwant Raj Gunasekaran, Cyan Subhra Mishra. “MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance” – <a href="#" target="_blank">Link coming soon</a>
+            [NAS-2021] Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>. “MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance” – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="cloud">
-            [SoCC-2021] Vivek M. Bhas, Jashwant Raj Gunasekaran, Prashanth Thinakaran, Cyan Subhra Mishra, Mahmut T. Kandemir, Chita R. Das. “Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms” – <a href="#" target="_blank">ACM Digital Library</a>
+            [SoCC-2021] Vivek M. Bhas, Jashwant Raj Gunasekaran, Prashanth Thinakaran, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut T. Kandemir, Chita R. Das. “Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms” – <a href="#" target="_blank">ACM Digital Library</a>
           </li>
           <li data-topic="ar">
-            [MICRO-2021] Shulin Zhao, Haibo Zhang, Cyan Subhra Mishra, Sandeepa Bhuyan, Ziyu Ying, Mahmut T. Kandemir, Chita R. Das. “HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality” – <a href="#" target="_blank">IEEE Xplore</a>
+            [MICRO-2021] Shulin Zhao, Haibo Zhang, <span class="pub-name">Cyan Subhra Mishra</span>, Sandeepa Bhuyan, Ziyu Ying, Mahmut T. Kandemir, Chita R. Das. “HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
           <li data-topic="edge">
-            [DATE-2021] Cyan Subhra Mishra, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a> <em>[Best Paper Nominee]</em>
+            [DATE-2021] <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a> <em>[Best Paper Nominee]</em>
           </li>
           <li data-topic="cloud">
-            [WoSC-2020] Jashwant Raj Gunasekaran, Cyan Subhra Mishra, Prashanth Thinakaran, Mahmut T. Kandemir, Chita R. Das. “Implications Of Public Cloud Resource Heterogeneity for Inference Serving” – <a href="#" target="_blank">Link coming soon</a>
+            [WoSC-2020] Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>, Prashanth Thinakaran, Mahmut T. Kandemir, Chita R. Das. “Implications Of Public Cloud Resource Heterogeneity for Inference Serving” – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="other">
-            [ISCA-2020] Shulin Zhao, Haibo Zhang, Sandeepa Bhuyan, Cyan Subhra Mishra, Ziyu Ying, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Déjà view: Spatio-temporal Compute Reuse for Energy-Efficient 360° VR Video Streaming” – <a href="#" target="_blank">ACM Digital Library</a>
+            [ISCA-2020] Shulin Zhao, Haibo Zhang, Sandeepa Bhuyan, <span class="pub-name">Cyan Subhra Mishra</span>, Ziyu Ying, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Déjà view: Spatio-temporal Compute Reuse for Energy-Efficient 360° VR Video Streaming” – <a href="#" target="_blank">ACM Digital Library</a>
           </li>
           <li data-topic="edge">
-            [HPCA-2020] Keni Qiu, Nicholas Jao, Mengying Zhao, Cyan Subhra Mishra, Gulsum Gudukbay, Sethu Jose, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors” – <a href="#" target="_blank">IEEE Xplore</a>
+            [HPCA-2020] Keni Qiu, Nicholas Jao, Mengying Zhao, <span class="pub-name">Cyan Subhra Mishra</span>, Gulsum Gudukbay, Sethu Jose, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
         </ul>
         <!-- Journal Papers -->
         <h4>Journal Papers</h4>
         <ul>
           <li data-topic="manufacturing">
-            [ASTM-SSMS-2022-0031] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, Cyan Subhra Mishra, Soundar R. T. Kumara, Anil Srivastava, Hui Yang, Vijaykrishnan Narayanan, John Morgan Sampson, Mahmut Taylan Kandemir, Kye-Hwan Lee, Tanna Marie Pugh, Amy Jorden, Gautam Natarajan, Dinakar Sagapuram, Satish T. S. Bukkapatnam. “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a>
+            [ASTM-SSMS-2022-0031] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, <span class="pub-name">Cyan Subhra Mishra</span>, Soundar R. T. Kumara, Anil Srivastava, Hui Yang, Vijaykrishnan Narayanan, John Morgan Sampson, Mahmut Taylan Kandemir, Kye-Hwan Lee, Tanna Marie Pugh, Amy Jorden, Gautam Natarajan, Dinakar Sagapuram, Satish T. S. Bukkapatnam. “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
-            [IEEE-ESL-2022] Tianyi Shen, Cyan Subhra Mishra, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a>
+            [IEEE-ESL-2022] Tianyi Shen, <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
           <li data-topic="mapping">
-            [Defence Science Journal-2015] Narayan Panigrahi, Cyan Subhra Mishra. “A Generic Method for Azimuthal Map Projection” – <a href="#" target="_blank">Link coming soon</a>
+            [Defence Science Journal-2015] Narayan Panigrahi, <span class="pub-name">Cyan Subhra Mishra</span>. “A Generic Method for Azimuthal Map Projection” – <a href="#" target="_blank">Link coming soon</a>
           </li>
         </ul>
       </div>
@@ -466,116 +472,85 @@
     </div>
   </section>
   
-  <!-- Experience Section -->
+  <!-- Experience Section (Compact, Expanded Details) -->
   <section id="experience">
     <div class="container">
       <h2 class="section-title">Experience</h2>
       <!-- Graduate Research Assistant -->
-      <div class="card mb-3">
+      <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Graduate Research Assistant</h5>
           <p class="card-text"><strong>Microsystems Design Lab, Penn State</strong> | University Park, PA<br>
           December 2018 – Present</p>
           <ul>
-            <li>Investigated architectural and algorithmic innovations in energy-harvesting wireless sensor networks.</li>
-            <li>Developed efficient strategies for on-device intelligence using non-volatile processors and intermittent computing.</li>
+            <li>Investigated architectural and algorithmic innovations in energy-harvesting wireless sensor networks using non-volatile processors.</li>
+            <li>Designed efficient strategies to enable on-device intelligence at the edge.</li>
+            <li>Collaborated with interdisciplinary teams, leading to multiple high-impact publications.</li>
+            <li>Led research initiatives in intermittent computing and sustainable system design.</li>
+            <li>Mentored junior researchers and assisted in securing research funding.</li>
           </ul>
-          <span class="read-more" onclick="toggleContent(this)">Read More...</span>
-          <div class="more-content">
-            <ul>
-              <li>Collaborated with interdisciplinary teams leading to multiple high-impact publications.</li>
-              <li>Led research initiatives in intermittent computing and sustainable system design.</li>
-              <li>Mentored junior researchers and assisted in securing research funding.</li>
-            </ul>
-          </div>
         </div>
       </div>
       <!-- Research Intern at Bell Labs -->
-      <div class="card mb-3">
+      <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Bell Labs</strong> | Murray Hill, NJ<br>
           June 2021 – Aug 2021</p>
           <ul>
             <li>Optimized deep neural network models for autonomous inference serving on heterogeneous platforms.</li>
+            <li>Implemented performance improvements reducing inference latency by 15%.</li>
+            <li>Collaborated closely with experts to translate research into practical solutions.</li>
           </ul>
-          <span class="read-more" onclick="toggleContent(this)">Read More...</span>
-          <div class="more-content">
-            <ul>
-              <li>Implemented performance improvements that reduced inference latency by 15%.</li>
-              <li>Worked closely with experts to translate research into practical solutions.</li>
-            </ul>
-          </div>
         </div>
       </div>
       <!-- Design Engineer at Intel -->
-      <div class="card mb-3">
+      <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Design Engineer</h5>
           <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>
           June 2016 – June 2018</p>
           <ul>
-            <li>Designed accelerators for machine learning, computer vision, and bioinformatics applications using FPGAs.</li>
+            <li>Designed accelerators for machine learning, computer vision, and bioinformatics using FPGAs.</li>
             <li>Engaged in hardware–software co-design projects to optimize few-shot learning algorithms.</li>
+            <li>Improved system efficiency with novel algorithmic optimizations and coordinated cross-functional teams.</li>
           </ul>
-          <span class="read-more" onclick="toggleContent(this)">Read More...</span>
-          <div class="more-content">
-            <ul>
-              <li>Improved system efficiency with novel algorithmic optimizations.</li>
-              <li>Coordinated with cross-functional teams to integrate advanced computing techniques.</li>
-            </ul>
-          </div>
         </div>
       </div>
       <!-- Research Intern at Intel -->
-      <div class="card mb-3">
+      <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Intel</strong> | Bengaluru, India<br>
           Dec 2015 – June 2016</p>
           <ul>
             <li>Developed FPGA-based hardware accelerators for protein search algorithms.</li>
+            <li>Enhanced processing throughput by optimizing data pipelines.</li>
           </ul>
-          <span class="read-more" onclick="toggleContent(this)">Read More...</span>
-          <div class="more-content">
-            <ul>
-              <li>Enhanced processing throughput by optimizing data pipelines.</li>
-            </ul>
-          </div>
         </div>
       </div>
       <!-- Research Intern at CSRE, IIT Bombay -->
-      <div class="card mb-3">
+      <div class="experience-item card mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>CSRE, IIT Bombay</strong> | Mumbai, India<br>
           May 2014 – July 2014</p>
           <ul>
-            <li>Developed computational models for pre-processing hyper-spectral images.</li>
+            <li>Developed computational models for pre-processing hyperspectral images.</li>
+            <li>Enhanced image analysis accuracy by refining data processing techniques.</li>
           </ul>
-          <span class="read-more" onclick="toggleContent(this)">Read More...</span>
-          <div class="more-content">
-            <ul>
-              <li>Enhanced image analysis accuracy by refining data processing techniques.</li>
-            </ul>
-          </div>
         </div>
       </div>
       <!-- Research Intern at Centre for AI and Robotics -->
-      <div class="card">
+      <div class="experience-item card">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
           <p class="card-text"><strong>Centre for Artificial Intelligence and Robotics</strong> | Bengaluru, India<br>
           May 2013 – July 2013</p>
           <ul>
             <li>Developed a generic method for azimuthal map projection.</li>
+            <li>Contributed to foundational research that informed subsequent projects.</li>
           </ul>
-          <span class="read-more" onclick="toggleContent(this)">Read More...</span>
-          <div class="more-content">
-            <ul>
-              <li>Contributed to foundational research that informed subsequent projects.</li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
@@ -605,9 +580,9 @@
         <li><strong>Branch Prediction Simulator:</strong> <a href="https://github.com/cyanmishra92/PyBrachPredSim" target="_blank">GitHub Link</a> – Python-based simulation tool for evaluating branch prediction algorithms.</li>
         <li><strong>Few-shot Facial Recognition:</strong> <a href="https://github.com/cyanmishra92/FewShotEye" target="_blank">GitHub Link</a> – Implementation of few-shot facial recognition on edge devices.</li>
         <li><strong>Distributed File System Management:</strong> Development of a distributed file system using RPC calls.</li>
-        <li><strong>Synchronization using Path Expressions:</strong> Solving bounded-buffer and readers-writers synchronization problems using path expressions.</li>
-        <li><strong>Compression of DNNs:</strong> Exploring sparsity, pruning, quantization, coresets, SVD, and knowledge distillation for optimizing deep neural networks on low-power devices.</li>
-        <li><strong>AcuLive Classifier:</strong> <a href="https://github.com/cyanmishra92/AcuLive" target="_blank">GitHub Link</a> – A classifier to distinguish recorded voice from live voice for digital personal assistants.</li>
+        <li><strong>Synchronization using Path Expressions:</strong> Solving bounded-buffer and readers-writers problems using path expressions.</li>
+        <li><strong>Compression of DNNs:</strong> Exploring sparsity, pruning, quantization, coresets, SVD, and knowledge distillation to optimize deep neural networks for low-power devices.</li>
+        <li><strong>AcuLive Classifier:</strong> <a href="https://github.com/cyanmishra92/AcuLive" target="_blank">GitHub Link</a> – A classifier distinguishing recorded from live voice for digital personal assistants.</li>
       </ul>
     </div>
   </section>
@@ -638,28 +613,12 @@
   <!-- Social & Media Section -->
   <section id="social-interests">
     <div class="container">
-      <h2 class="section-title">Social &amp; Media</h2>
+      <h2 class="section-title">Social & Media</h2>
       <div class="social-container row">
-        <!-- Instagram Gallery -->
+        <!-- Live Instagram Feed -->
         <div class="col-md-6">
           <h4>Instagram Feed</h4>
-          <div class="row insta-gallery">
-            <div class="col-4">
-              <a href="https://www.instagram.com/cyansubhra/" target="_blank">
-                <img src="https://via.placeholder.com/300" alt="Instagram Photo 1">
-              </a>
-            </div>
-            <div class="col-4">
-              <a href="https://www.instagram.com/cyansubhra/" target="_blank">
-                <img src="https://via.placeholder.com/300" alt="Instagram Photo 2">
-              </a>
-            </div>
-            <div class="col-4">
-              <a href="https://www.instagram.com/cyansubhra/" target="_blank">
-                <img src="https://via.placeholder.com/300" alt="Instagram Photo 3">
-              </a>
-            </div>
-          </div>
+          <div id="instafeed"></div>
         </div>
         <!-- Social Icons -->
         <div class="col-md-6 social-icons">
@@ -679,8 +638,7 @@
       <h2 class="section-title">Contact</h2>
       <p><strong>Email:</strong> <a href="mailto:cyan@psu.edu">cyan@psu.edu</a>, <a href="mailto:cyanmishra92@gmail.com">cyanmishra92@gmail.com</a></p>
       <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank">Visit my LinkedIn</a></p>
-      <p><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank">
-        <i class="fa fa-graduation-cap"></i> View Google Scholar</a></p>
+      <p><strong>Google Scholar:</strong> <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank"><i class="fa fa-graduation-cap"></i> View Google Scholar</a></p>
       <p><strong>Current Webpage:</strong> <a href="https://sites.google.com/view/cyansubhramishra/" target="_blank">View my Google Site</a></p>
     </div>
   </section>
@@ -694,7 +652,7 @@
   
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Random Particles Animation -->
+  <!-- Particles.js Initialization -->
   <script>
     const particleConfigs = [
       {
@@ -749,19 +707,6 @@
     const randomConfig = particleConfigs[Math.floor(Math.random() * particleConfigs.length)];
     particlesJS("particles-js", randomConfig);
   </script>
-  <!-- Toggle Expand/Collapse for Experience Details -->
-  <script>
-    function toggleContent(el) {
-      const content = el.nextElementSibling;
-      if (content.style.display === "block") {
-        content.style.display = "none";
-        el.textContent = "Read More...";
-      } else {
-        content.style.display = "block";
-        el.textContent = "Read Less...";
-      }
-    }
-  </script>
   <!-- Publication Filter Script -->
   <script>
     document.getElementById('pubFilter').addEventListener('change', function() {
@@ -792,6 +737,17 @@
       .catch(error => {
         document.getElementById('marqueeText').textContent = "Stay tuned and keep in touch for collaborations";
       });
+  </script>
+  <!-- Instafeed.js Initialization for Live Instagram Feed -->
+  <script>
+    var userFeed = new Instafeed({
+      get: 'user',
+      userId: 'YOUR_USER_ID', // Replace with your Instagram User ID
+      accessToken: 'YOUR_ACCESS_TOKEN', // Replace with your Access Token
+      limit: 6,
+      template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a>'
+    });
+    userFeed.run();
   </script>
 </body>
 </html>
