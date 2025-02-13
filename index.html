@@ -37,20 +37,22 @@
       left: 0;
     }
     
-    /* Opportunity Banner – Underlined & Highlighted */
+    /* Opportunity Banner – Improved Styling */
     .opportunity-banner {
       background-color: #002663;
       color: #fff;
       padding: 12px 0;
       text-align: center;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: bold;
+      border-bottom: 3px solid #0d6efd;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
     .opportunity-banner span {
       text-decoration: underline;
-      background-color: rgba(255,255,255,0.2);
       padding: 4px 8px;
       border-radius: 4px;
+      background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
     }
     
     /* Top Bar with Contact, Resume & Language Options */
@@ -85,16 +87,17 @@
       font-size: 0.9rem;
     }
     
-    /* Navbar with PSU Logo */
+    /* Navbar with PSU Logo and Single-Line Items */
     .navbar {
       background-color: #002663;
       padding: 0.4rem 1rem;
     }
-    .navbar-brand, .nav-link { color: #fff !important; }
+    .navbar-brand, .nav-link { color: #fff !important; white-space: nowrap; }
     .navbar-brand img {
       height: 35px;
       margin-right: 8px;
     }
+    .navbar-nav { flex-wrap: nowrap; }
     .navbar-nav .nav-item { margin: 0 4px; }
     /* Mobile Navbar: White text on Blue */
     @media (max-width: 768px) {
@@ -194,12 +197,10 @@
     .card { margin-bottom: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); padding: 10px; }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
-    /* Education: Side-by-Side Cards with Distinct Backgrounds, Logos, and Degree Icons */
+    /* Education: Side-by-Side Cards with Distinct Background Colors */
     #education .row > div { padding: 6px; position: relative; }
-    /* PSU card in light blue tint */
-    #education .psu-card { background-color: #e7f1ff; }
-    /* NIT card in a slightly different tint */
-    #education .nit-card { background-color: #f0f8ff; }
+    .psu-card { background-color: #e7f1ff; }
+    .nit-card { background-color: #f0f8ff; }
     .edu-logo {
       position: absolute;
       bottom: 10px;
@@ -207,19 +208,12 @@
       width: 50px;
       opacity: 0.8;
     }
-    .degree-icon {
-      position: absolute;
-      bottom: 10px;
-      right: 70px;
-      width: 40px;
-      opacity: 0.8;
-    }
     
     /* About Section: Fluid Bio with Inline Highlighted Research Interests */
     #about p { font-size: 1rem; }
     .highlight { font-weight: bold; color: #0d6efd; }
     
-    /* Publications: Different colored tags for each type */
+    /* Publications: Colored Tags for Each Type */
     .tag-arxiv { background-color: #0d6efd; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
     .tag-conf { background-color: #28a745; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
     .tag-journal { background-color: #dc3545; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
@@ -302,16 +296,16 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#about" data-i18n="about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about" data-i18n="about">About Me</a></li>
           <li class="nav-item"><a class="nav-link" href="#education" data-i18n="education">Education</a></li>
           <li class="nav-item"><a class="nav-link" href="#publications" data-i18n="publications">Publications</a></li>
           <li class="nav-item"><a class="nav-link" href="#talks" data-i18n="talks">Talks</a></li>
           <li class="nav-item"><a class="nav-link" href="#experience" data-i18n="experience">Experience</a></li>
-          <li class="nav-item"><a class="nav-link" href="#teaching" data-i18n="teaching">Teaching</a></li>
+          <li class="nav-item"><a class="nav-link" href="#teaching" data-i18n="teaching">Teaching Experience</a></li>
           <li class="nav-item"><a class="nav-link" href="#projects" data-i18n="projects">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="#skills" data-i18n="skills">Skills</a></li>
-          <li class="nav-item"><a class="nav-link" href="#coursework" data-i18n="coursework">Coursework</a></li>
-          <li class="nav-item"><a class="nav-link" href="#social-interests" data-i18n="social">Social</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills" data-i18n="skills">Technical Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#coursework" data-i18n="coursework">Relevant Coursework</a></li>
+          <li class="nav-item"><a class="nav-link" href="#social-interests" data-i18n="social">Social & Media</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact" data-i18n="contact">Contact</a></li>
         </ul>
       </div>
@@ -351,17 +345,17 @@
     </div>
   </header>
   
-  <!-- About Section with Integrated Research Interests -->
+  <!-- About Section with Translation -->
   <section id="about">
     <div class="container">
       <h2 class="section-title" data-i18n="about">About Me</h2>
-      <p>
+      <p data-i18n="aboutText">
         I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work explores innovative topics like <span class="highlight">Deep Learning at the Edge</span>, <span class="highlight">Continuous Learning Systems</span>, <span class="highlight">Intermittent Computing &amp; Non-volatile Processors</span>, <span class="highlight">Sustainable Computing &amp; Energy Harvesting</span>, and <span class="highlight">Computational Storage</span> – all aimed at bridging cutting-edge research with impactful industry solutions.
       </p>
     </div>
   </section>
   
-  <!-- Education Section (Side-by-Side Cards with Logos & Degree Icons) -->
+  <!-- Education Section (Side-by-Side Cards with Distinct Colors) -->
   <section id="education">
     <div class="container">
       <h2 class="section-title" data-i18n="education">Education</h2>
@@ -377,7 +371,6 @@
                 GPA: 3.7/4.00
               </p>
               <img src="psu-logo.svg" alt="PSU Logo" class="edu-logo">
-              <img src="doctoral-hat.svg" alt="Doctoral Hat" class="degree-icon">
             </div>
           </div>
         </div>
@@ -392,7 +385,6 @@
                 CGPA: 8.39/10.00 <em>(Honors)</em>
               </p>
               <img src="nit-logo.svg" alt="NIT Rourkela Logo" class="edu-logo">
-              <img src="masters-hat.svg" alt="Masters Hat" class="degree-icon">
             </div>
           </div>
         </div>
@@ -400,7 +392,7 @@
     </div>
   </section>
   
-  <!-- Publications Section with Filter -->
+  <!-- Publications Section with Colored Tags -->
   <section id="publications">
     <div class="container">
       <h2 class="section-title" data-i18n="publications">Publications</h2>
@@ -686,7 +678,7 @@
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   
-  <!-- Particles.js Initialization -->
+  <!-- Particles.js Initialization with Multiple Configs -->
   <script>
     const particleConfigs = [
       {
@@ -736,6 +728,23 @@
           "events": { "onhover": { "enable": true, "mode": "bubble" } }
         },
         "retina_detect": true
+      },
+      {
+        // New configuration: polygon particles with a different effect.
+        "particles": {
+          "number": { "value": 50, "density": { "enable": true, "value_area": 1000 } },
+          "color": { "value": "#ff6b6b" },
+          "shape": { "type": "polygon", "polygon": { "nb_sides": 6 } },
+          "opacity": { "value": 0.3 },
+          "size": { "value": 4, "random": true },
+          "line_linked": { "enable": true, "distance": 150, "color": "#ff6b6b", "opacity": 0.5, "width": 1 },
+          "move": { "enable": true, "speed": 3 }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "repulse" } }
+        },
+        "retina_detect": true
       }
     ];
     const randomConfig = particleConfigs[Math.floor(Math.random() * particleConfigs.length)];
@@ -780,7 +789,7 @@
     var userFeed = new Instafeed({
       get: 'user',
       userId: 'YOUR_USER_ID', // Replace with your Instagram User ID
-      accessToken: 'YOUR_ACCESS_TOKEN', // Replace with your Access Token (if desired)
+      accessToken: 'YOUR_ACCESS_TOKEN', // Replace with your Access Token if desired
       limit: 6,
       template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a>'
     });
@@ -796,6 +805,7 @@
           translation: {
             "opportunity": "Actively seeking new academic & research-driven industry opportunities – Let's collaborate!",
             "about": "About Me",
+            "aboutText": "I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work explores innovative topics like Deep Learning at the Edge, Continuous Learning Systems, Intermittent Computing & Non-volatile Processors, Sustainable Computing & Energy Harvesting, and Computational Storage – all aimed at bridging cutting-edge research with impactful industry solutions.",
             "education": "Education",
             "publications": "Publications",
             "talks": "Talks",
@@ -812,6 +822,7 @@
           translation: {
             "opportunity": "积极寻求新的学术和研究驱动的产业机会 – 让我们合作！",
             "about": "关于我",
+            "aboutText": "我是宾州州立大学的一名博士生，专注于先进的深度学习、边缘计算和可持续系统设计。我的研究探讨了边缘深度学习、连续学习系统、中断计算与非易失性处理器、可持续计算与能量采集以及计算存储等创新主题，旨在将前沿学术研究与有影响力的产业解决方案相结合。",
             "education": "教育经历",
             "publications": "出版物",
             "talks": "讲座",
@@ -828,6 +839,7 @@
           translation: {
             "opportunity": "Busco activamente nuevas oportunidades académicas e industriales impulsadas por la investigación – ¡Colaboremos!",
             "about": "Acerca de mí",
+            "aboutText": "Soy un candidato a doctorado en Penn State especializado en aprendizaje profundo avanzado, computación en el borde y diseño de sistemas sostenibles. Mi trabajo explora temas innovadores como el aprendizaje profundo en el borde, sistemas de aprendizaje continuo, computación intermitente y procesadores no volátiles, computación sostenible y cosecha de energía, y almacenamiento computacional, todo con el fin de unir la investigación de vanguardia con soluciones industriales impactantes.",
             "education": "Educación",
             "publications": "Publicaciones",
             "talks": "Conferencias",
@@ -844,6 +856,7 @@
           translation: {
             "opportunity": "नई अकादमिक और अनुसंधान-चालित उद्योग अवसरों की तलाश में – आइए सहयोग करें!",
             "about": "मेरे बारे में",
+            "aboutText": "मैं Penn State में एक डिग्री उम्मीदवार हूँ, जो उन्नत गहन शिक्षण, एज कंप्यूटिंग और स्थायी प्रणाली डिजाइन में विशेषज्ञता रखता है। मेरा कार्य एज पर गहन शिक्षण, सतत शिक्षण प्रणालियाँ, अंतरिम कंप्यूटिंग और नॉन-वोलेटाइल प्रोसेसर, स्थायी कंप्यूटिंग एवं ऊर्जा संग्रहण, तथा कंप्यूटेशनल स्टोरेज जैसे नवाचारी विषयों का अन्वेषण करता है – जो अत्याधुनिक शोध को प्रभावशाली उद्योग समाधान के साथ जोड़ने का प्रयास करता है।",
             "education": "शिक्षा",
             "publications": "प्रकाशन",
             "talks": "व्याख्यान",
@@ -874,6 +887,7 @@
       document.querySelector('[data-i18n="coursework"]').innerHTML = i18next.t('coursework');
       document.querySelector('[data-i18n="social"]').innerHTML = i18next.t('social');
       document.querySelector('[data-i18n="contact"]').innerHTML = i18next.t('contact');
+      document.querySelector('[data-i18n="aboutText"]').innerHTML = i18next.t('aboutText');
     }
     
     document.querySelector('.language-select select').addEventListener('change', function() {
