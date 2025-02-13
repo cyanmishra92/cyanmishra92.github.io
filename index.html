@@ -6,8 +6,8 @@
   <title>Cyan Subhra Mishra – Academic Portfolio</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Open Sans for body and Montserrat for headings -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Particles.js for background animation -->
@@ -24,8 +24,15 @@
       background-color: #f4f8fb;
       scroll-behavior: smooth;
     }
-    a { color: #0d6efd; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { 
+      color: #0d6efd; 
+      text-decoration: none; 
+      transition: color 0.3s ease;
+    }
+    a:hover { 
+      text-decoration: underline; 
+      color: #ffc107;
+    }
     
     /* Particles Background */
     #particles-js {
@@ -37,7 +44,7 @@
       left: 0;
     }
     
-    /* Opportunity Banner – Clean Blue */
+    /* Opportunity Banner – Modern Blue with Flair */
     .opportunity-banner {
       background-color: #002663;
       color: #fff;
@@ -47,11 +54,17 @@
       font-weight: bold;
       border-bottom: 3px solid #0d6efd;
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
     }
     .opportunity-banner span {
-      /* Removed extra highlight styling */
       padding: 4px 8px;
       border-radius: 4px;
+      /* A subtle gradient that shows through the text */
+      background: linear-gradient(45deg, #0d6efd, #ffc107);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
     }
     
     /* Top Bar with Contact, Resume & Language Options */
@@ -61,7 +74,9 @@
       font-size: 0.9rem;
       padding: 4px 0;
     }
-    .top-bar a { color: #fff; }
+    .top-bar a { 
+      color: #fff; 
+    }
     .top-bar .container {
       display: flex;
       justify-content: space-between;
@@ -78,6 +93,10 @@
       border-radius: 4px;
       margin-left: 5px;
       font-size: 0.9rem;
+      transition: background-color 0.3s ease;
+    }
+    .btn-contact:hover, .btn-resume:hover {
+      background-color: #ffc107;
     }
     /* Wider Language Dropdown */
     .language-select select {
@@ -90,33 +109,59 @@
     .navbar {
       background-color: #002663;
       padding: 0.4rem 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    .navbar-brand, .nav-link { color: #fff !important; white-space: nowrap; }
-    .navbar-brand img { height: 35px; margin-right: 8px; }
-    .navbar-nav { flex-wrap: nowrap; }
-    .navbar-nav .nav-item { margin: 0 4px; }
+    .navbar-brand, .nav-link { 
+      color: #fff !important; 
+      white-space: nowrap; 
+      transition: color 0.3s ease;
+    }
+    .navbar-brand img { 
+      height: 35px; 
+      margin-right: 8px; 
+    }
+    .navbar-nav { 
+      flex-wrap: nowrap; 
+    }
+    .navbar-nav .nav-item { 
+      margin: 0 4px; 
+    }
+    .navbar-nav .nav-link:hover {
+      color: #ffc107 !important;
+    }
     /* More Dropdown */
-    .more-dropdown { margin-left: 8px; }
+    .more-dropdown { 
+      margin-left: 8px; 
+    }
     @media (max-width: 768px) {
-      .navbar-collapse { background-color: #002663; }
-      .navbar-collapse .nav-link { color: #fff !important; }
+      .navbar-collapse { 
+        background-color: #002663; 
+      }
+      .navbar-collapse .nav-link { 
+        color: #fff !important; 
+      }
     }
     
-    /* Header Section with Cover Image */
+    /* Header Section with Cover Image and Overlay Gradient */
     header {
       position: relative;
       height: 30vh;
       background: url('https://upload.wikimedia.org/wikipedia/commons/7/70/Old_Main_-_Penn_State.png') no-repeat center center/cover;
       color: #fff;
       padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
     header::before {
       content: "";
       position: absolute;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
+      background: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3));
       z-index: 1;
     }
     .header-profile {
@@ -129,6 +174,10 @@
       background-color: rgba(0,0,0,0.7);
       padding: 6px;
       border-radius: 6px;
+      transition: transform 0.3s ease;
+    }
+    .header-profile:hover {
+      transform: scale(1.05);
     }
     .header-profile img {
       width: 80px;
@@ -142,6 +191,7 @@
       margin: 0;
       font-size: 1.4rem;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+      font-family: 'Montserrat', sans-serif;
     }
     .header-profile p {
       margin: 2px 0 0;
@@ -152,9 +202,13 @@
       margin-right: 8px;
       font-size: 1.2rem;
       color: #ffc107;
+      transition: color 0.3s ease;
+    }
+    .header-icons a:hover {
+      color: #ffea00;
     }
     
-    /* Moving News Ticker */
+    /* Moving News Ticker with Bright, Glowing Text */
     .marquee-container {
       width: 100%;
       overflow: hidden;
@@ -168,50 +222,58 @@
     .marquee-text {
       display: inline-block;
       padding-left: 100%;
-      color: #ffff33;
       font-size: 2rem;
       font-weight: bold;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
       animation: marquee 20s linear infinite;
+      color: #ffea00;
+      text-shadow: 0 0 8px #ffea00, 0 0 12px #ffea00;
     }
     @keyframes marquee {
       0% { transform: translate(0, 0); }
       100% { transform: translate(-100%, 0); }
     }
     
-    /* Section Titles with Underline */
+    /* Section Titles with Underline and Modern Font */
     .section-title {
-      margin-bottom: 12px;
+      margin-top: 40px;
+      margin-bottom: 20px;
       text-align: center;
       color: #002663;
       font-weight: 700;
-      font-size: 1.8rem;
+      font-size: 2rem;
       position: relative;
+      font-family: 'Montserrat', sans-serif;
     }
     .section-title::after {
       content: "";
       display: block;
       width: 60px;
       height: 3px;
-      background-color: #002663;
+      background-color: #0d6efd;
       margin: 8px auto 0;
     }
-    section { padding: 16px 0; }
+    section { padding: 20px 0; }
     .bg-light { background-color: #f8f9fa !important; }
     .card {
-      margin-bottom: 8px;
+      margin-bottom: 16px;
       box-shadow: 0 0 8px rgba(0,0,0,0.1);
       padding: 10px;
       border-radius: 6px;
-      transition: transform 0.2s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .card:hover { transform: scale(1.02); }
-    ul { list-style: disc inside; padding-left: 1.25rem; }
+    .card:hover { 
+      transform: scale(1.02); 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    ul { 
+      list-style: disc inside; 
+      padding-left: 1.25rem; 
+    }
     
     /* Education Cards */
     #education .row > div { padding: 6px; position: relative; }
     .psu-card { background-color: #e7f1ff; }
-    .nit-card { background-color: #F7DAD0; } /* light brick color for NIT */
+    .nit-card { background-color: #F7DAD0; }
     .edu-logo {
       position: absolute;
       bottom: 10px;
@@ -234,7 +296,6 @@
     .experience-item { margin-bottom: 12px; }
     .experience-item .card-text { font-size: 0.95rem; }
     .exp-date { float: right; font-weight: normal; color: #555; }
-    /* Experience Colors for each institution */
     .exp-psu { background-color: #cce5ff; }
     .exp-bell { background-color: #ffcccc; }
     .exp-intel { background-color: #d9edf7; }
@@ -254,6 +315,11 @@
       font-size: 1.4rem;
       margin: 0 8px;
       color: #0d6efd;
+      transition: transform 0.3s ease;
+    }
+    #social-interests .social-icons a:hover {
+      transform: scale(1.1);
+      color: #ffc107;
     }
     
     /* Footer */
@@ -314,12 +380,10 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <!-- Main Items -->
           <li class="nav-item"><a class="nav-link" href="#education" data-i18n="education">Education</a></li>
           <li class="nav-item"><a class="nav-link" href="#experience" data-i18n="experience">Experience</a></li>
           <li class="nav-item"><a class="nav-link" href="#publications" data-i18n="publications">Publications</a></li>
           <li class="nav-item"><a class="nav-link" href="#social-interests" data-i18n="social">Social</a></li>
-          <!-- "More" Dropdown for remaining options -->
           <li class="nav-item dropdown more-dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown">More</a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreDropdown">
@@ -339,7 +403,6 @@
   
   <!-- Header Section with Cover Image -->
   <header>
-    <!-- Profile Container (Top Left) -->
     <div class="header-profile">
       <img src="profile-pic.jpg" alt="Profile Picture">
       <div>
@@ -364,7 +427,6 @@
         </div>
       </div>
     </div>
-    <!-- Moving News Ticker -->
     <div class="marquee-container">
       <span class="marquee-text" id="marqueeText">Stay tuned and keep in touch for collaborations</span>
     </div>
@@ -375,12 +437,12 @@
     <div class="container">
       <h2 class="section-title" data-i18n="about">About Me</h2>
       <p data-i18n="aboutText">
-        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work explores innovative topics like Deep Learning at the Edge, Continuous Learning Systems, Intermittent Computing & Non-volatile Processors, Sustainable Computing & Energy Harvesting, and Computational Storage – all aimed at bridging cutting-edge research with impactful industry solutions.
+        I am a dedicated Ph.D. candidate at Penn State specializing in advanced deep learning, edge computing, and sustainable system design. My work explores innovative topics like Deep Learning at the Edge, Continuous Learning Systems, Intermittent Computing &amp; Non-volatile Processors, Sustainable Computing &amp; Energy Harvesting, and Computational Storage – all aimed at bridging cutting-edge research with impactful industry solutions.
       </p>
     </div>
   </section>
   
-  <!-- Education Section (Side-by-Side Cards with Distinct Colors) -->
+  <!-- Education Section -->
   <section id="education">
     <div class="container">
       <h2 class="section-title" data-i18n="education">Education</h2>
@@ -415,7 +477,7 @@
     </div>
   </section>
   
-  <!-- Publications Section with Colored Tags -->
+  <!-- Publications Section -->
   <section id="publications">
     <div class="container">
       <h2 class="section-title" data-i18n="publications">Publications</h2>
@@ -433,7 +495,6 @@
         </select>
       </div>
       <div id="pubList">
-        <!-- arXiv Preprints -->
         <h4>arXiv Preprints</h4>
         <ul>
           <li data-topic="edge">
@@ -452,7 +513,6 @@
             <span class="tag-arxiv">[arXiv-2020]</span> Jashwant Raj Gunasekaran, Prashanth Thinakaran, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut Taylan Kandemir, Chita R. Das. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud” – <a href="https://arxiv.org/abs/2008.09491" target="_blank">arXiv:2008.09491</a> (2020).
           </li>
         </ul>
-        <!-- Conference Papers -->
         <h4>Conference Papers</h4>
         <ul>
           <li data-topic="ml">
@@ -495,7 +555,6 @@
             <span class="tag-conf">[HPCA-2020]</span> Keni Qiu, Nicholas Jao, Mengying Zhao, <span class="pub-name">Cyan Subhra Mishra</span>, Gulsum Gudukbay, Sethu Jose, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
         </ul>
-        <!-- Journal Papers -->
         <h4>Journal Papers</h4>
         <ul>
           <li data-topic="manufacturing">
@@ -526,11 +585,10 @@
     </div>
   </section>
   
-  <!-- Experience Section (Compact, Expanded Details with Date Next to Place) -->
+  <!-- Experience Section -->
   <section id="experience">
     <div class="container">
       <h2 class="section-title" data-i18n="experience">Experience</h2>
-      <!-- Graduate Research Assistant (PSU) -->
       <div class="experience-item card exp-psu mb-3">
         <div class="card-body">
           <h5 class="card-title">Graduate Research Assistant</h5>
@@ -544,7 +602,6 @@
           </ul>
         </div>
       </div>
-      <!-- Research Intern at Bell Labs -->
       <div class="experience-item card exp-bell mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
@@ -556,7 +613,6 @@
           </ul>
         </div>
       </div>
-      <!-- Design Engineer at Intel -->
       <div class="experience-item card exp-intel mb-3">
         <div class="card-body">
           <h5 class="card-title">Design Engineer</h5>
@@ -568,7 +624,6 @@
           </ul>
         </div>
       </div>
-      <!-- Research Intern at Intel -->
       <div class="experience-item card exp-intel mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
@@ -579,7 +634,6 @@
           </ul>
         </div>
       </div>
-      <!-- Research Intern at CSRE, IIT Bombay -->
       <div class="experience-item card exp-csre mb-3">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
@@ -590,7 +644,6 @@
           </ul>
         </div>
       </div>
-      <!-- Research Intern at Centre for AI and Robotics -->
       <div class="experience-item card exp-cair">
         <div class="card-body">
           <h5 class="card-title">Research Intern</h5>
@@ -663,12 +716,10 @@
     <div class="container">
       <h2 class="section-title" data-i18n="social">Social & Media</h2>
       <div class="social-container row">
-        <!-- Live Instagram Feed -->
         <div class="col-md-6">
           <h4>Instagram Feed</h4>
           <div id="instafeed"></div>
         </div>
-        <!-- Social Icons -->
         <div class="col-md-6 social-icons">
           <h4>Connect with Me</h4>
           <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
@@ -810,8 +861,8 @@
   <script>
     var userFeed = new Instafeed({
       get: 'user',
-      userId: 'YOUR_USER_ID', // Replace with your Instagram User ID
-      accessToken: 'YOUR_ACCESS_TOKEN', // Replace with your Access Token (if desired)
+      userId: 'YOUR_USER_ID',
+      accessToken: 'YOUR_ACCESS_TOKEN',
       limit: 6,
       template: '<a href="{{link}}" target="_blank"><img src="{{image}}" /></a>'
     });
