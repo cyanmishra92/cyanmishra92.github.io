@@ -14,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <!-- i18next for translation -->
   <script src="https://unpkg.com/i18next@21.8.12/dist/umd/i18next.min.js"></script>
-  <!-- Instafeed.js (for Instagram feed) – optional -->
+  <!-- Instafeed.js for Instagram feed (if used) -->
   <script src="https://cdn.jsdelivr.net/npm/instafeed.js@1.4.1"></script>
   <style>
     /* Global Styles & Color Palette */
@@ -96,7 +96,7 @@
       margin-right: 8px;
     }
     .navbar-nav .nav-item { margin: 0 4px; }
-    /* Mobile Navbar: White text on blue */
+    /* Mobile Navbar: White text on Blue */
     @media (max-width: 768px) {
       .navbar-collapse { background-color: #002663; }
       .navbar-collapse .nav-link { color: #fff !important; }
@@ -194,10 +194,12 @@
     .card { margin-bottom: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); padding: 10px; }
     ul { list-style: disc inside; padding-left: 1.25rem; }
     
-    /* Education: Side-by-Side Cards with Distinct Color & Logos */
+    /* Education: Side-by-Side Cards with Distinct Backgrounds, Logos, and Degree Icons */
     #education .row > div { padding: 6px; position: relative; }
-    /* Give each card a light background tint */
-    #education .card { background-color: #e7f1ff; }
+    /* PSU card in light blue tint */
+    #education .psu-card { background-color: #e7f1ff; }
+    /* NIT card in a slightly different tint */
+    #education .nit-card { background-color: #f0f8ff; }
     .edu-logo {
       position: absolute;
       bottom: 10px;
@@ -217,17 +219,11 @@
     #about p { font-size: 1rem; }
     .highlight { font-weight: bold; color: #0d6efd; }
     
-    /* Publications: Highlight My Name and Conference Tag */
+    /* Publications: Different colored tags for each type */
+    .tag-arxiv { background-color: #0d6efd; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
+    .tag-conf { background-color: #28a745; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
+    .tag-journal { background-color: #dc3545; color: #fff; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 4px; }
     .pub-name { font-weight: bold; text-decoration: underline; }
-    .conf-tag {
-      background-color: #0d6efd;
-      color: #fff;
-      padding: 2px 4px;
-      border-radius: 3px;
-      font-weight: bold;
-      display: inline-block;
-      margin-right: 4px;
-    }
     
     /* Experience: Compact Details */
     .experience-item { margin-bottom: 12px; }
@@ -371,7 +367,7 @@
       <h2 class="section-title" data-i18n="education">Education</h2>
       <div class="row">
         <div class="col-md-6">
-          <div class="card">
+          <div class="card psu-card">
             <div class="card-body" style="position: relative;">
               <h5 class="card-title">The Pennsylvania State University</h5>
               <p class="card-text"><strong>Ph.D. in Computer Science and Engineering</strong><br>Aug 2018 – Aug 2025 (Expected) | University Park, PA</p>
@@ -386,7 +382,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card">
+          <div class="card nit-card">
             <div class="card-body" style="position: relative;">
               <h5 class="card-title">National Institute of Technology, Rourkela</h5>
               <p class="card-text"><strong>B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering</strong><br>Aug 2011 – May 2016 | Rourkela, Odisha, India</p>
@@ -426,46 +422,75 @@
         <h4>arXiv Preprints</h4>
         <ul>
           <li data-topic="edge">
-            [arXiv-2024] <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir. “Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers” – <a href="https://arxiv.org/abs/2410.05435" target="_blank">arXiv:2410.05435</a> (2024).
+            <span class="tag-arxiv">[arXiv-2024]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir. “Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers” – <a href="https://arxiv.org/abs/2410.05435" target="_blank">arXiv:2410.05435</a> (2024).
           </li>
           <li data-topic="edge">
-            [arXiv-2024] <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks” – <a href="https://arxiv.org/abs/2408.14379" target="_blank">arXiv:2408.14379</a> (2024).
+            <span class="tag-arxiv">[arXiv-2024]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks” – <a href="https://arxiv.org/abs/2408.14379" target="_blank">arXiv:2408.14379</a> (2024).
           </li>
           <li data-topic="ml">
-            [arXiv-2024] <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers” – <a href="https://arxiv.org/abs/2408.13696" target="_blank">arXiv:2408.13696</a> (2024).
+            <span class="tag-arxiv">[arXiv-2024]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers” – <a href="https://arxiv.org/abs/2408.13696" target="_blank">arXiv:2408.13696</a> (2024).
           </li>
           <li data-topic="edge">
-            [arXiv-2020] <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition” – <a href="https://arxiv.org/abs/2204.13106" target="_blank">arXiv:2204.13106</a> (2022).
+            <span class="tag-arxiv">[arXiv-2020]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition” – <a href="https://arxiv.org/abs/2204.13106" target="_blank">arXiv:2204.13106</a> (2022).
           </li>
           <li data-topic="cloud">
-            [arXiv-2020] Jashwant Raj Gunasekaran, Prashanth Thinakaran, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut Taylan Kandemir, Chita R. Das. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud” – <a href="https://arxiv.org/abs/2008.09491" target="_blank">arXiv:2008.09491</a> (2020).
+            <span class="tag-arxiv">[arXiv-2020]</span> Jashwant Raj Gunasekaran, Prashanth Thinakaran, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut Taylan Kandemir, Chita R. Das. “Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud” – <a href="https://arxiv.org/abs/2008.09491" target="_blank">arXiv:2008.09491</a> (2020).
           </li>
         </ul>
         <!-- Conference Papers -->
         <h4>Conference Papers</h4>
         <ul>
           <li data-topic="ml">
-            <span class="conf-tag">[ICLR-2025]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
+            <span class="tag-conf">[ICLR-2025]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R. Das. “Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
-            <span class="conf-tag">[IPDPS-2025]</span> Wahid Uz Zaman, <span class="pub-name">Cyan Subhra Mishra</span>, Saleh AlSaleh, Abutalib Aghayev, Mahmut Taylan Kandemir. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
+            <span class="tag-conf">[IPDPS-2025]</span> Wahid Uz Zaman, <span class="pub-name">Cyan Subhra Mishra</span>, Saleh AlSaleh, Abutalib Aghayev, Mahmut Taylan Kandemir. “CORD: Parallelizing Query Processing across Multiple Computational Storage Devices” [To Appear] – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
-            <span class="conf-tag">[HPCA-2024]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan, Chita R. Das. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – <a href="#" target="_blank">IEEE Xplore</a>
+            <span class="tag-conf">[HPCA-2024]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan, Chita R. Das. “Uṣa’s: A Sustainable Continuous-Learning Framework for Edge Servers” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
-          <!-- Additional conference papers similarly updated... -->
+          <li data-topic="edge">
+            <span class="tag-conf">[ICDCS-2022]</span> Ziyu Ying, Shulin Zhao, Haibo Zhang, <span class="pub-name">Cyan Subhra Mishra</span>, Sandeepa Bhuyan, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Exploiting Frame Similarity for Efficient Inference on Edge Devices” – <a href="#" target="_blank">IEEE Xplore</a>
+          </li>
+          <li data-topic="edge">
+            <span class="tag-conf">[MICRO-2022]</span> Ziyu Ying, Shulin Zhao, Sandeepa Bhuyan, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut Kandemir, Chita R. Das. “Pushing Point Cloud Compression to Edge” – <a href="#" target="_blank">IEEE Xplore</a>
+          </li>
+          <li data-topic="cloud">
+            <span class="tag-conf">[NSDI-2022]</span> Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>, Prashanth Thinakaran, Bikash Sharma, Mahmut T. Kandemir, Chita R. Das. “Cocktail: A Multidimensional Optimization for Model Serving in Cloud” – <a href="#" target="_blank">USENIX</a>
+          </li>
+          <li data-topic="ml">
+            <span class="tag-conf">[NAS-2021]</span> Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>. “MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance” – <a href="#" target="_blank">Link coming soon</a>
+          </li>
+          <li data-topic="cloud">
+            <span class="tag-conf">[SoCC-2021]</span> Vivek M. Bhas, Jashwant Raj Gunasekaran, Prashanth Thinakaran, <span class="pub-name">Cyan Subhra Mishra</span>, Mahmut T. Kandemir, Chita R. Das. “Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms” – <a href="#" target="_blank">ACM Digital Library</a>
+          </li>
+          <li data-topic="ar">
+            <span class="tag-conf">[MICRO-2021]</span> Shulin Zhao, Haibo Zhang, <span class="pub-name">Cyan Subhra Mishra</span>, Sandeepa Bhuyan, Ziyu Ying, Mahmut T. Kandemir, Chita R. Das. “HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality” – <a href="#" target="_blank">IEEE Xplore</a>
+          </li>
+          <li data-topic="edge">
+            <span class="tag-conf">[DATE-2021]</span> <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a> <em>[Best Paper Nominee]</em>
+          </li>
+          <li data-topic="cloud">
+            <span class="tag-conf">[WoSC-2020]</span> Jashwant Raj Gunasekaran, <span class="pub-name">Cyan Subhra Mishra</span>, Prashanth Thinakaran, Mahmut T. Kandemir, Chita R. Das. “Implications Of Public Cloud Resource Heterogeneity for Inference Serving” – <a href="#" target="_blank">Link coming soon</a>
+          </li>
+          <li data-topic="other">
+            <span class="tag-conf">[ISCA-2020]</span> Shulin Zhao, Haibo Zhang, Sandeepa Bhuyan, <span class="pub-name">Cyan Subhra Mishra</span>, Ziyu Ying, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das. “Déjà view: Spatio-temporal compute reuse for energy-efficient 360° VR Video Streaming” – <a href="#" target="_blank">ACM Digital Library</a>
+          </li>
+          <li data-topic="edge">
+            <span class="tag-conf">[HPCA-2020]</span> Keni Qiu, Nicholas Jao, Mengying Zhao, <span class="pub-name">Cyan Subhra Mishra</span>, Gulsum Gudukbay, Sethu Jose, Jack Sampson, Mahmut T. Kandemir, Vijaykrishnan Narayanan. “ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors” – <a href="#" target="_blank">IEEE Xplore</a>
+          </li>
         </ul>
         <!-- Journal Papers -->
         <h4>Journal Papers</h4>
         <ul>
           <li data-topic="manufacturing">
-            [ASTM-SSMS-2022-0031] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, <span class="pub-name">Cyan Subhra Mishra</span>, ... “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a>
+            <span class="tag-journal">[ASTM-SSMS-2022]</span> Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, <span class="pub-name">Cyan Subhra Mishra</span>, Soundar R. T. Kumara, Anil Srivastava, Hui Yang, Vijaykrishnan Narayanan, John Morgan Sampson, Mahmut Taylan Kandemir, Kye-Hwan Lee, Tanna Marie Pugh, Amy Jorden, Gautam Natarajan, Dinakar Sagapuram, Satish T. S. Bukkapatnam. “A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing” – <a href="#" target="_blank">Link coming soon</a>
           </li>
           <li data-topic="edge">
-            [IEEE-ESL-2022] Tianyi Shen, <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a>
+            <span class="tag-journal">[IEEE-ESL-2022]</span> Tianyi Shen, <span class="pub-name">Cyan Subhra Mishra</span>, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. “An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks” – <a href="#" target="_blank">IEEE Xplore</a>
           </li>
           <li data-topic="mapping">
-            [Defence Science Journal-2015] Narayan Panigrahi, <span class="pub-name">Cyan Subhra Mishra</span>. “A Generic Method for Azimuthal Map Projection” – <a href="#" target="_blank">Link coming soon</a>
+            <span class="tag-journal">[Defence Science Journal-2015]</span> Narayan Panigrahi, <span class="pub-name">Cyan Subhra Mishra</span>. “A Generic Method for Azimuthal Map Projection” – <a href="#" target="_blank">Link coming soon</a>
           </li>
         </ul>
       </div>
