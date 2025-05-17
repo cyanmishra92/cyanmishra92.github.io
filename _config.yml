@@ -1,0 +1,75 @@
+# Site settings
+title: Cyan Subhra Mishra
+description: Personal academic website of Cyan Subhra Mishra, Ph.D. Candidate at Penn State, specializing in Computer Systems and Architecture for Sustainable Machine Learning.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://cyanmishra92.github.io" # the base hostname & protocol for your site
+
+# Author information
+author:
+  name: Cyan Subhra Mishra
+  email: cyan@psu.edu
+  github_username: cyanmishra92
+  linkedin_username: cyan-subhra-mishra
+  twitter_username: CyanSM
+  instagram_username: cyansubhra
+  google_scholar: oizH-wQAAAAJ
+  dblp: 263/7470
+
+# Google Analytics
+google_analytics: G-362234782
+
+# Build settings
+markdown: kramdown
+permalink: /:title/
+
+# GitHub Pages supported plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jemoji
+  - jekyll-paginate
+
+# Pagination settings
+paginate: 5
+paginate_path: "/blog/page:num/"
+
+# Collections
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+  news:
+    output: true
+    permalink: /news/:year/:month/:day/:title/
+
+# Default settings
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+  - scope:
+      path: ""
+      type: "news"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .git
+  - .github

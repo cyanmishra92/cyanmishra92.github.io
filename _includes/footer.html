@@ -1,0 +1,36 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <p>{{ site.author.email }}</p>
+      </div>
+      <div class="footer-col">
+        <h3>Connect</h3>
+        <div class="social-links">
+          {% if site.author.github_username %}
+          <a href="https://github.com/{{ site.author.github_username }}" target="_blank"><i class="fab fa-github"></i></a>
+          {% endif %}
+          {% if site.author.linkedin_username %}
+          <a href="https://www.linkedin.com/in/{{ site.author.linkedin_username }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+          {% endif %}
+          {% if site.author.twitter_username %}
+          <a href="https://twitter.com/{{ site.author.twitter_username }}" target="_blank"><i class="fab fa-twitter"></i></a>
+          {% endif %}
+          {% if site.author.instagram_username %}
+          <a href="https://www.instagram.com/{{ site.author.instagram_username }}" target="_blank"><i class="fab fa-instagram"></i></a>
+          {% endif %}
+          {% if site.author.google_scholar %}
+          <a href="https://scholar.google.com/citations?user={{ site.author.google_scholar }}" target="_blank"><i class="ai ai-google-scholar"></i></a>
+          {% endif %}
+          {% if site.author.dblp %}
+          <a href="https://dblp.org/pid/{{ site.author.dblp }}.html" target="_blank"><i class="ai ai-dblp"></i></a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
