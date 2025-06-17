@@ -21,6 +21,7 @@ google_analytics: G-362234782
 # Build settings
 markdown: kramdown
 permalink: /:title/
+theme: minima
 
 # GitHub Pages supported plugins
 plugins:
