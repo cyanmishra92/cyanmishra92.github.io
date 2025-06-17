@@ -20,6 +20,11 @@
   
   {% seo %}
   
+  <!-- Google Search Console Verification -->
+  {% if site.google_site_verification %}
+  <meta name="google-site-verification" content="{{ site.google_site_verification }}" />
+  {% endif %}
+  
   {% if site.google_analytics %}
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
@@ -29,6 +34,18 @@
     gtag('js', new Date());
     gtag('config', '{{ site.google_analytics }}');
   </script>
+  {% endif %}
+  
+  {% if site.statcounter_project and site.statcounter_security %}
+  <!-- StatCounter Analytics -->
+  <script type="text/javascript">
+  var sc_project={{ site.statcounter_project }};
+  var sc_security="{{ site.statcounter_security }}";
+  var sc_invisible=1;
+  var sc_remove_link=1;
+  </script>
+  <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+  <noscript><div class="statcounter"><img class="statcounter" src="https://c.statcounter.com/{{ site.statcounter_project }}/0/{{ site.statcounter_security }}/1/" alt="Web Analytics" referrerPolicy="no-referrer-when-downgrade" /></div></noscript>
   {% endif %}
 </head>
 <body>

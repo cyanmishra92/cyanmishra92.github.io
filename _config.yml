@@ -18,6 +18,13 @@ author:
 # Google Analytics
 google_analytics: G-362234782
 
+# StatCounter Analytics (get your project number from statcounter.com)
+statcounter_project: 
+statcounter_security: 
+
+# Google Search Console verification meta tag (get from search.google.com/search-console)
+google_site_verification:
+
 # Build settings
 markdown: kramdown
 permalink: /:title/
