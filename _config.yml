@@ -23,7 +23,7 @@ statcounter_project:
 statcounter_security: 
 
 # Google Search Console verification meta tag (get from search.google.com/search-console)
-google_site_verification:uvwqGAIezEw6dEfccPU6rirb21Cg-hw5oeZ-XJsWlQ4
+google_site_verification: uvwqGAIezEw6dEfccPU6rirb21Cg-hw5oeZ-XJsWlQ4
 
 # Build settings
 markdown: kramdown
