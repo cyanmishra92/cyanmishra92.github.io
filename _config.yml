@@ -93,3 +93,9 @@ exclude:
   - vendor
   - .git
   - .github
+
+# Sitemap settings
+sitemap:
+  priority: 1.0
+  changefreq: 'monthly'
+  lastmod: 2025-06-17
