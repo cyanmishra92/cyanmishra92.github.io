@@ -1,47 +1,47 @@
 ---
-title: Uṣa's - Sustainable Edge Computing Framework
-description: A comprehensive framework for sustainable edge computing that optimizes energy consumption while maintaining performance requirements.
+title: Usas - Sustainable Continuous Learning Framework
+description: A sustainable continuous learning framework for edge servers that enables adaptive learning while optimizing energy consumption.
 image: /assets/img/projects/usas.jpg
-tags: [Sustainable Computing, Edge AI, Energy Efficiency]
+tags: [Continuous Learning, Edge Servers, Sustainability]
 ---
 
-# Uṣa's - Sustainable Edge Computing Framework
+# Usas - Sustainable Continuous Learning Framework
 
 ## Overview
 
-Uṣa's is a comprehensive framework for sustainable edge computing that optimizes energy consumption while maintaining performance requirements. Named after the Sanskrit word for "dawn," Uṣa's represents a new beginning for sustainable computing at the edge.
+Usas is a sustainable continuous learning framework for edge servers that enables adaptive learning while optimizing energy consumption. The framework addresses the challenge of maintaining up-to-date machine learning models on edge devices while managing power and computational constraints.
 
 ## Key Features
 
-- **Energy Profiling**: Detailed energy consumption analysis of edge applications
-- **Workload Characterization**: ML-based techniques to understand and predict workload patterns
-- **Adaptive Resource Management**: Dynamic allocation of computing resources based on workload and energy constraints
-- **Carbon-Aware Scheduling**: Optimization of task scheduling to minimize carbon footprint
-- **Performance Guarantees**: Maintaining application performance while reducing energy consumption
+- **Continuous Learning**: Adaptive model updates based on new data streams
+- **Smart Storage Management**: Intelligent data and model storage optimization for edge servers
+- **Energy-Aware Learning**: Learning algorithms that consider energy consumption during training
+- **Model Versioning**: Efficient management of multiple model versions on resource-constrained devices
+- **Sustainable Operations**: Optimizing the learning process for long-term sustainability
 
 ## Technical Details
 
 The framework consists of several components:
 
-1. **Energy Monitor**: Hardware and software tools to measure and track energy consumption at fine granularity
-2. **Workload Analyzer**: ML models to characterize and predict application behavior
-3. **Resource Manager**: Intelligent allocation of computing resources based on energy and performance constraints
-4. **Scheduler**: Carbon-aware task scheduling algorithms
-5. **Performance Guardian**: Ensures that performance requirements are met despite energy optimizations
+1. **Learning Engine**: Adaptive algorithms for continuous model updates on edge servers
+2. **Salient Store**: Smart storage system for managing data and model artifacts efficiently
+3. **Energy Monitor**: Real-time tracking of energy consumption during learning operations
+4. **Resource Scheduler**: Intelligent allocation of computational resources for learning tasks
+5. **Model Manager**: Efficient versioning and deployment of updated models
 
 ## Results
 
-Our evaluations show that Uṣa's can reduce energy consumption by up to 40% while maintaining application performance within 5% of baseline. The framework has been tested on various edge devices, including Raspberry Pi, NVIDIA Jetson, and custom FPGA platforms.
+Our evaluations show that Usas enables continuous learning on edge servers while reducing energy consumption compared to traditional approaches. The framework maintains model accuracy while adapting to new data patterns in real-time.
 
 ## Publications
 
-- **Sustainable Edge Computing: Energy-Efficient Deep Learning Inference on Resource-Constrained Devices**  
-  Cyan S. Mishra, Vijaykrishnan Narayanan  
-  *IEEE International Parallel and Distributed Processing Symposium (IPDPS), 2025*
+- **Usas: A Sustainable Continuous-Learning Framework for Edge Servers**  
+  Cyan S. Mishra, Deeksha Chaudhary, Jack Sampson, Vijaykrishnan Narayanan  
+  *IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2024*
 
-- **Towards Carbon-Aware Machine Learning Systems**  
-  Cyan S. Mishra, Vijaykrishnan Narayanan  
-  *Workshop on Sustainable AI (SustainAI), 2023*
+- **Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers**  
+  Cyan S. Mishra, Jack Sampson, Vijaykrishnan Narayanan  
+  *CoRR (arXiv), 2024*
 
 ## Future Work
 

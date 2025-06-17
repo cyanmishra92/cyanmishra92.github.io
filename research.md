@@ -40,20 +40,28 @@ For a complete list of my publications, please visit the [Publications](/publica
 
 ## Research Projects
 
-### Uṣa's - Sustainable Edge Computing Framework
+### NExUME - Adaptive Training and Inference for Intermittent Power
 
-Uṣa's is a comprehensive framework for sustainable edge computing that optimizes energy consumption while maintaining performance requirements. The framework includes tools for energy profiling, workload characterization, and adaptive resource management.
+NExUME addresses the challenge of training and running deep neural networks under intermittent power conditions, typical in energy harvesting devices. The system provides adaptive mechanisms for both training and inference phases to maintain model performance despite power interruptions.
 
-### Origin - On-Device Reinforcement Learning
+### Usas - Sustainable Continuous Learning Framework
 
-Origin is a system for efficient on-device reinforcement learning that enables edge devices to learn from their environment with minimal energy consumption. The system includes novel algorithms for sample-efficient learning and hardware-aware policy optimization.
+Usas is a comprehensive framework for sustainable edge computing that enables continuous learning on edge servers while optimizing energy consumption. The framework includes intelligent storage management, adaptive learning algorithms, and energy-aware resource allocation.
 
-### Seeker - Synergizing Edge and Cloud Computing
+### Origin - On-Device Intelligence for Activity Recognition
 
-Seeker is a framework that intelligently distributes computation between edge devices and the cloud to optimize for energy efficiency, latency, and accuracy. The system includes a decision engine that adapts to changing network conditions and application requirements.
+Origin enables on-device intelligence for human activity recognition using energy harvesting wireless sensor networks. The system combines efficient machine learning algorithms with energy harvesting techniques to provide continuous monitoring with minimal power consumption.
 
-### ResiRCA - Resilient Root Cause Analysis
+### HoloAR - 3D Holographic Processing for Augmented Reality
 
-ResiRCA is a system for resilient root cause analysis in distributed systems. The system uses machine learning techniques to identify the root causes of failures and performance issues in complex distributed applications.
+HoloAR provides on-the-fly optimization of 3D holographic processing for augmented reality applications. The system optimizes computational resources and processing pipelines to enable real-time holographic rendering on resource-constrained devices.
+
+### Cocktail - Multidimensional Model Serving Optimization
+
+Cocktail is a cloud-based system that provides multidimensional optimization for machine learning model serving. It optimizes across multiple dimensions including latency, throughput, accuracy, and resource utilization to provide efficient ML inference in cloud environments.
+
+### Kraken - Adaptive Container Provisioning
+
+Kraken provides adaptive container provisioning for deploying dynamic DAGs in serverless platforms. The system automatically manages container resources and scaling to optimize performance and cost for complex computational workflows.
 
 For more details on these and other projects, please visit the [Projects](/projects/) page.

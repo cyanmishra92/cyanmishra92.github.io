@@ -21,9 +21,12 @@ permalink: /
   <ul>
     <li>Computer Architecture for Machine Learning</li>
     <li>Sustainable Computing and Green AI</li>
-    <li>Edge Computing and IoT Systems</li>
+    <li>Edge Computing and Energy Harvesting Systems</li>
+    <li>Intermittent Computing and Power-aware ML</li>
     <li>Hardware-Software Co-design</li>
-    <li>Energy-Efficient Neural Network Inference</li>
+    <li>Continuous Learning on Edge Devices</li>
+    <li>Cloud Computing and Serverless Platforms</li>
+    <li>Point Cloud Processing and Computer Vision</li>
   </ul>
 </div>
 

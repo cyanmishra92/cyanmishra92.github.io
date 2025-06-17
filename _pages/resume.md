@@ -8,7 +8,7 @@ permalink: /resume/
 
 <div class="resume-section">
   <p class="resume-download">
-    <a href="{{ '/assets/pdf/Cyan_Subhra_Mishra_Resume.pdf' | relative_url }}" target="_blank" class="btn">
+    <a href="{{ '/assets/pdf/CyanResumePublic.pdf' | relative_url }}" target="_blank" class="btn">
       <i class="fas fa-file-pdf"></i> Download PDF Resume
     </a>
   </p>
