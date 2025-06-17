@@ -21,7 +21,6 @@ google_analytics: G-362234782
 # Build settings
 markdown: kramdown
 permalink: /:title/
-theme: minima
 
 # GitHub Pages supported plugins
 plugins:
@@ -43,6 +42,19 @@ collections:
   news:
     output: true
     permalink: /news/:year/:month/:day/:title/
+
+# Include _pages directory  
+include:
+  - _pages
+
+# GitHub Pages specific settings
+safe: true
+source: .
+destination: ./_site
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
 
 # Default settings
 defaults:
