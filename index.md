@@ -11,8 +11,8 @@ permalink: /
   <div class="profile-content">
     <h1>Cyan Subhra Mishra</h1>
     <h2>Ph.D. Candidate in Computer Science and Engineering</h2>
-    <p>I am a Ph.D. Candidate in the Department of Computer Science and Engineering at Pennsylvania State University, working with <a href="https://sites.google.com/site/vijaykrishnapal/" target="_blank">Dr. Vijaykrishnan Narayanan</a>. My research focuses on developing sustainable and efficient machine learning systems, particularly for edge computing environments.</p>
-    <p>My work spans computer architecture, machine learning, and sustainable computing, with a focus on designing energy-efficient systems for AI applications. I am particularly interested in optimizing neural network inference for resource-constrained environments and developing novel hardware-software co-design approaches.</p>
+    <p>I am a Ph.D. Candidate in the Department of Computer Science and Engineering at Pennsylvania State University, working with <a href="https://www.cse.psu.edu/~kandemir/" target="_blank">Dr. Mahmut Taylan Kandemir</a> and <a href="https://www.cse.psu.edu/~sampson/" target="_blank">Dr. Jack Sampson</a>. My research focuses on hardware/software co-design for machine learning systems, with particular emphasis on resource-constrained and energy-harvesting environments.</p>
+    <p>I specialize in accelerator architecture, kernel optimization, and performance modeling for ML workloads across heterogeneous compute platforms. My work spans computer architecture, machine learning systems, and sustainable computing, with a focus on designing energy-efficient systems for edge AI applications, intermittent computing, and continuous learning on resource-constrained devices.</p>
   </div>
 </div>
 
@@ -33,9 +33,8 @@ permalink: /
 <div class="section">
   <h2 class="section-title">Education</h2>
   <ul>
-    <li><strong>Ph.D. in Computer Science and Engineering</strong>, Pennsylvania State University (Expected 2025)</li>
-    <li><strong>M.S. in Computer Science and Engineering</strong>, Pennsylvania State University (2020)</li>
-    <li><strong>B.Tech. in Electronics and Communication Engineering</strong>, National Institute of Technology, Rourkela (2015)</li>
+    <li><strong>Ph.D. in Computer Science and Engineering</strong>, Pennsylvania State University (2018-2025, Expected)</li>
+    <li><strong>B.Tech. + M.Tech. Dual Degree in Electronics and Communication Engineering</strong>, National Institute of Technology, Rourkela (2011-2016, Honors)</li>
   </ul>
 </div>
 

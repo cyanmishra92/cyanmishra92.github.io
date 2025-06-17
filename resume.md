@@ -8,7 +8,7 @@ permalink: /resume/
 
 <div class="resume-section">
   <p class="resume-download">
-    <a href="{{ '/assets/pdf/Cyan_Subhra_Mishra_Resume.pdf' | relative_url }}" target="_blank" class="btn">
+    <a href="{{ '/assets/pdf/CyanResumePublic.pdf' | relative_url }}" target="_blank" class="btn">
       <i class="fas fa-file-pdf"></i> Download PDF Resume
     </a>
   </p>
@@ -17,87 +17,83 @@ permalink: /resume/
 ## Education
 
 **Pennsylvania State University**, University Park, PA  
-*Ph.D. in Computer Science and Engineering* (Expected 2025)  
-Advisor: Dr. Vijaykrishnan Narayanan  
-Thesis: Sustainable Machine Learning Systems for Edge Computing
-
-**Pennsylvania State University**, University Park, PA  
-*M.S. in Computer Science and Engineering* (2020)  
-GPA: 3.9/4.0
+*Ph.D. in Computer Science and Engineering* (2018-2025, Expected)  
+Advisors: Dr. Mahmut Taylan Kandemir, Dr. Jack Sampson  
+GPA: 3.7/4.0
 
 **National Institute of Technology, Rourkela**, India  
-*B.Tech. in Electronics and Communication Engineering* (2015)  
-GPA: 9.1/10.0
+*B.Tech. + M.Tech. Dual Degree in Electronics and Communication Engineering* (2011-2016)  
+Advisors: Dr. Sarat Kumar Patra, Tarjinder Singh (Intel)  
+CGPA: 8.39/10.00 (Honors)
 
-## Research Experience
+## Professional Experience
 
-**Graduate Research Assistant**, Pennsylvania State University (2019 - Present)
-- Developing novel techniques for energy-efficient deep learning inference on edge devices
-- Designing hardware-software co-design approaches for sustainable machine learning
-- Implementing and evaluating on-device reinforcement learning frameworks
-- Publishing research in top-tier conferences and journals in computer architecture and machine learning
+**Graduate Research Assistant**, Microsystems Design Lab, Penn State (2018-Present)
+- Led hardware/software co-design initiatives for ML systems at scale, optimizing performance, energy efficiency, and resource utilization across heterogeneous computing platforms
+- Developed novel architectural solutions for efficient deployment of large language models on resource-constrained devices, achieving up to 22% accuracy improvement with minimal computational overhead
+- Engineered high-throughput computational storage architectures for data-intensive ML workloads, reducing data movement by 6.1× while maintaining system-level performance
+- Created comprehensive performance modeling frameworks for multi-dimensional optimization of ML deployments, balancing latency, accuracy, and energy constraints in both edge and cloud environments
 
-**Research Intern**, Microsoft Research (Summer 2023)
-- Developed energy-efficient neural network compression techniques for edge devices
-- Implemented and evaluated quantization methods for reducing model size and inference latency
-- Collaborated with the Edge AI team to integrate solutions into production systems
+**Research Intern**, Bell Labs (Summer 2021)
+- Developed optimization strategies for autonomous ML inference serving across heterogeneous hardware (GPUs, FPGAs), leveraging Apache TVM for cross-platform kernel optimization
+- Implemented model compression techniques including quantization, pruning, and knowledge distillation to improve inference efficiency while maintaining accuracy targets
 
-**Research Intern**, Intel Labs (Summer 2022)
-- Researched hardware-aware neural network optimization techniques
-- Developed algorithms for automated model compression and quantization
-- Evaluated performance on Intel's neural compute platforms
+**Design Engineer**, Intel (2016-2018)
+- Led hardware/software co-design initiatives for ML accelerators, implementing systematic performance modeling methodologies for GPU and FPGA platforms
+- Optimized ML kernels (convolution, softmax) for FPGA deployment, balancing computational efficiency with resource utilization through microarchitectural innovations
+- Conducted comprehensive timing analysis and workload characterization for large-scale ML deployment across heterogeneous computing environments
+- Developed simulation frameworks to validate accelerator designs, enabling rapid iteration and performance optimization prior to physical deployment
 
-## Industry Experience
+**Research Intern**, Intel (2015-2016)
+- Designed FPGA-based hardware accelerators for protein search algorithms, achieving significant speedups over CPU implementations
+- Leveraged OpenCL for rapid deployment and optimization of bioinformatics kernels (pairHMM, HMMer) on FPGA platforms, establishing performance benchmarks for production environments
 
-**Software Engineering Intern**, DRDO, India (2015)
-- Developed embedded software for real-time signal processing applications
-- Implemented algorithms for radar signal processing on FPGA platforms
-- Collaborated with hardware engineers to optimize system performance
+**Research Intern**, Indian Institute of Technology, Bombay (Summer 2014)
+- Designed algorithms and framework for hyperspectral image processing
+- Leveraged MATLAB and atmospheric data to build atmospheric corrections for hyperspectral images
 
-**Software Engineering Intern**, IIT Bombay, India (2014)
-- Worked on low-power VLSI design techniques for digital signal processors
-- Implemented and evaluated power optimization algorithms
-- Contributed to research publications in low-power computing
+**Research Intern**, Center for AI and Robotics, DRDO (Summer 2013)
+- Designed novel algorithm and mathematical modeling for generic azimuthal map projection
 
-## Skills
+## Technical Expertise
 
-**Programming Languages**: Python, C/C++, CUDA, PyTorch, TensorFlow, MATLAB, Verilog/VHDL
+**Programming/Compiler**: Python, C++, LLVM, Apache TVM
 
-**Areas of Expertise**:
-- Machine Learning & Deep Learning
-- Computer Architecture
-- Edge Computing
-- Hardware-Software Co-design
-- Energy-Efficient Computing
-- FPGA Design and Implementation
+**Hardware Architecture**: Microarchitecture, FPGA, ReRAM crossbars, Systolic arrays, Low-power systems
+
+**Accelerator Programming**: CUDA toolkit, OpenCL, Low-precision computing, Parallel programming optimization
+
+**ML Systems**: TensorFlow, PyTorch, Quantization, Pruning, Kernel optimization
+
+**Performance Engineering**: Workload characterization, Power/Performance modeling, Microarchitecture simulation, profiling tools (Nsight, vTune, Pin tool, Valgrind)
+
+**Hardware Design**: SystemVerilog, Xilinx Vivado, Design Compiler, Hardware simulation
 
 ## Awards & Honors
 
-- Outstanding Graduate Research Award, Penn State CSE Department, 2024
-- Best Paper Award, Workshop on Sustainable AI, 2023
-- Graduate Fellowship, Pennsylvania State University, 2019-2023
-- University Academic Excellence Award, NIT Rourkela, 2015
+- Best Paper Nomination, Design Automation and Test in Europe (DATE), 2021
+- Student Travel Award, IEEE Network Architecture and Storage (NAS), 2021
 
 ## Selected Publications
 
 For a complete list of publications, please visit the [Publications](/publications/) page.
 
-1. **Sustainable Edge Computing: Energy-Efficient Deep Learning Inference on Resource-Constrained Devices**  
-   Cyan S. Mishra, Vijaykrishnan Narayanan  
-   *IEEE International Parallel and Distributed Processing Symposium (IPDPS), 2025*
-
-2. **Origin: On-Device Reinforcement Learning Framework for Edge Intelligence**  
-   Cyan S. Mishra, Vijaykrishnan Narayanan  
+1. **NExUME: Adaptive Training and Inference for DNNs under Intermittent Power Environments**  
+   Cyan S. Mishra, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, and Chita R. Das  
    *International Conference on Learning Representations (ICLR), 2025*
 
-3. **ResiRCA: Resilient Root Cause Analysis for Distributed Systems using Machine Learning**  
-   Cyan S. Mishra, Vijaykrishnan Narayanan  
-   *IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2023*
+2. **Usas: A Sustainable Continuous-Learning Framework for Edge Servers**  
+   Cyan S. Mishra, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan and Chita R. Das  
+   *IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2024*
 
-4. **Seeker: Synergizing Edge and Cloud Computing for Efficient ML Inference**  
-   Cyan S. Mishra, Vijaykrishnan Narayanan  
-   *IEEE/ACM International Symposium on Microarchitecture (MICRO), 2022*
+3. **Cocktail: A Multidimensional Optimization for Model Serving in Cloud**  
+   Jashwant Raj Gunasekharan, Cyan S. Mishra, Prashanth Thinakaran, Bikash Sharma, Mahmut T Kandemir, Chita R. Das  
+   *USENIX Symposium on Networked Systems Design and Implementation (NSDI), 2022*
 
-5. **Efficient Acceleration of CNN Training on Resource-Constrained Edge Devices**  
-   Cyan S. Mishra, Vijaykrishnan Narayanan  
+4. **Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks**  
+   Cyan S. Mishra, Jack Sampson, Mahmut T Kandemir, Vijaykrishnan Narayanan  
+   *Design, Automation & Test in Europe Conference (DATE), 2021* [Best Paper Nominee]
+
+5. **An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks**  
+   Tianyi Shen, Cyan S. Mishra, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan  
    *IEEE Embedded Systems Letters, 2022*
