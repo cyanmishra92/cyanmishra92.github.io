@@ -1,0 +1,603 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage[document]{ragged2e}
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+%\usepackage{fontspec}
+\usepackage{fontawesome}
+%\usepackage{hyperref}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{\color{blue}
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{blue}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small#4} \\
+      %\textit{\small#5} & \textit{\small#6} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\NresumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small#4} \\
+      %\textit{\small#5} & \textit{\small#6} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+% \newcommand{\NresumeSubheading}[4]{
+%   \vspace{-2pt}\item
+%     \begin{tabular*}%{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+%       \textbf{#1} & #2 & \textit{\small#3} & \textit{\small#4}\\
+%       %\textit{\small#3} & \textit{\small#4} \\
+%       %\textit{\small#5} & \textit{\small#6} \\
+%     \end{tabular*}\vspace{-7pt}
+% }
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+% \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+%   \textbf{\href{http://sourabhbajaj.com/}{\Large Sourabh Bajaj}} & Email : \href{mailto:sourabh@sourabhbajaj.com}{sourabh@sourabhbajaj.com}\\
+%   \href{http://sourabhbajaj.com/}{http://www.sourabhbajaj.com} & Mobile : +1-123-456-7890 \\
+% \end{tabular*}
+
+\begin{center}
+    \textbf{\Huge \scshape Cyan Subhra Mishra} \\ \vspace{1pt}
+     %\small Ph.D. Candidate, Department of CSE, Penn State \\
+     \small Graduate (Performance and Power) Engineer, Arm \\
+    \href{mailto:cyanmishra92@gmail.com}{\underline{email: cyanmishra92@gmail.com}} $|$ 
+    \href{https://www.linkedin.com/in/cyan-subhra-mishra/}{\underline{Linkedin: cyan-subhra-mishra}} $|$
+    \href{https://sites.google.com/view/cyansubhramishra/}{\underline{Homepage}}
+\end{center}
+
+%-----------Research-----------
+\section{Summary}
+Specializing in hardware/software co-design for ML systems with expertise in accelerator architecture, performance modeling, and energy-efficient computing. Demonstrated experience optimizing neural network workloads across heterogeneous platforms (GPUs, FPGAs, ReRAM) with particular focus on kernel optimization, model compression techniques, and system-level performance for resource-constrained environments.\\
+\textbf{Key words:} \textit{Deep Learning at Edge, Continuous Learning Systems, Intermittent Computing, Non-volatile Processors, 
+%Sustainable Computing, 
+Energy Harvesting-Wireless Sensor Networks, Computational Storage}
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {The Pennsylvania State University}{University Park, PA}
+      {Ph.D. in Computer Science and Engineering}{Aug 2018 -- Aug 2025 (Expected)}
+  \resumeSubHeadingListEnd
+%   \hspace{4mm}{Advisors: Dr. Mahmut Taylan Kandemir, Dr. Jack Sampson}\\
+%   \hspace{4mm}{Current GPA: 3.65/4.00}
+\begin{table}[h]
+\vspace{-6mm}
+\hspace{2.5mm}
+\begin{tabular*}{0.970\textwidth}{l@{\extracolsep{\fill}}r}
+Advisors: \textbf{Dr. Mahmut Taylan Kandemir, Dr. Jack Sampson}  & Current GPA: 3.7/4.00 
+\end{tabular*}
+\vspace{-6mm}
+\end{table}
+      %\hspace{4mm}\textbf{\underline{Research Interests:}} Deep Learning at Edge, Non-volatile Processor, Intermittent Computing, EH-WSNs
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {National Institute of Technology, Rourkela}{Rourkela, Odisha, India}
+      {B.Tech + M.Tech Dual Degree in Electronics and Communication Engineering}{Aug 2011 --  May 2016}
+  \resumeSubHeadingListEnd
+%   \hspace{4mm}{Advisor: Dr. Sarat Kumar Patra}\\
+%   \hspace{4mm}{CGPA: 8.39/10}
+\begin{table}[h]
+\vspace{-6mm}
+\hspace{2.5mm}
+\begin{tabular*}{0.970\textwidth}{l@{\extracolsep{\fill}}r}
+Advisors: \textbf{Dr. Sarat Kumar Patra, Tarjinder Singh} (Intel)  & CGPA: 8.39/10.00 \textbf{(\textit{Honors})}
+\end{tabular*}
+\vspace{-6mm}
+\end{table}
+
+% %-----------EXPERIENCE-----------
+% \section{Experience}
+%   \resumeSubHeadingListStart
+
+%     \NresumeSubheading
+%       {Graduate Research Assistant}{December 2018 -- Present}
+%       {Microsystems Design Lab, Penn State}{University Park, PA}
+%       \resumeItemListStart
+%         \resumeItem{Understanding and exploring architectural and algorithmic innovations in deploying continuous learning intermittent computing systems.}
+%         \resumeItem{Designing efficient strategies, architectures and systems for running DNNs, LLMs, and RAGs on edge devices.}
+%         \resumeItem{Energy efficient, high throughput computational storage architecture for ML and HPC systems.}
+%         \resumeItem{Multi-dimensional optimization of ML-services for resource constraint and intermittent cloud instances.}
+%         % \resumeItem{Developed a full-stack web application using Flask, React, PostgreSQL and Docker to analyze GitHub data}
+%         % \resumeItem{Explored ways to visualize GitHub collaboration in a classroom setting}
+%       \resumeItemListEnd
+      
+% % -----------Multiple Positions Heading-----------
+% %    \resumeSubSubheading
+% %     {Software Engineer I}{Oct 2014 - Sep 2016}
+% %     \resumeItemListStart
+% %        \resumeItem{Apache Beam}
+% %          {Apache Beam is a unified model for defining both batch and streaming data-parallel processing pipelines}
+% %     \resumeItemListEnd
+% %    \resumeSubHeadingListEnd
+% %-------------------------------------------
+
+    
+
+%     \NresumeSubheading
+%       {Research Intern}{June 2021 -- Aug 2021}{Bell Labs}{Murray Hill, NJ}
+%       \resumeItemListStart
+%         \resumeItem{Optimization of DNNs for autonomous inference serving in heterogeneous platforms.}% including GPUs and FPGAs. }
+%       \resumeItemListEnd
+    
+    
+%     \NresumeSubheading
+%       {Design Engineer}{June 2016 -- June 2018}{Intel}{Bengaluru, India}
+%       \resumeItemListStart
+%         \resumeItem{Accelerator design for machine learning and computer vision and bioinformatics using FPGAs.}
+%         \resumeItem{Hardware-software co-design for few-shot learning.}
+%     \resumeItemListEnd
+    
+%     \NresumeSubheading
+%       {Research Intern}{Dec 2015 -- June 2016}{Intel}{Bengaluru, India}
+%       \resumeItemListStart
+%         \resumeItem{Designing FPGA based hardware accelerator for protein search algorithms.}
+%       \resumeItemListEnd
+% %\newpage      
+%      \NresumeSubheading
+%       {Research Intern}{May 2014 – July 2014}{CSRE, IIT Bombay}{Mumbai, India}
+%       \resumeItemListStart
+%         \resumeItem{Developing a computational model for pre-processing of hyper-spectral images.}
+%       \resumeItemListEnd
+      
+%        \NresumeSubheading
+%       {Research Intern}{May 2013 – July 2013}{Centre for Artificial Intelligence and Robotics}{Bengaluru, India}
+%       \resumeItemListStart
+%         \resumeItem{Developing a generic method for azimuthal map projection.}
+%       \resumeItemListEnd
+%   \resumeSubHeadingListEnd
+
+%   %-----------PROGRAMMING SKILLS-----------
+% \section{Technical Skills}
+%  \begin{itemize}[leftmargin=0.15in, label={}]
+%     \small{\item{
+%      \textbf{Programming Languages}{: Python, C/C++, SystemVerilog, MATLAB} \\
+%      \textbf{Frameworks}{: TensorFlow, Keras, PyTorch} \\
+%      \textbf{Tools:} Nvidia Nsight Compute, Nvidia Nsight Systems, Intel vTune, CUDA toolkit, Xilinx Vivado, Design Compiler
+%     }}
+%  \end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+
+\resumeSubHeadingListStart
+    \NresumeSubheading
+      {Graduate Engineer: SoC Performance Engineering}{Jan 2026 -- Present}
+      {Arm Inc.}{San Diego, CA}
+      \resumeItemListStart
+        \resumeItem{Performance and power modeling for next-generation System-on-Chip targeting emerging domains such as Edge AI, Internet of Things, and automotive, informing architectural trade-off decisions and design prioritization.}
+        \resumeItem{Collaborating with cross-functional architecture, microarchitecture, and systems teams to quantify latency, throughput, energy, and area impacts of compute subsystems using analytical and empirical methods, guiding optimization strategies across hardware and software stacks.}
+        \resumeItem{Developing and maintaining performance evaluation and automation frameworks using Python and C++ for large-scale workload profiling, simulation, data analysis, and regression benchmarking across workloads.}
+        \resumeItem{Characterizing diverse workloads using performance profiling, hardware counters, and custom telemetry pipelines to identify bottlenecks and optimization opportunities.}
+        \resumeItem{Communicating detailed performance insights to engineering stakeholders, elevating performance awareness and influencing product development roadmaps.}
+        \resumeItem{Integrating performance data into continuous integration workflows, enabling automated performance regression detection and ensuring stability of architectural changes across development cycles.}
+      \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+  \resumeSubHeadingListStart
+    \NresumeSubheading
+      {Graduate Research Assistant}{December 2018 -- December 2025}
+      {Microsystems Design Lab, Penn State}{University Park, PA}
+      \resumeItemListStart
+        \resumeItem{Designing and implementing hardware/software co-design methodologies for ML systems, with focus on optimizing performance, energy efficiency, and resource utilization across heterogeneous computing platforms.}
+        \resumeItem{Developing novel architectural solutions for efficient deployment of DNNs, LLMs, and RAGs on resource-constrained edge devices, achieving up to 22\% higher accuracy with minimal computational overhead.}
+        \resumeItem{Engineering high-throughput computational storage architectures for ML workloads that reduce data movement by 6.1$\times$ while improving system-level performance.}
+        \resumeItem{Creating performance modeling frameworks for multi-dimensional optimization of large-scale ML deployments, balancing latency, accuracy, and energy constraints in both edge and cloud environments.}
+      \resumeItemListEnd
+      
+    \NresumeSubheading
+      {Research Intern}{June 2021 -- Aug 2021}{Bell Labs}{Murray Hill, NJ}
+      \resumeItemListStart
+        \resumeItem{Developed optimization strategies for autonomous ML inference serving across heterogeneous platforms (GPUs, FPGAs), leveraging Apache TVM for cross-platform kernel optimization.}
+        \resumeItem{Implemented model compression techniques including pruning, quantization, and knowledge distillation to improve inference efficiency while maintaining accuracy targets.}
+      \resumeItemListEnd
+    
+    \NresumeSubheading
+      {Design Engineer}{June 2016 -- June 2018}{Intel}{Bengaluru, India}
+      \resumeItemListStart
+        \resumeItem{Led hardware/software co-design initiatives for ML accelerators, implementing systematic performance modeling methodologies for GPU and FPGA platforms.}
+        \resumeItem{Optimized ML kernels (convolution, softmax) for FPGA deployment, balancing computational efficiency with resource utilization through microarchitectural innovations.}
+        \resumeItem{Conducted comprehensive timing analysis and performance characterization for large-scale ML workloads across heterogeneous computing environments.}
+        \resumeItem{Developed software/hardware simulation frameworks to validate accelerator designs, enabling rapid iteration and performance optimization prior to physical deployment.}
+      \resumeItemListEnd
+    
+    \NresumeSubheading
+      {Research Intern}{Dec 2015 -- June 2016}{Intel}{Bengaluru, India}
+      \resumeItemListStart
+        \resumeItem{Designed FPGA-based hardware accelerators for protein search algorithms, achieving significant speedups over CPU implementations.}
+        \resumeItem{Leveraged OpenCL for rapid deployment and optimization of bioinformatics kernels (pairHMM, HMMer) on FPGA platforms, establishing performance benchmarks for production environments.}
+      \resumeItemListEnd
+      
+     \NresumeSubheading
+      {Research Intern}{May 2014 -- July 2014}{CSRE, IIT Bombay}{Mumbai, India}
+      \resumeItemListStart
+        \resumeItem{Developed computational models for pre-processing hyperspectral satellite imagery, optimizing algorithms for data extraction and feature identification.}
+      \resumeItemListEnd
+      
+       \NresumeSubheading
+      {Research Intern}{May 2013 -- July 2013}{Centre for Artificial Intelligence and Robotics}{Bengaluru, India}
+      \resumeItemListStart
+        \resumeItem{Developed a generic method for azimuthal map projection, implementing efficient algorithms for coordinate transformation.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+  
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Hardware Architecture}{: GPU microarchitecture, FPGA acceleration, ReRAM crossbars, systolic arrays, energy-harvesting systems} \\
+     \textbf{Accelerator Programming}{: CUDA toolkit, OpenCL, Triton, parallel programming optimization} \\
+     \textbf{ML Systems}{: TensorFlow, PyTorch, Apache TVM, model compression, kernel optimization} \\
+     \textbf{Performance Engineering}{: Nvidia Nsight Compute/Systems, Intel vTune, workload characterization, power/performance modeling} \\
+     \textbf{Hardware Design}{: SystemVerilog, Xilinx Vivado, Design Compiler, microarchitecture simulation}
+    }}
+ \end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%-----------PUBLICATION-----------
+
+\section{Publications}
+
+\subsection*{Under Review}
+\begin{itemize}
+
+\item \small{[\textbf{R2025\#3}] \textbf{\underline{Cyan Subhra Mishra}}, Deeksha Chaudhary, Soumya Prakash Mishra, Rui Zhang, Jack Sampson, Mahmut Taylan Kandemir, Chita R Das. \textbf{``Prophet: Neural Expert Prediction for Efficient Mixture-of-Experts Inference''} \href{https://drive.google.com/file/d/1n4RoKUPws2BikLI4gpDKDBD_a1vMhsiA/view?usp=sharing}{[link]} }
+
+\item \small{[\textbf{R2025\#2}] \textbf{\underline{Cyan Subhra Mishra}}, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, Chita R Das. \textbf{``Hardware-Aware Neural Network Co-Design with Analog Activation for Energy-Efficient ReRAM Crossbars''} \href{https://drive.google.com/file/d/13B_9yXeTTqPra8d2fy-NVZXISsMfp_PZ/view?usp=sharing}{[link]} }
+
+
+\item \small{[\textbf{R2025\#1}] Deeksha Chaudhary, Rishabh Jain, \textbf{\underline{Cyan Subhra Mishra}}, Mahmut Taylan Kandemir, Chita R Das. \textbf{``MaestroRAG: Orchestrated Pipeline Architecture for Efficient RAG on Edge Devices''}}
+
+\end{itemize}
+\subsection*{arXiv Preprints}
+\begin{itemize}
+
+%\item When I expect to graduate and classify the publications into Preprint, COnf and journal
+
+\item \small{[\textbf{arXiv-2024}] \textbf{\underline{Cyan Subhra Mishra}}, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir. \textbf{``Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers''} arXiv preprint arXiv:2410.05435 (2024).}
+
+\item \small{[\textbf{arXiv-2024}] \textbf{\underline{Cyan Subhra Mishra}}, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. \textbf{``Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks''} arXiv preprint arXiv:2408.14379 (2024).}
+
+\item \small{[\textbf{arXiv-2024}]  \textbf{\underline{Cyan Subhra Mishra}}, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, and Chita R. Das.\textbf{``Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers"} arXiv preprint arXiv:2408.13696 (2024)}
+
+\item \small{[\textbf{arXiv-2020}] \textbf{\underline{Cyan Subhra Mishra}}, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan. \textbf{``Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition."} arXiv preprint arXiv:2204.13106 (2022).}
+
+\item \small{[\textbf{arXiv'2020}] Jashwant Raj Gunasekaran , Prashanth Thinakaran, \textbf{\underline{Cyan Subhra Mishra}}, Mahmut Taylan Kandemir, and Chita R. Das. \textbf{``Towards Designing a Self-Managed Machine Learning Inference Serving System inPublic Cloud."} arXiv preprint arXiv:2008.09491 (2020).}
+
+
+\end{itemize}
+
+\subsection*{Conference Papers}
+\begin{itemize}
+
+\item \small{[\textbf{PACT-2025}] \textbf{\underline{Cyan Subhra Mishra}}, Deeksha Chaudhary, Mahmut Taylan Kandemir, Chita R Das. \textbf{``Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers''} International Conference on Parallel Architectures and Compilation Techniques (PACT '25).}
+
+\item \small{[\textbf{ICLR-2025}]  \textbf{\underline{Cyan Subhra Mishra}}, Deeksha Chaudhary, Jack Sampson, Mahmut Taylan Kandemir, and Chita R. Das.\textbf{``Revisiting DNN Training for Intermittently--Powered Energy--Harvesting Micro--Computers"}; [TO APPEAR]}
+
+\item \small{[\textbf{IPDPS-2025}]  Wahid Uz Zaman, \textbf{\underline{Cyan Subhra Mishra}}, Saleh AlSaleh, Abutalib Aghayev, and Mahmut Taylan Kandemir.\textbf{``CORD: Parallelizing Query Processing across Multiple Computational Storage Devices"}; [TO APPEAR]}
+
+
+\item \small{[\textbf{HPCA-2024}]  \textbf{\underline{Cyan Subhra Mishra}}, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan and Chita R. Das.\textbf{``U\d{s}\'{a}s: A Sustainable Continuous-Learning Framework for  Edge Servers"};  In 2024 IEEE International Symposium on High-Performance Computer Architecture (HPCA), pp. 891-907. IEEE, 2024.}
+
+\item \small{[\textbf{ICDCS-2022}] Ziyu Ying, Shulin Zhao, Haibo Zhang, \textbf{\underline{Cyan Subhra Mishra}}, Sandeepa Bhuyan, Mahmut T. Kandemir, Anand Sivasubramaniam, and Chita R. Das.\textbf{``Exploiting Frame Similarity for Efficient Inference on Edge Devices"};  In 2022 IEEE 42nd International Conference on Distributed Computing Systems (ICDCS), pp. 1073-1084. IEEE, 2022.}
+
+\item \small{[\textbf{MICRO-2022}] Ziyu Ying, Shulin Zhao, Sandeepa Bhuyan, \textbf{\underline{Cyan Subhra Mishra}}, Mahmut Kandemir, Chita R. Das. \textbf{``Pushing Point Cloud Compression to Edge"}; In 2022 55th IEEE/ACM International Symposium on Microarchitecture (MICRO) (pp. 282-299). IEEE. In 2022 55th IEEE/ACM International Symposium on Microarchitecture (MICRO) (pp. 282-299). IEEE.}
+    
+\item \small{[\textbf{NSDI-2022}] Jashwant Raj Gunasekharan, \textbf{\underline{Cyan Subhra Mishra}}, Prashanth Thinakaran, Bikash Sharma, Mahmut T Kandemir, Chita R. Das, \textbf{``Cocktail: A Multidimensional Optimization for Model Serving in Cloud"}, 19th USENIX Symposium on Networked Systems Design and Implementation (NSDI), 2022.} 
+    
+\item \small{[\textbf{NAS-2021}] Jashwant Raj Gunasekaran, \textbf{\underline{Cyan Subhra Mishra}}, \textbf{``MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance"}, IEEE Network Architecture and Storage 2021 (NAS'21), 2021.}
+
+\item \small{[\textbf{SoCC-2021}] Vivek M. Bhas, Jashwant Raj Gunasekharan, Prashanth Thinakaran, \textbf{\underline{Cyan Subhra Mishra}}, Mahmut T Kandemir, Chita R. Das, \textbf{``Kraken : Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms"}, ACM Symposium on Cloud Computing 2021 (SoCC'21), 2021.}
+ 
+\item \small{[\textbf{MICRO-2021}] Shulin Zhao, Haibo Zhang, \textbf{\underline{Cyan Subhra Mishra}}, Sandeepa Bhuyan, Ziyu Ying, Mahmut T Kandemir, Chita R. Das, \textbf{``HoloAR: On-the-fly Optimization of 3D HolographicProcessing for Augmented Reality"}, 54th IEEE/ACM International Symposium on Microarchitecture (MICRO), 2021.}
+   
+    
+\item \small{[\textbf{DATE-2021}] \textbf{\underline{Cyan Subhra Mishra}}, Jack Sampson, Mahmut T Kandemir, Vijaykrishnan Narayanan, \textbf{``Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks"}, Design, Automation \& Test in Europe Conference \& Exhibition (DATE). IEEE, 2021. [\textbf{Best Paper Nominee}]}
+
+\item \small{[\textbf{WoSC-2020}] Jashwant Raj Gunasekaran, \textbf{\underline{Cyan Subhra Mishra}}, Prashanth Thinakaran, Mahmut T Kandemir, Chita R Das, \textbf{``Implications Of Public Cloud Resource Heterogeneity for Inference Serving"}, Proceedings of the 6th International Workshop on Serverless Computing 2020.}
+    
+\item \small{[\textbf{ISCA-2020}] Shulin Zhao, Haibo Zhang, Sandeepa Bhuyan, \textbf{\underline{Cyan Subhra Mishra}}, Ziyu Ying, Mahmut T. Kandemir, Anand Sivasubramaniam, Chita R. Das, \textbf{``Déjà view: Spatio-temporal compute reuse for energy-efficient 360° VR video streaming"}, In Proceedings of the ACM/IEEE 47th Annual International Symposium on Computer Architecture 2020 (\textbf{ISCA}) .}
+    
+\item \small{[\textbf{HPCA-2020}] Keni Qiu, Nicholas Jao; Mengying Zhao, \textbf{\underline{Cyan Subhra Mishra}}, Gulsum Gudukbay, Sethu Jose, Jack Sampson, Mahmut T Kandemir, Vijaykrishnan Narayanan, \textbf{``ResiRCA: A resilient energy harvesting ReRAM-based accelerator for intelligent embedded processors"}, In Proceedings of IEEE International Symposium on High Performance Computer Architecture 2020 (\textbf{HPCA}).}
+
+\end{itemize}
+
+\subsection*{Journal Papers}
+\begin{itemize}
+\item \small{[\textbf{ASTM-SSMS-2022-0031}] Abhishek Hanchate, Parth Sanjaybhai Dave, Ankur Verma, Akash Tiwari, \\\textbf{\underline{Cyan Subhra Mishra}}, Soundar R. T. Kumara, Anil Srivastava, Hui Yang,
+Vijaykrishnan Narayanan, John Morgan Sampson, Mahmut Taylan Kandemir,
+Kye-Hwan Lee, Tanna Marie Pugh, Amy Jorden, Gautam Natarajan,
+Dinakar Sagapuram, and Satish T. S. Bukkapatnam \textbf{``A Graphical Representation of Sensor
+Mapping for Machine Tool Fault
+Monitoring and Prognostics for Smart
+Manufacturing. "}}
+
+\item \small{[\textbf{IEEE-ESL-2022}] Tianyi Shen, \textbf{\underline{Cyan Subhra Mishra}}, Jack Sampson, Mahmut Taylan Kandemir, Vijaykrishnan Narayanan.\textbf{``An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks."}}
+    
+\item \small{[\textbf{Defence Science Journal-2015}]; Narayan Panigrahi, \textbf{\underline{Cyan Subhra Mishra}}, \textbf{``A Generic Method for Azimuthal Map Projection"}, Defence Science Journal 65 (5).}
+
+\end{itemize}
+
+%-----------Projects-----------
+
+\section{Academic Projects}
+\textbf{\underline{Preliminary Works}}
+
+% \begin{itemize}
+% \item \textbf{NExUME:} Dynamically adjusts dropout and quantization in response to unreliable energy. Achieves up to 22\% accuracy gains with a small extra compute cost.
+% \textbf{Key Concepts:} Energy Harvesting, Intermittent Computing, Dynamic Dropout, Quantization, Power/Energy Aware Training, ML for Systems.
+
+% \item \textbf{Seeker:} Partially runs DNNs on ultra-low-power nodes, sending only compressed ``coresets'' to the host. Cuts communication overhead while retaining high accuracy. 
+% \textbf{Key Concepts:} Coreset Compression, EH-WSN, Partial Inference, Edge-Host Synergy, Lightweight Hardware, Embedded Systems.
+
+% \item \textbf{SaLT:} Incorporates neural compression, encryption, and redundancy inside computational storage for continuous-learning on edge servers. Streamlines data movement.
+% \textbf{Key Concepts:} Computational Storage, Continuous Learning, Neural Compression, FPGA Acceleration, Edge Servers, Storage servers.
+
+% \item \textbf{Us.\'as:} Enables continuous learning with only intermittent solar power. Uses a morphable accelerator to adapt to power fluctuations and prevent training stalls.
+% \textbf{Key Concepts:} Battery-Free Design, Morphable Accelerator, Continuous Learning, Edge Analytics, Performance/Power Modeling, System for ML.
+
+% \item \textbf{Origin:} Employs scheduling and ensemble techniques in EH body-area networks for robust human activity recognition, boosting completed inferences.
+% \textbf{Key Concepts:} Human Activity Recognition, Ensemble Learning, EH-WSN, Scheduling, Non-Volatile Computing
+% \end{itemize}
+
+% \begin{itemize}
+% \item \textbf{NExUME:} 
+% Dynamically adjusts dropout and quantization in response to intermittent and unreliable energy availability, thereby enabling Deep Neural Networks (DNNs) to operate efficiently under energy-harvesting conditions. The key novelty lies in training DNNs to be \emph{intermittency-aware}: during training (\emph{DynFit}), the framework embeds real-time energy variability into the optimization procedure by simultaneously updating dropout rates and quantization levels. At inference (\emph{DynInfer}), a power- and platform-aware scheduler handles partial computations and checkpointing to accommodate sporadic power income. Experiments across varied tasks (sensor data, images, audio) show up to $22\%$ higher accuracy compared to state-of-the-art intermittency solutions, for only a marginal $<5\%$ compute overhead. 
+% \textbf{Key Concepts:} Energy Harvesting, Intermittent Computing, Dynamic Dropout, Quantization, Power/Energy Aware Training, ML for Systems.
+
+% \item \textbf{Seeker:} 
+% Partially runs DNNs on ultra-low-power sensor nodes that rely on energy harvesting, sending only compressed ``coresets'' (representative subsets) to a more capable host for final inference. This co-design drastically cuts communication overhead while retaining high accuracy. At the sensor side, lightweight hardware/software support for coreset construction identifies salient, high-value features from sensor signals. On the host side, the partial feature-based inference finalizes classification with near-baseline accuracy. Seeker combines \emph{energy-awareness} at the node (store-and-execute with non-volatile memory) and \emph{coreset-based data compression} for large communication gains (up to $8.9\times$ reduction). 
+% \textbf{Key Concepts:} Coreset Compression, EH-WSN, Partial Inference, Edge-Host Synergy, Lightweight Hardware, Embedded Systems.
+
+% \item \textbf{SaLT:} 
+% Implements \emph{computational storage} to handle video or large-scale sensor data directly at the storage layer, combining neural compression, quantum-safe encryption, and redundancy for continuous learning on edge servers. The core idea is to offload data-intensive tasks---like compression and encryption---into storage devices (\emph{CSDs}) that contain on-board FPGAs. This \emph{near-data processing} architecture significantly reduces data movement across the memory and I/O boundaries, accelerating continuous-learning pipelines and mitigating bottlenecks in the host CPU or GPU. Prototype results show up to $6\times$ faster data handling and $6.1\times$ less data movement, making continuous training more scalable at the edge. 
+% \textbf{Key Concepts:} Computational Storage, Continuous Learning, Neural Compression, FPGA Acceleration, Edge Servers, Storage Servers.
+
+% \item \textbf{Us.\'as:} 
+% Enables continuous learning on edge servers powered purely by \emph{intermittent solar energy}, thereby removing dependence on grid or battery resources. By pairing a morphable DNN accelerator (capable of dynamically resizing its systolic array and adjusting workloads) with a teacher-student training strategy, Us.\'as executes tasks adaptively even under limited or fluctuating power. Key components include a micro-profiling engine for selecting hyperparameters under strict power constraints, and a \emph{non-battery} design that stores minimal energy in capacitors and leverages checkpointing for progress. Evaluations show $\sim5\%$ higher accuracy (over a multi-window horizon) than conventional continuous learning approaches on the same power budget, while saving hundreds of kWh per year per device. 
+% \textbf{Key Concepts:} Battery-Free Design, Morphable Accelerator, Continuous Learning, Edge Analytics, Performance/Power Modeling, System for ML.
+
+% \item \textbf{Origin:} 
+% Employs scheduling and adaptive ensemble techniques in energy-harvesting body-area networks for robust \emph{human activity recognition} (HAR). Each ultra-low-power sensor node (e.g., at the wrist, ankle, chest) runs a specialized, intermittency-aware DNN, and the system coordinates inferences via an \emph{activity-aware scheduler} and a \emph{lightweight ensemble} aggregator. By carefully orchestrating which sensor attempts an inference (based on anticipated energy reserves and predicted activity), and by fusing partial/confident results, Origin dramatically boosts the number of successfully completed inferences. Experimental results on common HAR datasets show $2.5\%$--$5\%$ higher classification accuracy than standard baselines under sporadic harvested power, with minimal overhead. 
+% \textbf{Key Concepts:} Human Activity Recognition, Ensemble Learning, EH-WSN, Scheduling, Non-Volatile Computing
+% \end{itemize}
+
+\begin{itemize}
+\item \textbf{NExUME:} Dynamically adjusts dropout and quantization in response to intermittent energy, letting DNNs adapt to fluctuating power. Uses an intermittency-aware optimizer (\emph{DynFit}) and scheduling (\emph{DynInfer}) to achieve up to $22\%$ higher accuracy with minimal extra compute. 
+\textbf{Key Concepts:} Energy Harvesting, Intermittent Computing, Dynamic Dropout/Quantization.
+
+\item \textbf{Seeker:} Offloads only compressed ``coresets'' from ultra-low-power sensors to the host, cutting communication by up to $8.9\times$. Sensors run partial DNNs with store-and-execute on non-volatile memory; the host completes inference on the coreset. 
+\textbf{Key Concepts:} Coreset Compression, EH-WSN, Partial Inference, Edge-Host Synergy.
+
+\item \textbf{SaLT:} Uses computational storage for neural compression, encryption, and redundancy in continuous-learning edge servers. FPGA-accelerated storage drives offload data-intensive tasks, saving data movement and boosting throughput by $6\times$. 
+\textbf{Key Concepts:} Computational Storage, Neural Compression, FPGA Acceleration, Edge Servers.
+
+\item \textbf{Us\'as:} Runs continuous learning on solar-powered edge servers with no batteries. A morphable accelerator reshapes itself to available power, while a teacher-student approach helps train robust models. Saves hundreds of kWh/year compared to standard continuous-learning setups. 
+\textbf{Key Concepts:} Battery-Free, Morphable Accelerator, Continuous Learning, Solar-Powered.
+
+\item \textbf{Origin:} Schedules and ensembles multiple energy-harvesting sensors for human activity recognition. Each node runs a compact DNN, coordinated by an activity-aware scheduler and ensemble aggregator. Improves robustness and achieves $\sim 2.5\%$–$5\%$ higher accuracy under tight power constraints. 
+\textbf{Key Concepts:} Human Activity Recognition, Ensemble Learning, EH-WSN, Scheduling.
+\end{itemize}
+
+
+\textbf{\underline{Other Works}}
+\begin{itemize}
+    \item \textbf{Cloud Computing:} Analyzes resource heterogeneity in public clouds for inference services, focusing on cost efficiency and performance. Proposes a scheduling approach to map inference requests to diverse VM instance types.
+    Designing a resource management framework for dynamic DAG-based serverless platforms. Minimizes container over-provisioning in function-chains by combining proactive and reactive scaling, plus a weighting policy for short-latency workflows.
+    Designing ensembling-based model-serving framework in the public cloud, balancing cost, accuracy, and latency. Employs dynamic model subset selection, weighted majority voting, and transient VM usage to reduce deployment costs and maintain SLO.
+
+\item \textbf{Point Cloud:} Targets point cloud compression for real-time and energy-constrained systems. Proposes a two-stage pipeline for geometry (via parallel octree) and attribute compression, achieving up to 35$\times$ speedup and major energy savings on edge. 
+
+\item \textbf{AR/VR:} Explores spatio-temporal compute reuse in 360$^\circ$ video streaming on mobile VR headsets. Skips redundant projection computations, reducing total power and meeting real-time constraints.
+Focuses on holographic rendering for AR headsets, using approximate or foveated-based strategies to reduce compute overhead. Demonstrates 2.7$\times$ speedup and 73\% energy savings compared to naive holographic rendering.
+
+
+\item \textbf{Intermittent Computing:} Presents a reconfigurable ReRAM crossbar accelerator for DNN inference on intermittently-powered IoT devices. Dynamically adjusts partial activation under fluctuating harvested power, maintaining high energy efficiency and throughput.
+
+\item \textbf{Edge:} Proposes efficient edge–cloud partitioning for Random Forest inference. Introduces threshold-based offloading and training to preserve data privacy and meet latency objectives across distributed sensor deployments. Exploits frame-level and region-level similarity for video analytics on low-power edge devices. Skips redundant DNN computations in object detection, leading to speedups and energy improvements.
+     
+\end{itemize}
+
+
+
+%-----------Talks-----------
+\section{Talks}
+
+\begin{itemize}
+    \item Cocktail: A Multidimensional Optimization for Model Serving in Cloud: NSDI'22, Renton, Washington, USA, April'22. \href{https://youtu.be/VAsB1XBuRZ0}{\faYoutubePlay}
+    \item MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance: NAS'21, Riverside, California, October'21.
+    \item PowerPrep: A power management proposal for user-facing datacenter workloads: NAS'21, Riverside, California, October'21  \textbf{[Best Paper Award]}   
+    \item Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks: DATE'21, Online. \href{https://drive.google.com/file/d/1zM1oaPxZSWI2VyBMHivl1utpkjMVrACI/view?usp=sharing}{\faYoutubePlay} 
+    \item Future of Machine Learning in Computer Science; Invited Talk: IIIT Vadodara, India, November 2017.
+
+    %\item moves the talks up and next to publications
+\end{itemize}
+
+
+
+%-----------Teaching Experience-----------
+\section{Teaching Experience}
+ \resumeSubHeadingListStart
+\resumeSubheading
+    {Instructor}{Penn State}
+    {CMPEN 431: Introduction to Computer Architecture} {Spring 2024, Spring 2022}
+ \resumeSubheading
+    {Guest Lecture}{Penn State}
+    {CSE 530: Computer Architecture -- Graduate Level} {Fall 2023, Fall 2024}
+\resumeSubheading
+    {Guest Lecture}{Penn State}
+    {CMPEN 431: Introduction to Computer Architecture} {Fall 2024, Spring 2023}
+
+% \resumeSubheading
+%     {Guest Lecture}{Penn State}
+%     {CSE 530: Computer Architecture -- Graduate Level} {Fall 2023}
+% \resumeSubheading
+%     {Guest Lecture}{Penn State}
+%     {CMPEN 431: Introduction to Computer Architecture} {Spring 2023}
+% \resumeSubheading
+%     {Instructor}{Penn State}
+%     {CMPEN 431: Introduction to Computer Architecture} {Spring 2022} 
+\resumeSubheading
+    {Guest Lecturer}{Penn State}
+    {CMPSC 497: Architecture for Deep Leaning} {Fall 2019}
+\resumeSubheading
+      {Teaching Assistant}{Penn State}
+      {CMPEN 270 -- Introduction to Digital Design}{Fall 2018}
+\resumeSubheading
+    {Teaching Assistant}{NIT Rourkela}
+    {EC 270 -- Basic Electronics Laboratory}{Fall 2015}
+\resumeSubHeadingListEnd
+
+%-----------Relevant Projects-----------%
+\section{Course/Hobby Projects}
+
+\begin{itemize}
+    % \item \href{https://github.com/cyanmishra92/DynDrop}{Dynamic Dropout for Intermittent Systems}\\
+    % Demonstrates the integration of various dynamic dropout techniques for training intermittent systems.
+    \item\href{https://github.com/cyanmishra92/PyBrachPredSim}{Branch Prediction Simulator}\\
+    Python-based simulation tool to evaluate the performance of different branch prediction algorithms. 
+    \item \href{https://github.com/cyanmishra92/FewShotEye} {Few-shot Facial Recognition}\\
+    Using few-shot learning techniques and efficient memory organizations for edge devices.
+    
+    \item Distributed File System Management \\
+    Distributed file system for both client and server side using RPC calls.
+    \item Synchronization using Path Expressions \\
+    Solving the bounded-buffer and readers-writers synchronization problem using path expressions. 
+    % \item Understanding Cache Performance \\
+    % Characterizing multiple workload n the simple scalar processor to understand the impact of changing cache parameters like block size, associativity etc. 
+    \item Compression of DNNs \\
+    Exploring different DNN compression techniques like sparsity, pruning, quantization, coresets, SVD and knowledge distillation for making larger DNNs more suitable for low power low compute devices.  
+
+    \item \href{https://github.com/cyanmishra92/AcuLive}{AcuLive Classifier}\\
+    A na\"ive classifier to tell recorded voice against real voice for digital personal assistants
+\end{itemize}
+
+
+%-----------Awards-----------
+\section{Honors AND Awards}
+
+\begin{tabular}{lll}
+2021 & \hspace{1cm} &\textbf{Student Travel Award for NAS'21}\\
+2021 & \hspace{1cm} &\textbf{Best Paper Nomination of DATE'21}
+\end{tabular}
+
+
+%-----------Services-----------
+\section{Services and Memberships}
+\textbf{Submission Chair}:  IISWC:  IEEE International Symposium on Workload Characterization, 2025\\
+\textbf{Reviewer}: TPDS: Transactions on Parallel and Distributed Systems, 2024, 2023, 2019\\
+\textbf{Reviewer}: TC: Transactions on Computers, 2024, 2023, 2021, 2022\\
+\textbf{Student Member}: ACM, IEEE
+
+
+
+%-----------CourseWork-----------
+\section{Relevant Coursework}
+\textbf{Graduate}: Large Scale Machine Learning, Computer Architecture, Operating System, Compilers. \\
+\textbf{Online Courses}: Deep Learning, Introduction to Parallel Programming, Quantum Computation.
+
+%-----------References-----------
+% \section{References}
+% References are available on request.
+
+%-------------------------------------------
+\end{document}
