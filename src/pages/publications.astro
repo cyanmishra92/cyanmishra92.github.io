@@ -5,9 +5,9 @@ import PageHeader from '@components/PageHeader.astro';
 import SectionHeader from '@components/SectionHeader.astro';
 import PaperItem from '@components/PaperItem.astro';
 import BibtexModal from '@components/BibtexModal.astro';
-import { groupPapers, TOP_VENUES, VENUE_TYPE_LABELS } from '@lib/papers';
+import { groupPapers, TOP_VENUES, VENUE_TYPE_LABELS, withCitations } from '@lib/papers';
 
-const all = (await getCollection('publications')).map((e) => e.data);
+const all = withCitations((await getCollection('publications')).map((e) => e.data));
 const groups = groupPapers(all);
 const total = all.length;
 

@@ -1,0 +1,53 @@
+name: Refresh citations
+
+on:
+  schedule:
+    # Mondays at 06:00 UTC.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    name: Pull citation counts from Semantic Scholar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Refresh citations
+        run: npm run refresh-citations
+
+      - name: Open PR with refreshed citations
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/refresh-citations
+          base: main
+          commit-message: 'chore(citations): refresh from Semantic Scholar'
+          title: 'chore(citations): weekly refresh'
+          body: |
+            Automated weekly refresh of `public/data/citations.json` from
+            the Semantic Scholar Graph API.
+
+            Drives the Stats strip on the home page (totalCitations + h-index)
+            and the per-paper "cited by N" annotation on `/publications`.
+
+            Manual overrides for papers without a DOI/arXiv ID live in
+            `src/data/manual-citations.json` and take precedence over API
+            values.
+          delete-branch: true
+          add-paths: |
+            public/data/citations.json

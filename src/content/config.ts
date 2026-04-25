@@ -63,7 +63,47 @@ const projects = defineCollection({
   }),
 });
 
+/**
+ * News collection — short MDX entries under src/content/news/.
+ * Each entry is one news item; reverse-chronological by `date`.
+ * MDX body is optional; the headline + brief usually suffice.
+ */
+const news = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    /** True for entries where the exact day isn't known — page hides it. */
+    approximateDate: z.boolean().default(false),
+    /** Optional link the headline links to. Internal paths or full URLs both OK. */
+    href: z.string().refine(
+      (s) => s.startsWith('/') || /^https?:\/\//.test(s) || s.startsWith('mailto:'),
+      'href must be an internal path (/...) or a full URL',
+    ).optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+/**
+ * Blog collection — MDX posts under src/content/blog/.
+ */
+const blog = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   publications,
   projects,
+  news,
+  blog,
 };
+
