@@ -49,6 +49,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.PUBLIC_PLAUSIBLE_DOMAIN }}
           PUBLIC_FORMSPREE_ENDPOINT: ${{ vars.PUBLIC_FORMSPREE_ENDPOINT }}
+          # Search engine ownership tokens. Set as repo Variables (not
+          # Secrets) — they're publicly visible in rendered HTML anyway,
+          # and Variables can be referenced from build steps. See docs/SEO.md.
+          PUBLIC_GSC_VERIFICATION: ${{ vars.PUBLIC_GSC_VERIFICATION }}
+          PUBLIC_BING_VERIFICATION: ${{ vars.PUBLIC_BING_VERIFICATION }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

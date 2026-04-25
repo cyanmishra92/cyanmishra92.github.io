@@ -32,6 +32,12 @@ const rendered = await Promise.all(
 <BaseLayout
   title={page.currentPage === 1 ? 'News' : `News — page ${page.currentPage}`}
   description="News, paper acceptances, talks, and milestones from Cyan Subhra Mishra."
+  breadcrumbs={page.currentPage === 1
+    ? [{ name: 'News', href: '/news/' }]
+    : [
+        { name: 'News', href: '/news/' },
+        { name: `Page ${page.currentPage}`, href: page.url.current },
+      ]}
 >
   <PageHeader
     number="05"

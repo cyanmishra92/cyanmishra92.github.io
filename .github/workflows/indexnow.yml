@@ -1,0 +1,55 @@
+name: IndexNow submit
+
+# Triggered when a Deploy run completes successfully on main.
+# Resolves the deploy commit's diff, maps changed source paths to
+# public URLs, and submits the list to https://api.indexnow.org/IndexNow
+# so Bing/Yandex/etc. crawl the new content within minutes instead of
+# days. Best-effort — failures don't block anything.
+#
+# Setup:
+#   1. Repo Secrets → INDEXNOW_KEY = the 32-char hex matching
+#      public/<KEY>.txt (verification file). Default key is checked
+#      into the repo; override only if rotating.
+
+on:
+  workflow_run:
+    workflows: ['Deploy to GitHub Pages']
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    name: Notify IndexNow
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need the commit + its parent so `git diff` works.
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Submit changed URLs
+        env:
+          GITHUB_SHA: ${{ github.event.workflow_run.head_sha }}
+          # Default key matches public/169cc72c88778a725f0e4b20ea849813.txt.
+          # Override via Repo Secrets → INDEXNOW_KEY when rotating.
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY || '169cc72c88778a725f0e4b20ea849813' }}
+        run: npm run indexnow-submit

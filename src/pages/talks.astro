@@ -72,6 +72,7 @@ const years = [...new Set(talks.map((t) => t.year))].sort((a, b) => b - a);
 <BaseLayout
   title="Talks"
   description="Conference talks and invited lectures from Cyan Subhra Mishra."
+  breadcrumbs={[{ name: 'Talks', href: '/talks/' }]}
 >
   <PageHeader
     number="06"

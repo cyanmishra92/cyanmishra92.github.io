@@ -5,6 +5,13 @@ import ThemeScript from '@components/ThemeScript.astro';
 import Nav from '@components/Nav.astro';
 import Footer from '@components/Footer.astro';
 
+interface Crumb {
+  /** Display name in the breadcrumb trail. */
+  name: string;
+  /** Absolute or root-relative URL. */
+  href: string;
+}
+
 interface Props {
   title?: string;
   description?: string;
@@ -14,6 +21,11 @@ interface Props {
   bare?: boolean;
   /** Optional extra JSON-LD blocks to inject (e.g. ScholarlyArticle, BlogPosting). */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Optional breadcrumb trail. Home is implied; pass entries from the
+   *  next level down (e.g. for /publications/[slug]/, pass
+   *  [{ name: 'Publications', href: '/publications/' }, { name: title, href: pathname }]).
+   *  When set, a BreadcrumbList JSON-LD block is emitted. */
+  breadcrumbs?: Crumb[];
 }
 
 const {
@@ -23,6 +35,7 @@ const {
   noindex = false,
   bare = false,
   jsonLd,
+  breadcrumbs,
 } = Astro.props;
 const extraLd = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
 
@@ -30,7 +43,19 @@ const fullTitle = title ? `${title} — ${SITE.shortName}` : SITE.name;
 const canonical = new URL(Astro.url.pathname, SITE.url).toString();
 const ogImage = new URL(image, SITE.url).toString();
 
-// Person JSON-LD applied site-wide.
+// ─── Person JSON-LD (site-wide) ────────────────────────────────────
+// Email intentionally NOT in sameAs — Google's Person schema
+// recommends mailto for email contact, not as a social link.
+const sameAs: string[] = [
+  'https://github.com/cyanmishra92',
+  'https://www.linkedin.com/in/cyan-subhra-mishra/',
+  'https://scholar.google.com/citations?user=oizH-wQAAAAJ',
+  'https://dblp.org/pid/263/7470.html',
+  'https://www.instagram.com/cyansubhra/',
+];
+if (SITE.orcid) sameAs.push(`https://orcid.org/${SITE.orcid}`);
+if (SITE.twitter) sameAs.push(`https://x.com/${SITE.twitter}`);
+
 const personLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -40,16 +65,34 @@ const personLd = {
   email: `mailto:${SITE.email}`,
   url: SITE.url,
   worksFor: { '@type': 'Organization', name: SITE.org },
-  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Pennsylvania State University' },
-  address: { '@type': 'PostalAddress', addressLocality: 'San Diego', addressRegion: 'CA', addressCountry: 'US' },
-  sameAs: [
-    'https://github.com/cyanmishra92',
-    'https://www.linkedin.com/in/cyan-subhra-mishra/',
-    'https://scholar.google.com/citations?user=oizH-wQAAAAJ',
-    'https://dblp.org/pid/263/7470.html',
-    'https://www.instagram.com/cyansubhra/',
+  alumniOf: [
+    { '@type': 'CollegeOrUniversity', name: 'Pennsylvania State University' },
+    { '@type': 'CollegeOrUniversity', name: 'National Institute of Technology, Rourkela' },
   ],
+  address: { '@type': 'PostalAddress', addressLocality: 'San Diego', addressRegion: 'CA', addressCountry: 'US' },
+  sameAs,
 };
+
+// ─── BreadcrumbList JSON-LD (when crumbs supplied) ─────────────────
+const breadcrumbLd = breadcrumbs && breadcrumbs.length > 0
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url },
+        ...breadcrumbs.map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 2,
+          name: c.name,
+          item: new URL(c.href, SITE.url).toString(),
+        })),
+      ],
+    }
+  : null;
+
+// ─── Verification tags — env-driven, omitted when unset ────────────
+const gscToken = import.meta.env.PUBLIC_GSC_VERIFICATION;
+const bingToken = import.meta.env.PUBLIC_BING_VERIFICATION;
 ---
 
 <!doctype html>
@@ -64,6 +107,13 @@ const personLd = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    {/* Search engine site verification — only emit when token is set;
+        no empty content attr if unset. Configure via repo Actions vars
+        PUBLIC_GSC_VERIFICATION and PUBLIC_BING_VERIFICATION. See
+        docs/SEO.md for the verification walkthroughs. */}
+    {gscToken && <meta name="google-site-verification" content={gscToken} />}
+    {bingToken && <meta name="msvalidate.01" content={bingToken} />}
 
     {/* Open Graph */}
     <meta property="og:type" content="website" />
@@ -80,6 +130,7 @@ const personLd = {
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    {SITE.twitter && <meta name="twitter:creator" content={`@${SITE.twitter}`} />}
 
     {/* RSS */}
     <link rel="alternate" type="application/rss+xml" title={`${SITE.shortName} — News & Blog`} href="/rss.xml" />
@@ -88,12 +139,10 @@ const personLd = {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
 
-    {/* TODO(cyan): add Google Search Console verification token here.
-        Get it from https://search.google.com/search-console and replace
-        the placeholder below. */}
-    <meta name="google-site-verification" content="TODO_VERIFICATION_TOKEN" />
-
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personLd)} />
+    {breadcrumbLd && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+    )}
     {extraLd.map((blob) => (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(blob)} />
     ))}
@@ -115,21 +164,23 @@ const personLd = {
 
     {!bare && <Footer />}
 
-    {/* StatCounter — preserved from legacy site (project ID 13144757). */}
+    {/* StatCounter — project ID 13144757, hash d39bf83e (preserved from
+        the legacy Jekyll site so historical analytics survive the v2
+        migration). See docs/ANALYTICS.md. */}
     <script is:inline>
       window.sc_project = 13144757;
       window.sc_invisible = 1;
-      window.sc_security = 'd3a06f8e';
+      window.sc_security = 'd39bf83e';
     </script>
     <script
       is:inline
-      defer
+      async
       src="https://www.statcounter.com/counter/counter.js"
     ></script>
     <noscript>
       <div class="statcounter">
         <a title="Web Analytics" href="https://statcounter.com/" target="_blank" rel="noopener noreferrer">
-          <img class="statcounter" src="https://c.statcounter.com/13144757/0/d3a06f8e/1/" alt="Web Analytics" referrerpolicy="no-referrer-when-downgrade" />
+          <img class="statcounter" src="https://c.statcounter.com/13144757/0/d39bf83e/1/" alt="Web Analytics" referrerpolicy="no-referrer-when-downgrade" />
         </a>
       </div>
     </noscript>

@@ -26,7 +26,15 @@ if (d.paperId) {
 }
 ---
 
-<BaseLayout title={d.title} description={d.summary} image={`/og/projects/${entry.slug}.png`}>
+<BaseLayout
+  title={d.title}
+  description={d.summary}
+  image={`/og/projects/${entry.slug}.png`}
+  breadcrumbs={[
+    { name: 'Projects', href: '/projects/' },
+    { name: d.title, href: `/projects/${entry.slug}/` },
+  ]}
+>
   {/* page header — asymmetric, mono meta column on the right */}
   <header class="border-b border-border">
     <div class="mx-auto grid max-w-page grid-cols-12 gap-x-6 gap-y-8 px-6 py-16 lg:gap-x-10 lg:px-8 lg:py-24">

@@ -8,6 +8,7 @@ import PaperItem from '@components/PaperItem.astro';
 import { compare, TOP_VENUES, withCitations, loadCitations } from '@lib/papers';
 import { compareNews, prettyDate, approximateDate, isoDate } from '@lib/news';
 import { loadGithubStats } from '@lib/github-stats';
+import { SITE } from '@lib/site';
 
 // ─── projects ─────────────────────────────────────────────────────
 const projects = (await getCollection('projects', ({ data }) => !data.draft))
@@ -47,9 +48,32 @@ const stats = [
   { value: String(citations.hIndex), unit: 'h-index' },
   { value: '10+', unit: 'years exp.' },
 ];
+
+// ─── WebSite JSON-LD on home ────────────────────────────────────
+// Tells Google about the site's identity. The SearchAction
+// potentialAction targets the publications-page filter input,
+// which is the closest thing this site has to a global search.
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  alternateName: SITE.shortName,
+  url: SITE.url,
+  description: SITE.description,
+  inLanguage: 'en-US',
+  publisher: { '@type': 'Person', name: SITE.name },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${SITE.url}/publications/?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
 ---
 
-<BaseLayout>
+<BaseLayout jsonLd={websiteLd}>
   <Hero />
 
   {/* ─── §02 currently ────────────────────────────────────────── */}

@@ -14,7 +14,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "refresh-citations": "tsx scripts/refresh-citations.ts"
+    "refresh-citations": "tsx scripts/refresh-citations.ts",
+    "indexnow-submit": "tsx scripts/indexnow-submit.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
