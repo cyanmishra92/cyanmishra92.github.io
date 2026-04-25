@@ -1,0 +1,38 @@
+---
+import GithubIcon from './icons/GithubIcon.astro';
+import LinkedinIcon from './icons/LinkedinIcon.astro';
+import MailIcon from './icons/MailIcon.astro';
+import InstagramIcon from './icons/InstagramIcon.astro';
+import ScholarIcon from './icons/ScholarIcon.astro';
+import DblpIcon from './icons/DblpIcon.astro';
+
+interface Props {
+  href: string;
+  icon: 'github' | 'linkedin' | 'mail' | 'instagram' | 'scholar' | 'dblp';
+  label: string;
+  external?: boolean;
+}
+
+const { href, icon, label, external = true } = Astro.props;
+
+const map = {
+  github: GithubIcon,
+  linkedin: LinkedinIcon,
+  mail: MailIcon,
+  instagram: InstagramIcon,
+  scholar: ScholarIcon,
+  dblp: DblpIcon,
+};
+
+const Icon = map[icon];
+---
+
+<a
+  href={href}
+  aria-label={label}
+  title={label}
+  class="inline-flex h-9 w-9 items-center justify-center border border-border text-text-muted transition-colors hover:border-accent hover:text-accent"
+  {...(external ? { rel: 'noopener noreferrer', target: '_blank' } : {})}
+>
+  <Icon />
+</a>

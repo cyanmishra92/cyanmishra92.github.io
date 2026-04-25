@@ -1,0 +1,95 @@
+---
+import { SITE, buildStamp } from '@lib/site';
+import SchematicBackdrop from './SchematicBackdrop.astro';
+
+const stamp = buildStamp();
+const coord = `${SITE.coords.label} // ${SITE.location} // ${stamp}`;
+---
+
+<section
+  id="hero"
+  class="hero-mount relative overflow-hidden border-b border-border"
+  data-hero
+>
+  <SchematicBackdrop />
+
+  <div class="relative mx-auto grid max-w-page grid-cols-12 gap-x-6 gap-y-10 px-6 pb-24 pt-20 sm:pt-24 lg:gap-x-8 lg:px-8 lg:pb-32 lg:pt-28">
+    {/* coord label — top right */}
+    <p class="stage stage-1 col-span-12 text-right font-mono text-[0.6875rem] uppercase tracking-[0.05em] text-text-muted lg:col-start-9 lg:col-end-13 lg:row-start-1 lg:text-right">
+      {coord}
+    </p>
+
+    {/* eyebrow + name + tagline — left, cols 1-8 */}
+    <div class="col-span-12 lg:col-span-8 lg:row-start-2">
+      <p class="stage stage-2 eyebrow">currently in San Diego</p>
+
+      <h1 class="stage stage-2 mt-4 font-display text-display-1 leading-[1.02] text-ink">
+        Cyan
+        <span class="text-text-muted/80">·</span>
+        Subhra
+        <br class="hidden sm:block" />
+        Mishra
+        <span aria-hidden="true" class="ml-2 inline-block h-3 w-3 -translate-y-3 bg-accent"></span>
+      </h1>
+
+      <p class="stage stage-3 mt-6 max-w-prose text-lg text-text-muted sm:text-xl">
+        <span class="text-text">{SITE.role}</span> at {SITE.org}.
+        Hardware/software co-design for ML systems — energy-harvesting sensors,
+        computational storage, intermittent and continuous learning at the edge.
+      </p>
+
+      <div class="stage stage-6 mt-10 flex flex-wrap items-center gap-3">
+        <a class="btn btn-primary stage stage-6" href="/publications/">
+          <span>View publications</span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="btn stage stage-7" href="/contact/">
+          <span>Get in touch</span>
+        </a>
+        <a class="btn stage stage-7" href="/cv/">
+          <span>CV</span>
+          <span class="font-mono text-[0.625rem] text-text-muted">[ pdf ]</span>
+        </a>
+      </div>
+    </div>
+
+    {/* avatar + currently block — right, cols 9-12, offset down */}
+    <aside class="stage stage-4 col-span-12 lg:col-span-4 lg:row-start-2 lg:mt-32 lg:pl-4">
+      <figure class="relative">
+        <img
+          src="/img/profile.jpg"
+          alt="Cyan Subhra Mishra, head and shoulders portrait"
+          width="320"
+          height="322"
+          class="block w-40 border border-accent sm:w-48 lg:w-full lg:max-w-[260px]"
+          style="border-radius: 4px;"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <figcaption class="mt-3 max-w-[260px] font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+          Fig. 0 — author photo · 2024
+        </figcaption>
+      </figure>
+
+      <div class="mt-6 max-w-[260px] border-l border-border pl-4">
+        <p class="eyebrow">currently</p>
+        <p class="mt-2 text-sm text-text">
+          Pre-silicon perf/power modeling on the SoC Architecture Performance team
+          at Arm. Edge AI, IoT, automotive workloads.
+        </p>
+        <p class="mt-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          Jan 2026 — present
+        </p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+  // Mark hero as mounted on next frame so the schematic fades in
+  // as part of the staged sequence (transition handled in component).
+  requestAnimationFrame(() => {
+    const el = document.querySelector('[data-hero]');
+    if (el) el.classList.add('hero-mounted');
+  });
+</script>

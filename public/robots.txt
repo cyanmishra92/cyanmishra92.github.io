@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Bingbot
+User-agent: bingbot
+Allow: /
+
+Sitemap: https://cyanmishra92.github.io/sitemap-index.xml

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f3ee"/>
+  <g fill="none" stroke="#0891b2" stroke-opacity="0.12">
+    <pattern id="g" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0 L0 0 0 48"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#g)"/>
+  </g>
+  <rect x="240" y="120" width="720" height="360" fill="none" stroke="#0891b2" stroke-opacity="0.18" stroke-width="1"/>
+  <text x="80" y="220" font-family="Georgia, serif" font-size="92" font-weight="600" fill="#1c1917">Cyan Subhra</text>
+  <text x="80" y="320" font-family="Georgia, serif" font-size="92" font-weight="600" fill="#1c1917">Mishra</text>
+  <rect x="660" y="290" width="14" height="14" fill="#0891b2"/>
+  <text x="80" y="395" font-family="ui-monospace, monospace" font-size="22" fill="#475569" letter-spacing="2">PERFORMANCE AND POWER ENGINEER · ARM</text>
+  <text x="80" y="430" font-family="ui-monospace, monospace" font-size="22" fill="#475569" letter-spacing="2">HARDWARE/SOFTWARE CO-DESIGN FOR ML SYSTEMS</text>
+  <line x1="80" y1="540" x2="1120" y2="540" stroke="#475569" stroke-width="0.6"/>
+  <text x="80" y="570" font-family="ui-monospace, monospace" font-size="18" fill="#475569" letter-spacing="2">cyanmishra92.github.io</text>
+  <text x="1120" y="570" text-anchor="end" font-family="ui-monospace, monospace" font-size="18" fill="#475569" letter-spacing="2">San Diego, CA</text>
+</svg>

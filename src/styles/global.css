@@ -1,0 +1,305 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Global stylesheet — Technical Editorial system.
+   Tokens, fonts, base typography, atmospheric noise, focus rings.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@import '@fontsource-variable/mona-sans';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/600.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens — light (warm paper) ─────────────────────────────────── */
+:root {
+  --color-bg: 245 243 238;          /* #f5f3ee */
+  --color-surface: 251 250 246;     /* #fbfaf6 */
+  --color-text: 15 23 42;           /* slate-900 */
+  --color-text-muted: 71 85 105;    /* slate-600 */
+  --color-border: 231 226 211;      /* warm border */
+  --color-accent: 8 145 178;        /* cyan-600 */
+  --color-accent-soft: 207 250 254; /* cyan-100 */
+  --color-ink: 28 25 23;            /* near-black on paper */
+
+  --noise-opacity: 0.025;
+  --grid-line: rgba(15, 23, 42, 0.04);
+}
+
+/* ─── Design tokens — dark (deep slate) ──────────────────────────────────── */
+:root.dark {
+  --color-bg: 10 14 20;             /* #0a0e14 */
+  --color-surface: 15 23 42;        /* slate-900 */
+  --color-text: 226 232 240;        /* slate-200 */
+  --color-text-muted: 148 163 184;  /* slate-400 */
+  --color-border: 30 41 59;         /* slate-800 */
+  --color-accent: 34 211 238;       /* cyan-400 */
+  --color-accent-soft: 22 78 99;    /* cyan-900 */
+  --color-ink: 226 232 240;
+
+  --noise-opacity: 0.04;
+  --grid-line: rgba(226, 232, 240, 0.05);
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--color-border));
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: rgb(var(--color-bg));
+    color: rgb(var(--color-text));
+    font-family: 'Mona Sans Variable', ui-sans-serif, sans-serif;
+    font-feature-settings: 'ss01', 'ss02', 'cv01';
+    font-size: 1rem;
+    line-height: 1.65;
+    font-variation-settings: 'wdth' 102, 'wght' 400;
+    min-height: 100vh;
+  }
+
+  /* Atmospheric noise — fixed pseudo-element behind every page.
+     Single SVG turbulence, no raster. Restraint per §4.7. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+  }
+
+  :root.dark body::before {
+    mix-blend-mode: screen;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces Variable', ui-serif, Georgia, serif;
+    color: rgb(var(--color-text));
+    letter-spacing: -0.015em;
+    font-variation-settings: 'opsz' 32, 'SOFT' 30, 'WONK' 0;
+  }
+
+  h1 {
+    font-variation-settings: 'opsz' 144, 'SOFT' 60, 'WONK' 1;
+    color: rgb(var(--color-ink));
+  }
+
+  /* Selection — accent at low alpha, no white text. */
+  ::selection {
+    background: rgb(var(--color-accent) / 0.22);
+    color: rgb(var(--color-ink));
+  }
+  :root.dark ::selection {
+    background: rgb(var(--color-accent) / 0.32);
+    color: rgb(var(--color-text));
+  }
+
+  /* Focus rings — accent, 2px, 2px offset, square (not rounded). */
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-accent));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Reduce motion — respect user preference everywhere. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Eyebrow label — Commit Mono substitute (JetBrains Mono), accent.
+     Used above sections per §4.2. */
+  .eyebrow {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgb(var(--color-accent));
+    font-weight: 500;
+  }
+  .eyebrow::before {
+    content: '// ';
+    opacity: 0.6;
+  }
+
+  /* Section header — number + rule extending right (§4.7). */
+  .section-rule {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: rgb(var(--color-text-muted));
+  }
+  .section-rule::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgb(var(--color-border));
+  }
+
+  /* Animated underline link — grows from left on hover. */
+  .link-underline {
+    position: relative;
+    color: inherit;
+    text-decoration: none;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 200ms ease-out;
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* Card — sharp 2px border, no shadow, no rounded-2xl.
+     Hover transitions border to accent. §4.7 explicitly. */
+  .card-sharp {
+    position: relative;
+    border: 2px solid rgb(var(--color-border));
+    background: rgb(var(--color-surface));
+    transition: border-color 200ms ease-out, transform 200ms ease-out;
+  }
+  .card-sharp:hover {
+    border-color: rgb(var(--color-accent));
+    transform: translateY(-2px);
+  }
+
+  /* Card index label — top-left corner, mono, muted. */
+  .card-index {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    color: rgb(var(--color-text-muted));
+    pointer-events: none;
+  }
+
+  /* Button — square corners, 1px inset accent border on hover, no scale. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.125rem;
+    font-family: 'Mona Sans Variable', ui-sans-serif, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid rgb(var(--color-border));
+    background: rgb(var(--color-surface));
+    color: rgb(var(--color-text));
+    transition: border-color 180ms ease-out, box-shadow 180ms ease-out, color 180ms ease-out;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .btn:hover {
+    border-color: rgb(var(--color-accent));
+    box-shadow: inset 0 0 0 1px rgb(var(--color-accent));
+    color: rgb(var(--color-accent));
+  }
+  .btn-primary {
+    background: rgb(var(--color-accent));
+    color: rgb(var(--color-bg));
+    border-color: rgb(var(--color-accent));
+  }
+  .btn-primary:hover {
+    box-shadow: inset 0 0 0 1px rgb(var(--color-bg));
+    color: rgb(var(--color-bg));
+  }
+
+  /* Tag chip — used for venues, topics. Mono, uppercase, square. */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid rgb(var(--color-border));
+    color: rgb(var(--color-text-muted));
+    background: transparent;
+    line-height: 1.4;
+  }
+  .tag-accent {
+    border-color: rgb(var(--color-accent));
+    color: rgb(var(--color-accent));
+  }
+
+  /* Coordinate label — top-right of hero, mono, tiny. */
+  .coord-label {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+    color: rgb(var(--color-text-muted));
+    line-height: 1.5;
+  }
+}
+
+/* ─── Hero page-load orchestration (§4.6) ─────────────────────────────────
+   Every staged element starts hidden; staggered animation-delay reveals.
+   Pure CSS — no JS for the entrance choreography. */
+.stage {
+  opacity: 0;
+}
+.stage-1  { animation: reveal-in 500ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both; }
+.stage-2  { animation: reveal-up 600ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both; }
+.stage-3  { animation: reveal-up 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms both; }
+.stage-4  { animation: reveal-right 700ms cubic-bezier(0.16, 1, 0.3, 1) 500ms both; }
+.stage-5  { animation: reveal-in 1200ms cubic-bezier(0.16, 1, 0.3, 1) 700ms both; }
+.stage-6  { animation: reveal-up 500ms cubic-bezier(0.16, 1, 0.3, 1) 900ms both; }
+.stage-7  { animation: reveal-up 500ms cubic-bezier(0.16, 1, 0.3, 1) 960ms both; }
+
+/* Header backdrop — slight blur over warm paper. */
+.nav-blur {
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  background: rgb(var(--color-bg) / 0.78);
+}
+
+/* Reading progress bar (used on long-form pages later). */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: rgb(var(--color-accent));
+  transform-origin: left;
+  transform: scaleX(var(--scroll, 0));
+  z-index: 60;
+  pointer-events: none;
+}
