@@ -19,5 +19,6 @@
     "Edge",
     "LLM Inference"
   ],
-  "bibtex": "@inproceedings{maestrorag2025,\n  title     = {MaestroRAG: Orchestrated Pipeline Architecture for Efficient RAG on Edge Devices},\n  author    = {Deeksha Chaudhary and Rishabh Jain and Cyan Subhra Mishra and Mahmut Taylan Kandemir and Chita R. Das},\n  booktitle = {Under review (R2025#1)},\n  year      = {2025},\n  publisher = {IEEE},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@unpublished{chaudhary2025maestrorag,\n  title     = {MaestroRAG: Orchestrated Pipeline Architecture for Efficient RAG on Edge Devices},\n  author    = {Chaudhary, Deeksha and Jain, Rishabh and Mishra, Cyan Subhra and Kandemir, Mahmut Taylan and Das, Chita R.},\n  note      = {Manuscript under review},\n  year      = {2025},\n}"
 }

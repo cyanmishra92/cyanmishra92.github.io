@@ -8,17 +8,20 @@
     "Mahmut Taylan Kandemir",
     "Chita R. Das"
   ],
+  "myAuthorIndex": 0,
   "year": 2025,
   "venue": "ICLR",
   "venueFull": "International Conference on Learning Representations (ICLR '25)",
   "type": "conference",
-  "status": "to-appear",
+  "status": "published",
   "arxivId": "2408.13696",
   "topics": [
     "Energy Harvesting",
     "Intermittent Computing",
     "DNN Training"
   ],
-  "myAuthorIndex": 0,
-  "bibtex": "@inproceedings{nexumeiclr2025,\n  title     = {Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers},\n  author    = {Cyan Subhra Mishra and Deeksha Chaudhary and Jack Sampson and Mahmut Taylan Kandemir and Chita R. Das},\n  booktitle = {International Conference on Learning Representations (ICLR '25)},\n  year      = {2025},\n  publisher = {IEEE},\n  eprint    = {2408.13696},\n}"
+  "relatedPaperIds": [
+    "nexume-arxiv"
+  ],
+  "bibtex": "@inproceedings{mishra2025nexumeiclr,\n  title     = {Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers},\n  author    = {Mishra, Cyan Subhra and Chaudhary, Deeksha and Sampson, Jack and Kandemir, Mahmut Taylan and Das, Chita R.},\n  booktitle = {International Conference on Learning Representations (ICLR '25)},\n  year      = {2025},\n  publisher = {IEEE},\n}"
 }

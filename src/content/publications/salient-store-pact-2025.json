@@ -7,11 +7,12 @@
     "Mahmut Taylan Kandemir",
     "Chita R. Das"
   ],
+  "myAuthorIndex": 0,
   "year": 2025,
   "venue": "PACT",
   "venueFull": "International Conference on Parallel Architectures and Compilation Techniques (PACT '25)",
   "type": "conference",
-  "status": "to-appear",
+  "status": "published",
   "arxivId": "2410.05435",
   "topics": [
     "Computational Storage",
@@ -19,6 +20,8 @@
     "Edge",
     "FPGA"
   ],
-  "myAuthorIndex": 0,
-  "bibtex": "@inproceedings{salientstorepact2025,\n  title     = {Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers},\n  author    = {Cyan Subhra Mishra and Deeksha Chaudhary and Mahmut Taylan Kandemir and Chita R. Das},\n  booktitle = {International Conference on Parallel Architectures and Compilation Techniques (PACT '25)},\n  year      = {2025},\n  publisher = {IEEE},\n  eprint    = {2410.05435},\n}"
+  "relatedPaperIds": [
+    "salient-store-arxiv"
+  ],
+  "bibtex": "@inproceedings{mishra2025salientstore,\n  title     = {Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers},\n  author    = {Mishra, Cyan Subhra and Chaudhary, Deeksha and Kandemir, Mahmut Taylan and Das, Chita R.},\n  booktitle = {International Conference on Parallel Architectures and Compilation Techniques (PACT '25)},\n  year      = {2025},\n  publisher = {IEEE},\n}"
 }

@@ -32,6 +32,8 @@ const publications = defineCollection({
     citations: z.number().int().nonnegative().optional(),
     /** Optional override for the citation key used in the BibTeX entry. */
     citationKey: z.string().optional(),
+    /** IDs of related papers (e.g. arXiv preprint ↔ conference version). */
+    relatedPaperIds: z.array(z.string()).default([]),
   }),
 });
 

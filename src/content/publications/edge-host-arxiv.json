@@ -7,6 +7,7 @@
     "Mahmut Taylan Kandemir",
     "Vijaykrishnan Narayanan"
   ],
+  "myAuthorIndex": 0,
   "year": 2024,
   "venue": "arXiv",
   "venueFull": "arXiv preprint",
@@ -19,6 +20,6 @@
     "Edge",
     "Communication"
   ],
-  "myAuthorIndex": 0,
-  "bibtex": "@article{edgehostarxiv,\n  title     = {Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks},\n  author    = {Cyan Subhra Mishra and Jack Sampson and Mahmut Taylan Kandemir and Vijaykrishnan Narayanan},\n  journal   = {arXiv preprint arXiv:2408.14379},\n  year      = {2024},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@article{mishra2024edgehost,\n  title     = {Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks},\n  author    = {Mishra, Cyan Subhra and Sampson, Jack and Kandemir, Mahmut Taylan and Narayanan, Vijaykrishnan},\n  journal   = {arXiv preprint arXiv:2408.14379},\n  year      = {2024},\n  eprint    = {2408.14379},\n  archivePrefix = {arXiv},\n}"
 }

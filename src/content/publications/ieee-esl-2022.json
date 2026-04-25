@@ -19,5 +19,6 @@
     "Random Forest",
     "Privacy"
   ],
-  "bibtex": "@article{ieeeesl2022,\n  title     = {An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks},\n  author    = {Tianyi Shen and Cyan Subhra Mishra and Jack Sampson and Mahmut Taylan Kandemir and Vijaykrishnan Narayanan},\n  journal   = {IEEE Embedded Systems Letters},\n  year      = {2022},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@article{shen2022ieeeesl,\n  title     = {An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks},\n  author    = {Shen, Tianyi and Mishra, Cyan Subhra and Sampson, Jack and Kandemir, Mahmut Taylan and Narayanan, Vijaykrishnan},\n  journal   = {IEEE Embedded Systems Letters},\n  year      = {2022},\n}"
 }

@@ -1,5 +1,27 @@
 # Changelog
 
+## Unreleased
+
+### chore(content): full publications + bibtex audit against resume.tex
+*Phase 7.6.3 — 2026-04-25*
+
+- Audited every entry in `src/content/publications/` against
+  `assets/texsources/resume.tex`. No hallucinated v1-Jekyll entries
+  leaked into v2.
+- Added `relatedPaperIds` to the publications schema and linked the
+  arXiv preprint ↔ conference-version pairs (NExUME, Salient Store).
+- Moved `salient-store-pact-2025`, `nexume-iclr-2025`, and
+  `cord-ipdps-2025` from `to-appear` → `published` (their conferences
+  are now in the past).
+- Regenerated all 25 BibTeX entries to spec format:
+  `lastnameYEARkeyword` keys, `Last, First and Last, First` author
+  strings, venue-appropriate types, `note = {Best Paper Nominee}` on
+  Origin (DATE 2021), correct publishers per venue.
+- Stable field order across every JSON file for diff readability.
+- `scripts/audit-publications-fix.mjs` added so the regen is
+  idempotent and re-runnable on future edits.
+- Full report in [`docs/PUBLICATIONS_AUDIT.md`](./docs/PUBLICATIONS_AUDIT.md).
+
 ## v2.0.0 — 2026-04-25
 
 The full rewrite. The legacy Jekyll site is preserved on the
