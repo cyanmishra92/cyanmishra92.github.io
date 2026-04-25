@@ -1,0 +1,37 @@
+---
+title: "Origin: On-Device Intelligence for HAR using Energy-Harvesting WSNs"
+date: 2021-02-08
+venue: DATE
+venueFull: "Design, Automation & Test in Europe Conference & Exhibition"
+location: Online
+type: conference
+awards: ["Best Paper Nominee"]
+driveFileId: 1zM1oaPxZSWI2VyBMHivl1utpkjMVrACI
+paperId: origin-date-2021
+---
+
+## What this talk is about
+
+Origin coordinates a body-area network of energy-harvesting sensors —
+wrist, ankle, chest — for human activity recognition. The talk frames
+the problem (each node is independently intermittent, so the system has
+to coordinate them without a central always-on clock) and walks through
+two key ideas:
+
+- **Activity-aware scheduling.** Decide which sensor attempts the next
+  inference based on (a) the energy the sensor expects to harvest in
+  the next window and (b) which sensor's vantage point is most useful
+  for the predicted activity class.
+- **Lightweight ensemble aggregation.** Fuse partial and confident
+  results from whichever nodes successfully completed their slice. The
+  ensemble is structurally tolerant to missing voters — losing one
+  sensor to a bad harvest window degrades gracefully.
+
+Across standard HAR datasets, this nets **2.5–5% higher classification
+accuracy** under sporadic harvested power, with negligible coordination
+overhead. Origin was a Best Paper Nominee at DATE '21.
+
+## Quick references
+
+- Paper: [Publications page → Origin (DATE '21)](/publications/)
+- Project deep-dive: [/projects/origin/](/projects/origin/)

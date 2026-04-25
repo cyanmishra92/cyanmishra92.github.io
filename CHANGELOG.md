@@ -2,6 +2,69 @@
 
 ## Unreleased
 
+### feat(polish): last-modified + newsletter + press + talks deep dives + migration checklist
+*Phase 7.6.5 — 2026-04-25*
+
+Six independent polish improvements bundled. After this lands, the
+structural rebuild is done — what remains is content, not infrastructure.
+
+**1. Last-modified footer on every content page.**
+- `src/lib/last-modified.ts` runs `git log -1 --format=%cs <filepath>`
+  per file at build time, with in-process caching so each file is
+  shelled-out at most once. Falls back to `statSync().mtime` when git
+  isn't available (preview builds, shallow CI clones).
+- `<LastModified file="src/content/..." />` component renders a
+  Commit Mono `// Last modified YYYY-MM-DD` line in the footer of
+  blog posts, project deep-dives, and talks deep-dives.
+
+**2. Buttondown newsletter — disabled by default, lit by env var.**
+- `<NewsletterSubscribe variant="default|compact" />` POSTs to
+  Buttondown's hosted form endpoint. Driven by
+  `SITE.buttondownUsername` in `src/lib/site.ts`; renders nothing
+  when unset.
+- Three placements: compact in the footer, full at the bottom of
+  every blog post, dedicated `/subscribe` page with longer copy and
+  alternate channels.
+
+**3. `docs/MIGRATION.md` backlink audit checklist.**
+- Already shipped in Phase 7.6.4 with **15 real checkboxes** across
+  Scholar / LinkedIn / GitHub / DBLP / Penn State / talk slides /
+  email signature. Verified intact.
+
+**4. Per-photo location.**
+- Already shipped in Phase 7.6.1 — `location: string` (free-text only,
+  never GPS). Verified intact.
+
+**5. `/press` page + collection.**
+- New `press` content collection: title, date, outlet, url,
+  excerpt (optional), type (`article` | `podcast` | `interview` |
+  `thesis-acknowledgment` | `blog-mention`), draft.
+- `src/pages/press.astro` renders a tight reverse-chrono list with
+  mono dates, type chip, outlet name, optional pull-quote,
+  "read source →" link.
+- Seed: one `_template.mdx` kept as draft.
+- `/press` linked from the footer site map.
+
+**6. Talks deep-dive pages with embedded video.**
+- New `talks` content collection: title, date, venue, venueFull,
+  location, type, awards, optional `youtubeId` / `driveFileId` /
+  `slidesUrl` / `paperId`, draft.
+- `src/pages/talks/[...slug].astro` renders the deep-dive — asymmetric
+  header, 16:9 video container, optional inline PDF slides,
+  optional MDX body for transcript / notes, footer with
+  back-link + LastModified.
+- `<YouTubeEmbed>` and `<DriveEmbed>`: click-to-play poster buttons.
+  The real `<iframe>` only loads on click — no YT/Drive cookies set
+  on page view. YouTube uses `youtube-nocookie.com`.
+- `/talks` index renders a `deep dive →` accent link on entries
+  whose `slug` matches an existing `talks` MDX, alongside the
+  existing "watch recording →" external link.
+- Seed: `cocktail-nsdi-2022.mdx` (YouTube `VAsB1XBuRZ0`) and
+  `origin-date-2021.mdx` (Drive `1zM1oa...mVrACI`).
+
+Footer site map gained `/photos`, `/press`, and `/subscribe`.
+`SITE.buttondownUsername` slot added in `src/lib/site.ts`.
+
 ### feat(photos): local schematic grid + exif reveal + custom lightbox + image optim bot
 *Phase 7.6.1 — 2026-04-25*
 

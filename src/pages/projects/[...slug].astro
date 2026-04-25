@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import LastModified from '@components/LastModified.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('projects', ({ data }) => !data.draft);
@@ -115,10 +116,11 @@ if (d.paperId) {
       <Content />
     </div>
 
-    <footer class="mt-16 border-t border-border pt-8">
+    <footer class="mt-16 flex flex-col gap-3 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
       <a href="/projects/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
         ← all projects
       </a>
+      <LastModified file={`src/content/projects/${entry.id}`} />
     </footer>
   </article>
 </BaseLayout>

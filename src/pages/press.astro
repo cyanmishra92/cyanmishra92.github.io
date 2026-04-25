@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+
+const TYPE_LABELS: Record<string, string> = {
+  article: 'article',
+  podcast: 'podcast',
+  interview: 'interview',
+  'thesis-acknowledgment': 'thesis ack',
+  'blog-mention': 'blog mention',
+};
+
+const items = (await getCollection('press', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<BaseLayout
+  title="Press"
+  description="Press, podcast appearances, interviews, thesis acknowledgments, and blog mentions of Cyan Subhra Mishra's work."
+  breadcrumbs={[{ name: 'Press', href: '/press/' }]}
+>
+  <PageHeader
+    number="13"
+    eyebrow="press"
+    title="Press &amp; mentions"
+    intro="Articles, podcast appearances, interviews, and other places work has shown up. Reverse-chronological."
+  />
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    {items.length === 0 ? (
+      <p class="border border-border bg-surface px-6 py-12 text-center font-mono text-sm uppercase tracking-eyebrow text-text-muted">
+        // no entries yet
+      </p>
+    ) : (
+      <ol class="grid gap-px border-y border-border bg-border">
+        {items.map((entry, i) => (
+          <li class="grid grid-cols-12 gap-x-4 bg-bg p-6 sm:gap-x-6 sm:p-7">
+            <div class="col-span-12 lg:col-span-3">
+              <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+                <span class="text-accent">{String(i + 1).padStart(2, '0')}</span>
+                <span class="ml-2">{entry.data.date.toISOString().slice(0, 10)}</span>
+              </p>
+              <p class="mt-2">
+                <span class="tag">{TYPE_LABELS[entry.data.type] ?? entry.data.type}</span>
+              </p>
+            </div>
+            <div class="col-span-12 mt-3 lg:col-span-9 lg:mt-0">
+              <h2 class="font-display text-xl leading-snug text-text sm:text-2xl">
+                <a
+                  href={entry.data.url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  class="link-underline"
+                >{entry.data.title}</a>
+              </h2>
+              <p class="mt-1 text-sm text-text-muted">
+                <span class="text-text">{entry.data.outlet}</span>
+              </p>
+              {entry.data.excerpt && (
+                <p class="mt-3 max-w-prose text-base leading-relaxed text-text">
+                  &ldquo;{entry.data.excerpt}&rdquo;
+                </p>
+              )}
+              <p class="mt-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+                <a href={entry.data.url} rel="noopener noreferrer" target="_blank" class="link-underline hover:text-accent">read source →</a>
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    )}
+  </div>
+</BaseLayout>

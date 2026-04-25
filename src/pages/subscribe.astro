@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import NewsletterSubscribe from '@components/NewsletterSubscribe.astro';
+import { SITE } from '@lib/site';
+
+const enabled = !!SITE.buttondownUsername;
+---
+
+<BaseLayout
+  title="Subscribe"
+  description="Subscribe to the newsletter — plain-text emails on new posts and notes. Unsubscribe anytime."
+  breadcrumbs={[{ name: 'Subscribe', href: '/subscribe/' }]}
+>
+  <PageHeader
+    number="12"
+    eyebrow="subscribe"
+    title="Get the next post in your inbox."
+    intro="Plain-text emails when there's something new — blog posts, talks, occasional research notes. Roughly monthly cadence. No tracking, no images, no marketing dribble."
+  />
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    <section class="mb-12">
+      <SectionHeader number="01" eyebrow="email" />
+      {enabled ? (
+        <NewsletterSubscribe
+          heading="newsletter"
+          intro="One email per published post. RSS-to-email is wired so it syncs whenever a new entry lands in /blog/ or /news/."
+        />
+      ) : (
+        <div class="border border-border bg-surface p-6">
+          <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+            // newsletter not yet configured
+          </p>
+          <p class="mt-3 max-w-prose text-text">
+            The newsletter form is wired to{' '}
+            <a class="link-underline text-accent" href="https://buttondown.email" rel="noopener noreferrer" target="_blank">Buttondown</a>{' '}
+            but the username slot in <code class="font-mono text-[0.875rem]">SITE.buttondownUsername</code> isn't set.
+            Once it is, this page lights up automatically.
+          </p>
+          <p class="mt-3 text-sm text-text-muted">
+            Until then, the{' '}
+            <a class="link-underline text-accent" href="/rss.xml">RSS feed</a>{' '}
+            covers the same content.
+          </p>
+        </div>
+      )}
+    </section>
+
+    <section class="mb-12">
+      <SectionHeader number="02" eyebrow="alternatives" />
+      <ul class="grid gap-3 sm:grid-cols-3">
+        <li>
+          <a href="/rss.xml" class="card-sharp block p-5">
+            <p class="eyebrow">rss</p>
+            <p class="mt-2 font-mono text-sm text-text">/rss.xml</p>
+            <p class="mt-3 text-sm text-text-muted">News + blog combined.</p>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/cyanmishra92" rel="noopener noreferrer" target="_blank" class="card-sharp block p-5">
+            <p class="eyebrow">github</p>
+            <p class="mt-2 font-mono text-sm text-text">@cyanmishra92</p>
+            <p class="mt-3 text-sm text-text-muted">Watch the repo for site changes; star projects you find useful.</p>
+          </a>
+        </li>
+        <li>
+          <a href={`mailto:${SITE.email}`} class="card-sharp block p-5">
+            <p class="eyebrow">email</p>
+            <p class="mt-2 font-mono text-sm text-text">{SITE.email}</p>
+            <p class="mt-3 text-sm text-text-muted">Direct messages get direct answers.</p>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

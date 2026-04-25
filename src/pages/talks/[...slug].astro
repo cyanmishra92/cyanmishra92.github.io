@@ -1,0 +1,143 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LastModified from '@components/LastModified.astro';
+import YouTubeEmbed from '@components/YouTubeEmbed.astro';
+import DriveEmbed from '@components/DriveEmbed.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('talks', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'talks'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const d = entry.data;
+
+// Look up the linked publication, if one exists.
+let paper: any = null;
+if (d.paperId) {
+  const all = await getCollection('publications');
+  paper = all.find((p) => p.data.id === d.paperId)?.data ?? null;
+}
+
+const isoDate = d.date.toISOString().slice(0, 10);
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const pretty = `${d.date.getFullYear()} · ${months[d.date.getUTCMonth()]}`;
+---
+
+<BaseLayout
+  title={d.title}
+  description={`${d.title} — talk at ${d.venueFull}, ${d.location}.`}
+  breadcrumbs={[
+    { name: 'Talks', href: '/talks/' },
+    { name: d.title, href: `/talks/${entry.slug}/` },
+  ]}
+>
+  <header class="border-b border-border">
+    <div class="mx-auto grid max-w-page grid-cols-12 gap-x-6 gap-y-8 px-6 py-16 lg:gap-x-10 lg:px-8 lg:py-24">
+      <div class="col-span-12 lg:col-span-8">
+        <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          <a href="/talks/" class="link-underline text-accent">/talks</a>
+          <span class="mx-2">·</span>
+          <time datetime={isoDate}>{pretty}</time>
+        </p>
+        <h1 class="mt-3 font-display text-display-1 leading-[1.05] text-ink">
+          {d.title}
+        </h1>
+        <p class="mt-5 max-w-prose text-lg leading-relaxed text-text-muted">
+          {d.venueFull} · {d.location}
+        </p>
+        <div class="mt-6 flex flex-wrap items-baseline gap-2">
+          <span class="tag tag-accent">{d.venue}</span>
+          {d.type === 'invited' && <span class="tag">invited</span>}
+          {d.awards.map((a) => (
+            <span class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">★ {a}</span>
+          ))}
+        </div>
+      </div>
+      <aside class="col-span-12 lg:col-span-4 lg:border-l lg:border-border lg:pl-8">
+        {paper && (
+          <div>
+            <p class="eyebrow">linked paper</p>
+            <p class="mt-2 text-sm text-text">{paper.title}</p>
+            <p class="mt-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+              <a href="/publications/" class="link-underline">{paper.venue} {paper.year}</a>
+            </p>
+          </div>
+        )}
+        {(d.youtubeId || d.driveFileId || d.slidesUrl) && (
+          <div class="mt-6">
+            <p class="eyebrow">links</p>
+            <ul class="mt-2 space-y-1 font-mono text-xs text-text-muted">
+              {d.youtubeId && (
+                <li>
+                  <a href={`https://www.youtube.com/watch?v=${d.youtubeId}`} rel="noopener noreferrer" target="_blank" class="link-underline hover:text-accent">[ youtube ]</a>
+                </li>
+              )}
+              {d.driveFileId && (
+                <li>
+                  <a href={`https://drive.google.com/file/d/${d.driveFileId}/view`} rel="noopener noreferrer" target="_blank" class="link-underline hover:text-accent">[ drive ]</a>
+                </li>
+              )}
+              {d.slidesUrl && (
+                <li>
+                  <a href={d.slidesUrl} rel="noopener noreferrer" target="_blank" class="link-underline hover:text-accent">[ slides ]</a>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+      </aside>
+    </div>
+  </header>
+
+  {/* Video embed — wrapped in a 16:9 container; click-to-play defers iframe */}
+  {(d.youtubeId || d.driveFileId) && (
+    <section class="mx-auto max-w-page px-6 pt-12 lg:px-8">
+      {d.youtubeId && <YouTubeEmbed id={d.youtubeId} title={d.title} />}
+      {d.driveFileId && !d.youtubeId && <DriveEmbed id={d.driveFileId} title={d.title} />}
+    </section>
+  )}
+
+  {/* Slides embed — direct PDF object so users can scroll the deck inline */}
+  {d.slidesUrl && (
+    <section class="mx-auto max-w-page px-6 pt-12 lg:px-8">
+      <p class="eyebrow mb-3">slides</p>
+      <div class="border-2 border-border bg-surface p-2">
+        <object
+          data={d.slidesUrl}
+          type="application/pdf"
+          class="block min-h-[60vh] w-full"
+          aria-label={`Slides for ${d.title}`}
+        >
+          <p class="p-6 text-text-muted">
+            Browser can't render the slides inline.{' '}
+            <a class="link-underline text-accent" href={d.slidesUrl} rel="noopener noreferrer" target="_blank">Open them directly</a>.
+          </p>
+        </object>
+      </div>
+    </section>
+  )}
+
+  {/* Optional MDX body — transcript or notes */}
+  <article class="mx-auto max-w-prose px-6 py-16 lg:px-8 lg:py-20">
+    <div class="prose-content text-base leading-relaxed text-text">
+      <Content />
+    </div>
+
+    <footer class="mt-12 flex flex-col gap-3 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
+      <a href="/talks/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+        ← all talks
+      </a>
+      <LastModified file={`src/content/talks/${entry.id}`} />
+    </footer>
+  </article>
+</BaseLayout>

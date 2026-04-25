@@ -1,0 +1,33 @@
+---
+title: "Cocktail: A Multidimensional Optimization for Model Serving in Cloud"
+date: 2022-04-04
+venue: NSDI
+venueFull: "19th USENIX Symposium on Networked Systems Design and Implementation"
+location: "Renton, WA"
+type: conference
+youtubeId: VAsB1XBuRZ0
+paperId: cocktail-nsdi-2022
+---
+
+## What this talk is about
+
+Cocktail is an ensemble-based model-serving framework for the public cloud
+that simultaneously optimises three things production teams actually care
+about:
+
+- **Cost** — by leveraging transient cloud instances and dynamically
+  selecting the smallest viable subset of models per request.
+- **Accuracy** — by combining predictions across the active ensemble
+  with a weighted majority vote.
+- **Latency / SLO** — by predicting per-request resource needs and
+  provisioning ahead of demand spikes.
+
+The talk walks through the per-component optimisations and the joint
+control loop that ties them together. It also covers the decoupling
+between model-selection (a slow loop) and request-routing (a fast loop)
+that makes the system responsive without flapping.
+
+## Quick references
+
+- Paper: [Publications page → Cocktail (NSDI '22)](/publications/)
+- Slides: TODO add a public link if you want them embedded inline.
