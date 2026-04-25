@@ -1,0 +1,152 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/Hero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import Card from '@components/Card.astro';
+
+// Phase-1 placeholder data — content collections wire in Phase 3-4.
+const stats = [
+  { value: '24', unit: 'publications' },
+  { value: '—', unit: 'citations' },
+  { value: '—', unit: 'h-index' },
+  { value: '10+', unit: 'years' },
+];
+
+const featuredPlaceholders = [
+  {
+    index: '01 / 06',
+    title: 'NExUME',
+    venue: 'ICLR 2025',
+    summary:
+      'Intermittency-aware DNN training: dynamic dropout and quantization that adapt to harvested energy. Up to 22% accuracy gain at <5% compute overhead.',
+    href: '/projects/nexume/',
+  },
+  {
+    index: '02 / 06',
+    title: 'Salient Store',
+    venue: 'PACT 2025',
+    summary:
+      'Computational storage for continuous learning. FPGA-accelerated CSDs handle compression and encryption near data — 6× throughput, 6.1× less data movement.',
+    href: '/projects/salient-store/',
+  },
+  {
+    index: '03 / 06',
+    title: 'Usás',
+    venue: 'HPCA 2024',
+    summary:
+      'Battery-free continuous learning on solar-powered edge servers. Morphable accelerator + teacher-student training. Hundreds of kWh/year saved.',
+    href: '/projects/usas/',
+  },
+];
+
+const newsPlaceholders = [
+  { date: '2026-01-15', body: 'Joined Arm in San Diego as a Performance and Power Engineer on the SoC Architecture Performance team.' },
+  { date: '2025-08-15', body: 'Defended my Ph.D. thesis at Penn State and officially graduated.' },
+  { date: '2025-04-01', body: 'Salient Store accepted at PACT 2025.' },
+];
+---
+
+<BaseLayout>
+  <Hero />
+
+  {/* ─── §02 currently ────────────────────────────────────────── */}
+  <section class="mx-auto max-w-page px-6 py-20 lg:px-8">
+    <SectionHeader number="02" eyebrow="currently" />
+    <div class="grid gap-10 lg:grid-cols-12">
+      <p class="lg:col-span-8 max-w-prose text-lg leading-relaxed text-text">
+        I'm a Performance and Power Engineer on the SoC Architecture Performance
+        team at <span class="text-accent">Arm</span> in San Diego, where I work
+        on pre-silicon performance and power analysis for next-generation
+        heterogeneous SoCs targeting Edge AI, IoT, and automotive workloads.
+        Recently completed my Ph.D. at Penn State, advised by
+        Mahmut Taylan Kandemir and Jack Sampson.
+      </p>
+      <aside class="lg:col-span-4 border-l border-border pl-6">
+        <p class="eyebrow">previously</p>
+        <ul class="mt-3 space-y-2 font-mono text-xs text-text-muted">
+          <li><span class="text-text">2018 — 2025</span> · Penn State (Ph.D.)</li>
+          <li><span class="text-text">2021</span> · Bell Labs (research intern)</li>
+          <li><span class="text-text">2016 — 2018</span> · Intel (design engineer)</li>
+          <li><span class="text-text">2011 — 2016</span> · NIT Rourkela</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  {/* ─── §03 stats strip ────────────────────────────────────────── */}
+  <section class="border-y border-border bg-surface/40">
+    <div class="mx-auto grid max-w-page grid-cols-2 divide-x divide-border lg:grid-cols-4">
+      {stats.map((s, i) => (
+        <div class="px-6 py-10 lg:px-8 lg:py-12">
+          <p class="font-display text-display-2 leading-none text-ink" style="font-variation-settings: 'opsz' 96, 'SOFT' 30, 'WONK' 0;">
+            {s.value}
+          </p>
+          <p class="mt-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+            <span class="text-accent">{String(i + 1).padStart(2, '0')}</span>
+            <span class="ml-1">// {s.unit}</span>
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* ─── §04 featured projects ────────────────────────────────── */}
+  <section class="mx-auto max-w-page px-6 py-24 lg:px-8">
+    <SectionHeader number="04" eyebrow="featured projects" title="Selected work" />
+
+    <div class="grid gap-6 lg:grid-cols-3">
+      {featuredPlaceholders.map((p) => (
+        <Card index={p.index} href={p.href}>
+          <div class="mt-8">
+            <span class="tag tag-accent">{p.venue}</span>
+            <h3 class="mt-4 font-display text-2xl text-text">{p.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-text-muted">{p.summary}</p>
+            <p class="mt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+              read more →
+            </p>
+          </div>
+        </Card>
+      ))}
+    </div>
+
+    <p class="mt-8 text-right">
+      <a href="/projects/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+        view all projects →
+      </a>
+    </p>
+  </section>
+
+  {/* ─── §05 latest news ──────────────────────────────────────── */}
+  <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
+    <SectionHeader number="05" eyebrow="latest" title="News" />
+
+    <ul class="divide-y divide-border border-y border-border">
+      {newsPlaceholders.map((n) => (
+        <li class="grid grid-cols-12 gap-4 py-5">
+          <time datetime={n.date} class="col-span-12 font-mono text-xs uppercase tracking-eyebrow text-text-muted lg:col-span-2">
+            {n.date}
+          </time>
+          <p class="col-span-12 text-text lg:col-span-10">{n.body}</p>
+        </li>
+      ))}
+    </ul>
+
+    <p class="mt-8 text-right">
+      <a href="/news/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+        full news archive →
+      </a>
+    </p>
+  </section>
+
+  {/* ─── §06 selected publications — placeholder ───────────────── */}
+  <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
+    <SectionHeader number="06" eyebrow="selected" title="Publications" />
+    <p class="text-text-muted">
+      Full filterable publication list lives at{' '}
+      <a href="/publications/" class="link-underline text-accent">
+        /publications
+      </a>
+      . Wires up in Phase 3.
+    </p>
+  </section>
+</BaseLayout>

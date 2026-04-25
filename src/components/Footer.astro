@@ -1,0 +1,62 @@
+---
+import { PROFILES, SITE, buildIso, buildStamp } from '@lib/site';
+import IconLink from './IconLink.astro';
+
+const built = buildIso();
+const stamp = buildStamp();
+const year = new Date().getUTCFullYear();
+---
+
+<footer class="border-t border-border mt-32">
+  <div class="mx-auto max-w-page px-6 py-12 lg:px-8">
+    <div class="grid gap-10 lg:grid-cols-12">
+      {/* identity */}
+      <div class="lg:col-span-5">
+        <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          // {SITE.shortName}
+        </p>
+        <p class="mt-3 max-w-prose text-sm text-text-muted">
+          {SITE.role} at {SITE.org}. Hardware/software co-design for ML systems.
+          Based in {SITE.location}.
+        </p>
+      </div>
+
+      {/* sitemap */}
+      <nav class="lg:col-span-4" aria-label="Footer">
+        <p class="eyebrow">sitemap</p>
+        <ul class="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm">
+          <li><a href="/about/" class="link-underline text-text">About</a></li>
+          <li><a href="/research/" class="link-underline text-text">Research</a></li>
+          <li><a href="/publications/" class="link-underline text-text">Publications</a></li>
+          <li><a href="/projects/" class="link-underline text-text">Projects</a></li>
+          <li><a href="/news/" class="link-underline text-text">News</a></li>
+          <li><a href="/talks/" class="link-underline text-text">Talks</a></li>
+          <li><a href="/blog/" class="link-underline text-text">Blog</a></li>
+          <li><a href="/cv/" class="link-underline text-text">CV</a></li>
+          <li><a href="/contact/" class="link-underline text-text">Contact</a></li>
+          <li><a href="/rss.xml" class="link-underline text-text">RSS</a></li>
+        </ul>
+      </nav>
+
+      {/* socials */}
+      <div class="lg:col-span-3">
+        <p class="eyebrow">channels</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          {PROFILES.map((p) => (
+            <IconLink href={p.href} icon={p.icon as any} label={p.label} external={!p.href.startsWith('mailto:')} />
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* meta strip */}
+    <div class="mt-10 flex flex-col gap-2 border-t border-border pt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} {SITE.name}. Built with Astro.</p>
+      <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span>last build · <time datetime={built}>{stamp}</time></span>
+        <span aria-hidden="true">·</span>
+        <a href="https://github.com/cyanmishra92/cyanmishra92.github.io" class="link-underline" rel="noopener noreferrer">view source</a>
+      </p>
+    </div>
+  </div>
+</footer>

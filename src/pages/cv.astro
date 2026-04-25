@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+---
+
+<BaseLayout title="CV" description="Curriculum vitae of Cyan Subhra Mishra.">
+  <PageHeader
+    number="09"
+    eyebrow="cv"
+    title="Curriculum Vitae"
+    intro="PDF below. Source TeX builds via GitHub Actions on every push to assets/texsources/resume.tex."
+  />
+  <section class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    <div class="mb-8 flex flex-wrap gap-3">
+      <a class="btn btn-primary" href="/cv/Cyan_Subhra_Mishra_Resume.pdf" download>
+        <span>Download PDF</span>
+        <span aria-hidden="true">↓</span>
+      </a>
+      <a class="btn" href="/cv/resume.tex" download>
+        <span>Download .tex source</span>
+      </a>
+    </div>
+    <div class="border-2 border-border bg-surface p-2">
+      <object
+        data="/cv/Cyan_Subhra_Mishra_Resume.pdf"
+        type="application/pdf"
+        class="block min-h-[80vh] w-full"
+        aria-label="Cyan Subhra Mishra resume PDF"
+      >
+        <p class="p-6 text-text-muted">
+          Your browser doesn't render embedded PDFs.{' '}
+          <a class="link-underline text-accent" href="/cv/Cyan_Subhra_Mishra_Resume.pdf">
+            Download the PDF
+          </a>{' '}
+          instead.
+        </p>
+      </object>
+    </div>
+  </section>
+</BaseLayout>

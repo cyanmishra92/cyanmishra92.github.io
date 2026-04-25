@@ -1,0 +1,68 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 — Not Found" noindex bare>
+  <section class="terminal-shell">
+    <div class="mx-auto flex min-h-[80vh] max-w-3xl flex-col justify-center px-6 py-20 font-mono text-sm leading-relaxed lg:px-8">
+      <p class="text-text-muted">// status code 404 — resource not located</p>
+
+      <pre class="mt-8 whitespace-pre-wrap text-text">
+<span class="text-accent">cyan@arm:~$</span> cd /you/were/looking/for
+<span class="text-text-muted">bash: cd: /you/were/looking/for: No such file or directory</span>
+
+<span class="text-accent">cyan@arm:~$</span> ls /
+<span class="grid grid-cols-3 gap-x-4 sm:grid-cols-4">
+  <a href="/about/" class="link-underline text-text">about/</a>
+  <a href="/research/" class="link-underline text-text">research/</a>
+  <a href="/publications/" class="link-underline text-text">publications/</a>
+  <a href="/projects/" class="link-underline text-text">projects/</a>
+  <a href="/news/" class="link-underline text-text">news/</a>
+  <a href="/talks/" class="link-underline text-text">talks/</a>
+  <a href="/blog/" class="link-underline text-text">blog/</a>
+  <a href="/cv/" class="link-underline text-text">cv/</a>
+  <a href="/contact/" class="link-underline text-text">contact/</a>
+</span>
+
+<span class="text-accent">cyan@arm:~$</span> <span class="inline-block h-4 w-2 translate-y-0.5 bg-accent animate-cursor-blink" aria-hidden="true"></span>
+      </pre>
+
+      <p class="mt-12">
+        <a href="/" class="link-underline text-accent">← back to /</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .terminal-shell {
+    position: relative;
+    min-height: 100vh;
+    background: rgb(var(--color-bg));
+  }
+  /* CRT scanline overlay — 4% opacity (§4.7). */
+  .terminal-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.04) 0px,
+      rgba(0, 0, 0, 0.04) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: multiply;
+  }
+  :global(.dark) .terminal-shell::after {
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.04) 0px,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: screen;
+  }
+</style>

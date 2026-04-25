@@ -1,0 +1,22 @@
+---
+/**
+ * Inlined head script — sets the theme class BEFORE first paint
+ * to prevent the dreaded flash of wrong theme.
+ *
+ * Reads localStorage `theme` ('light' | 'dark'); falls back to
+ * `prefers-color-scheme`. Listens for system changes when no
+ * explicit user preference is stored.
+ */
+---
+
+<script is:inline>
+  (function () {
+    try {
+      var stored = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var dark = stored ? stored === 'dark' : prefersDark;
+      document.documentElement.classList.toggle('dark', dark);
+      document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+    } catch (_) {}
+  })();
+</script>

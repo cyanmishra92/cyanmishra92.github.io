@@ -1,0 +1,23 @@
+---
+interface Props {
+  number: string;
+  eyebrow: string;
+  title: string;
+  intro?: string;
+}
+
+const { number, eyebrow, title, intro } = Astro.props;
+---
+
+<header class="mx-auto max-w-page px-6 py-16 lg:px-8 lg:pt-24">
+  <div class="section-rule">
+    <span>§ {number}</span>
+    <span class="text-accent">{eyebrow}</span>
+  </div>
+  <h1 class="mt-4 font-display text-display-1 leading-[1.05] text-ink">{title}</h1>
+  {intro && (
+    <p class="mt-6 max-w-prose text-lg leading-relaxed text-text-muted">
+      {intro}
+    </p>
+  )}
+</header>

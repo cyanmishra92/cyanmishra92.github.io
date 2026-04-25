@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import { SITE } from '@lib/site';
+---
+
+<BaseLayout title="Contact" description="Get in touch with Cyan Subhra Mishra.">
+  <PageHeader
+    number="10"
+    eyebrow="contact"
+    title="Let's talk."
+    intro="Email is fastest. Form below for everything else. Response time: usually within 48 hours."
+  />
+  <section class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    <div class="border border-border bg-surface p-6 sm:p-8">
+      <p class="eyebrow">primary</p>
+      <p class="mt-2 font-mono text-base text-text">
+        <a href={`mailto:${SITE.email}`} class="link-underline text-accent">{SITE.email}</a>
+      </p>
+      <p class="mt-6 font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+        Phase status: scaffolded · contact form arrives in Phase 2.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

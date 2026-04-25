@@ -1,0 +1,19 @@
+---
+interface Props {
+  index?: string;
+  href?: string;
+  className?: string;
+}
+
+const { index, href, className = '' } = Astro.props;
+const Tag = href ? 'a' : 'div';
+const linkProps = href ? { href } : {};
+---
+
+<Tag
+  class:list={['card-sharp block p-6 sm:p-7', className]}
+  {...linkProps}
+>
+  {index && <span class="card-index">{index}</span>}
+  <slot />
+</Tag>
