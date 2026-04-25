@@ -12,15 +12,19 @@ interface Props {
   noindex?: boolean;
   /** Hide footer for the 404 / terminal pages. */
   bare?: boolean;
+  /** Optional extra JSON-LD blocks to inject (e.g. ScholarlyArticle, BlogPosting). */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
   title,
   description = SITE.description,
-  image = '/og/default.svg',
+  image = '/og/default.png',
   noindex = false,
   bare = false,
+  jsonLd,
 } = Astro.props;
+const extraLd = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
 
 const fullTitle = title ? `${title} — ${SITE.shortName}` : SITE.name;
 const canonical = new URL(Astro.url.pathname, SITE.url).toString();
@@ -90,6 +94,9 @@ const personLd = {
     <meta name="google-site-verification" content="TODO_VERIFICATION_TOKEN" />
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personLd)} />
+    {extraLd.map((blob) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(blob)} />
+    ))}
   </head>
 
   <body class="font-sans antialiased">

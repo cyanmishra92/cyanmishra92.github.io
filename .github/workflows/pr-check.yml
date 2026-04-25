@@ -1,0 +1,51 @@
+name: PR smoke check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build + typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+        env:
+          # Auth header lifts /users/.../repos rate-limit from 60 to
+          # 5000 req/hr; keeps the GitHub-stats-card fetch reliable.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sanity check on build output
+        run: |
+          test -f dist/index.html
+          test -f dist/sitemap-index.xml
+          test -f dist/rss.xml
+          test -f dist/og/default.png
+          # Should always have at least the home OG; per-paper OGs
+          # land alongside.
+          ls dist/og/papers/*.png | head -3
+          ls dist/og/projects/*.png | head -3
+          ls dist/blog/*/index.html | head -3
+          # Page count sanity — site should have a couple dozen routes.
+          html_count=$(find dist -name 'index.html' -o -name '*.html' | wc -l)
+          echo "html files: $html_count"
+          test "$html_count" -ge 12

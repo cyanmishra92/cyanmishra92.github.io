@@ -103,6 +103,6 @@ and commits it to `public/cv/Cyan_Subhra_Mishra_Resume.pdf` (Phase 2).
 | 1 | Scaffold + design system + hero + deploy workflow | ✅ |
 | 2 | Static content pages (about, research, teaching, talks, cv, contact) + resume PDF auto-build | ✅ |
 | 3 | Publications + projects collections, filter/search, BibTeX modal | ⏳ |
-| 4 | News, blog, RSS, citation refresh, GitHub stats | ⏳ |
-| 5 | OG images, JSON-LD, polish, Lighthouse pass | ⏳ |
+| 4 | News, blog, RSS, citation refresh, GitHub stats | ✅ |
+| 5 | OG images (satori), JSON-LD, link checker, PR smoke check | ✅ |
 | 6 | Cutover to `main`, tag `v2.0.0` | ⏳ |

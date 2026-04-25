@@ -1,0 +1,3 @@
+{
+  "_comment": "Manual citation overrides. Keys are paper IDs from src/content/publications/*.json; values are integer citation counts. These take precedence over anything the refresh-citations script pulls from Semantic Scholar or OpenAlex. Use this for papers without a DOI or arXiv ID where the title-search fallback misses them. Pull numbers from your Google Scholar profile: https://scholar.google.com/citations?user=oizH-wQAAAAJ. Leave keys you're happy auto-tracking out of this file."
+}

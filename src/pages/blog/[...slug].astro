@@ -20,7 +20,22 @@ const { Content, remarkPluginFrontmatter } = await entry.render();
 const readingTime: string | undefined = remarkPluginFrontmatter?.minutesRead;
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.description}>
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  image={`/og/blog/${entry.slug}.png`}
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: entry.data.title,
+    description: entry.data.description,
+    datePublished: entry.data.date.toISOString(),
+    dateModified: (entry.data.updated ?? entry.data.date).toISOString(),
+    author: { '@type': 'Person', name: 'Cyan Subhra Mishra' },
+    keywords: entry.data.tags.join(', '),
+    image: `https://cyanmishra92.github.io/og/blog/${entry.slug}.png`,
+  }}
+>
   {/* Reading-progress bar — pure CSS via scroll-driven animations where supported.
       JS fallback added in Phase 5. For now: shows on supporting browsers. */}
   <div class="read-progress" aria-hidden="true" id="read-progress"></div>
