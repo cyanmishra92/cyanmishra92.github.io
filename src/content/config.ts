@@ -138,11 +138,72 @@ const photos = defineCollection({
   }),
 });
 
+/**
+ * Press / Mentions collection — short MDX entries under
+ * src/content/press/, one per article / podcast / interview /
+ * thesis-acknowledgment / blog-mention.
+ *
+ * Reverse-chronological list at /press. Body MDX is optional and
+ * unused by the index page; reserved for future per-entry pages if
+ * we ever want them.
+ */
+const press = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    outlet: z.string(),
+    /** Public URL to the source article / episode / page. */
+    url: z.string().url(),
+    /** Optional pull-quote or short summary. */
+    excerpt: z.string().optional(),
+    type: z
+      .enum(['article', 'podcast', 'interview', 'thesis-acknowledgment', 'blog-mention'])
+      .default('article'),
+    draft: z.boolean().default(false),
+  }),
+});
+
+/**
+ * Talks deep-dive collection — optional MDX page per talk at
+ * /talks/<slug>/. The /talks index page also links to a deep-dive
+ * when a matching slug exists in this collection.
+ *
+ * Embeds:
+ *   - youtubeId: 11-char YouTube video id (NOT the full URL)
+ *   - driveFileId: Google Drive file id (NOT the full URL)
+ *   - slidesUrl: PDF or Drive link, embedded inline via <iframe>
+ */
+const talks = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    venue: z.string(),
+    venueFull: z.string(),
+    location: z.string(),
+    /** Type of talk — drives the small "invited" badge on the index. */
+    type: z.enum(['conference', 'invited']).default('conference'),
+    awards: z.array(z.string()).default([]),
+    /** YouTube video id (e.g. "VAsB1XBuRZ0" — not the full URL). */
+    youtubeId: z.string().optional(),
+    /** Google Drive file id (e.g. "1zM1oa..." — not the full URL). */
+    driveFileId: z.string().optional(),
+    /** URL to slides PDF — Drive or self-hosted under /public/slides/. */
+    slidesUrl: z.string().url().optional(),
+    /** Optional id matching publications.id for cross-linking. */
+    paperId: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   publications,
   projects,
   news,
   blog,
   photos,
+  press,
+  talks,
 };
 

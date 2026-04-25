@@ -1,7 +1,10 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import LastModified from '@components/LastModified.astro';
+import NewsletterSubscribe from '@components/NewsletterSubscribe.astro';
 import { prettyDate, isoDate } from '@lib/news';
+import { SITE } from '@lib/site';
 
 export async function getStaticPaths() {
   const entries = await getCollection('blog', ({ data }) => !data.draft);
@@ -18,6 +21,8 @@ interface Props {
 const { entry } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await entry.render();
 const readingTime: string | undefined = remarkPluginFrontmatter?.minutesRead;
+// Path to the source MDX so the LastModified component can git-log it.
+const sourceFile = `src/content/blog/${entry.id}`;
 ---
 
 <BaseLayout
@@ -81,10 +86,21 @@ const readingTime: string | undefined = remarkPluginFrontmatter?.minutesRead;
     <div class="prose-content text-base leading-relaxed text-text">
       <Content />
     </div>
-    <footer class="mt-16 border-t border-border pt-8">
+
+    {SITE.buttondownUsername && (
+      <section class="mt-16 border-t border-border pt-8">
+        <NewsletterSubscribe
+          heading="get the next post"
+          intro="One plain-text email per published post. Unsubscribe anytime."
+        />
+      </section>
+    )}
+
+    <footer class="mt-12 flex flex-col gap-3 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
       <a href="/blog/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
         ← all posts
       </a>
+      <LastModified file={sourceFile} />
     </footer>
   </article>
 </BaseLayout>

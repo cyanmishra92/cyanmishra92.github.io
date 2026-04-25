@@ -1,0 +1,77 @@
+---
+import { SITE } from '@lib/site';
+
+interface Props {
+  /** "compact" — single-line for the footer. "default" — labelled block. */
+  variant?: 'default' | 'compact';
+  /** Override the default copy on the dedicated page. */
+  heading?: string;
+  intro?: string;
+}
+
+const { variant = 'default', heading, intro } = Astro.props;
+const username = SITE.buttondownUsername;
+
+if (!username) {
+  // Graceful disable — render nothing if BUTTONDOWN_USERNAME isn't set.
+}
+---
+
+{username && (
+  <form
+    class:list={['newsletter', variant === 'compact' && 'newsletter-compact']}
+    action={`https://buttondown.email/api/emails/embed-subscribe/${username}`}
+    method="post"
+    target="popupwindow"
+    onsubmit={`window.open('https://buttondown.email/${username}', 'popupwindow')`}
+    data-newsletter
+  >
+    {variant === 'default' && (
+      <>
+        {heading && <p class="eyebrow">{heading}</p>}
+        {intro && (
+          <p class="mt-2 max-w-prose text-sm text-text-muted">{intro}</p>
+        )}
+      </>
+    )}
+
+    <div class:list={[
+      'mt-4 flex items-stretch border border-border bg-surface focus-within:border-accent',
+      variant === 'compact' && 'mt-2',
+    ]}>
+      <label class="sr-only" for={`newsletter-email-${variant}`}>Email address</label>
+      <input
+        id={`newsletter-email-${variant}`}
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder="you@example.com"
+        class="flex-1 bg-transparent px-3 py-2 font-mono text-sm text-text placeholder:text-text-muted focus:outline-none"
+      />
+      <button
+        type="submit"
+        class="border-l border-border bg-transparent px-3 py-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted transition-colors hover:bg-accent hover:text-bg"
+      >
+        Subscribe
+      </button>
+    </div>
+
+    {variant === 'default' && (
+      <p class="mt-3 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+        // plain-text emails. unsubscribe anytime. powered by{' '}
+        <a
+          href="https://buttondown.email"
+          rel="noopener noreferrer"
+          target="_blank"
+          class="link-underline hover:text-accent"
+        >Buttondown</a>.
+      </p>
+    )}
+  </form>
+)}
+
+<style>
+  .newsletter { width: 100%; max-width: 520px; }
+  .newsletter-compact { max-width: 360px; }
+</style>

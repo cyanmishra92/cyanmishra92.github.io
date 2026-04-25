@@ -1,0 +1,22 @@
+---
+import { lastModified } from '@lib/last-modified';
+
+interface Props {
+  /** Path (relative to repo root or absolute) to the file whose
+   *  modification time should drive this stamp. Usually `Astro.self.url`
+   *  via fileURLToPath, but for content-collection pages it should be
+   *  the underlying MDX/JSON path. */
+  file: string;
+  /** Optional label override — defaults to "Last modified". */
+  label?: string;
+}
+
+const { file, label = 'Last modified' } = Astro.props;
+const stamp = lastModified(file);
+---
+
+{stamp && (
+  <p class="font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+    // {label} <time datetime={stamp}>{stamp}</time>
+  </p>
+)}

@@ -1,9 +1,13 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PageHeader from '@components/PageHeader.astro';
 import SectionHeader from '@components/SectionHeader.astro';
 
 interface Talk {
+  /** Slug — when set and a matching MDX exists in the talks collection,
+   *  the index links to /talks/<slug>/ for the deep-dive page. */
+  slug?: string;
   year: number;
   date: string;
   venue: string;
@@ -17,6 +21,7 @@ interface Talk {
 
 const talks: Talk[] = [
   {
+    slug: 'cocktail-nsdi-2022',
     year: 2022,
     date: '2022 · Apr',
     venue: 'NSDI',
@@ -46,6 +51,7 @@ const talks: Talk[] = [
     awards: ['Best Paper Award'],
   },
   {
+    slug: 'origin-date-2021',
     year: 2021,
     date: '2021',
     venue: 'DATE',
@@ -67,6 +73,13 @@ const talks: Talk[] = [
 ];
 
 const years = [...new Set(talks.map((t) => t.year))].sort((a, b) => b - a);
+
+// Build a set of slugs that have a real /talks/[slug]/ deep-dive page,
+// so the index can render a "deep dive →" link only when one exists.
+// Widened to `Set<string>` so .has() accepts the loose `t.slug` strings.
+const deepDiveSlugs = new Set<string>(
+  (await getCollection('talks', ({ data }) => !data.draft)).map((e) => e.slug),
+);
 ---
 
 <BaseLayout
@@ -115,18 +128,26 @@ const years = [...new Set(talks.map((t) => t.year))].sort((a, b) => b - a);
                       ★ {t.awards.join(' · ')}
                     </p>
                   )}
-                  {t.videoUrl && (
-                    <p class="mt-3">
+                  <div class="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                    {t.slug && deepDiveSlugs.has(t.slug) && (
+                      <a
+                        href={`/talks/${t.slug}/`}
+                        class="link-underline font-mono text-xs uppercase tracking-eyebrow text-accent"
+                      >
+                        deep dive →
+                      </a>
+                    )}
+                    {t.videoUrl && (
                       <a
                         href={t.videoUrl}
                         rel="noopener noreferrer"
                         target="_blank"
-                        class="link-underline font-mono text-xs uppercase tracking-eyebrow text-accent"
+                        class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted hover:text-accent"
                       >
                         watch recording →
                       </a>
-                    </p>
-                  )}
+                    )}
+                  </div>
                 </div>
               </li>
             ))}
