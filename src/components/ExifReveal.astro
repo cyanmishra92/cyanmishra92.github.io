@@ -1,0 +1,197 @@
+---
+// EXIF reveal popover — bottom-right of each photo cell.
+// Hidden when the sidecar carries no usable fields.
+//
+// Pure Astro + a tiny IIFE for the toggle. No island needed; the data
+// is rendered at build time and the JS only flips visibility.
+
+import type { PhotoExif } from '@lib/photos';
+import {
+  hasExif, formatAperture, formatShutter, formatFocal, formatTaken,
+  formatCamera,
+} from '@lib/photos';
+
+interface Props {
+  /** The photo's slug; used for ARIA labelling and unique IDs. */
+  slug: string;
+  /** Photo title; goes into the aria-label. */
+  title: string;
+  /** Privacy-safe EXIF subset from src/content/photos/exif/<slug>.json. */
+  exif: PhotoExif;
+}
+
+const { slug, title, exif } = Astro.props;
+
+if (!hasExif(exif)) {
+  // No row to render. The component renders nothing — Astro handles `null`.
+}
+
+const rows: { k: string; v: string }[] = [];
+const camera = formatCamera(exif.Make, exif.Model);
+if (camera) rows.push({ k: 'CAMERA', v: camera });
+if (exif.LensModel) rows.push({ k: 'LENS', v: exif.LensModel });
+const focal = formatFocal(exif.FocalLength, exif.FocalLengthIn35mmFormat);
+if (focal) rows.push({ k: 'FOCAL', v: focal });
+const aperture = formatAperture(exif.FNumber);
+if (aperture) rows.push({ k: 'APERTURE', v: aperture });
+const shutter = formatShutter(exif.ExposureTime);
+if (shutter) rows.push({ k: 'SHUTTER', v: shutter });
+if (typeof exif.ISO === 'number') rows.push({ k: 'ISO', v: String(exif.ISO) });
+const taken = formatTaken(exif.DateTimeOriginal);
+if (taken) rows.push({ k: 'TAKEN', v: taken });
+
+const popoverId = `exif-${slug}`;
+---
+
+{rows.length > 0 && (
+  <div class="exif-reveal">
+    <button
+      type="button"
+      class="exif-trigger"
+      aria-label={`Show EXIF for ${title}`}
+      aria-expanded="false"
+      aria-controls={popoverId}
+      data-exif-trigger={popoverId}
+    >
+      <span aria-hidden="true">(i)</span>
+    </button>
+    <div
+      id={popoverId}
+      class="exif-popover"
+      role="dialog"
+      aria-labelledby={`fig-${slug}`}
+      hidden
+    >
+      <table>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <th scope="row">{r.k}</th>
+              <td>{r.v}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+)}
+
+<style>
+  .exif-reveal {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    z-index: 5;
+  }
+  .exif-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.625rem;
+    line-height: 1;
+    color: rgb(var(--color-text-muted));
+    background: rgb(var(--color-bg) / 0.7);
+    border: 1px solid rgb(var(--color-border));
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: color 180ms ease-out, border-color 180ms ease-out, background 180ms ease-out;
+  }
+  .exif-trigger:hover,
+  .exif-trigger:focus-visible,
+  .exif-trigger[aria-expanded='true'] {
+    color: rgb(var(--color-accent));
+    border-color: rgb(var(--color-accent));
+    background: rgb(var(--color-bg) / 0.95);
+  }
+
+  .exif-popover {
+    position: absolute;
+    right: 0;
+    bottom: 30px;
+    min-width: 220px;
+    padding: 12px 14px;
+    background: rgb(var(--color-bg) / 0.96);
+    border: 1px solid rgb(var(--color-accent));
+    backdrop-filter: blur(8px);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    color: rgb(var(--color-text));
+  }
+  .exif-popover table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  .exif-popover th,
+  .exif-popover td {
+    text-align: left;
+    padding: 1px 0;
+    vertical-align: top;
+  }
+  .exif-popover th {
+    color: rgb(var(--color-text-muted));
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding-right: 12px;
+    width: 70px;
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  // One delegated listener per page handles every popover.
+  // Click the (i) trigger toggles its target popover; Esc and any
+  // outside-click close the open one.
+  function exifInit() {
+    const root = document;
+    let open: HTMLElement | null = null;
+    let openTrigger: HTMLElement | null = null;
+
+    function close() {
+      if (!open) return;
+      open.hidden = true;
+      openTrigger?.setAttribute('aria-expanded', 'false');
+      open = null;
+      openTrigger = null;
+    }
+
+    root.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      const trigger = target.closest<HTMLElement>('[data-exif-trigger]');
+      if (trigger) {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = trigger.dataset.exifTrigger ?? '';
+        const panel = document.getElementById(id);
+        if (!panel) return;
+        if (open === panel) {
+          close();
+          return;
+        }
+        close();
+        panel.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        open = panel;
+        openTrigger = trigger;
+        return;
+      }
+
+      // Click outside the open panel? Close.
+      if (open && !open.contains(target)) close();
+    });
+
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) {
+        e.preventDefault();
+        close();
+      }
+    });
+  }
+  exifInit();
+</script>

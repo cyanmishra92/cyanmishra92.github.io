@@ -1,0 +1,64 @@
+name: Photos — optimise sources
+
+# When images under src/content/photos/img/ change, downscale to 2400px
+# max long edge, strip ALL EXIF from the JPEG itself (the privacy-safe
+# subset is in the sidecar JSON), reencode at JPEG quality 85, and
+# commit the optimised sources back.
+#
+# Idempotent: a file already at ≤2400px with no embedded EXIF is left
+# untouched.
+#
+# Order matters: this runs BEFORE the EXIF extractor (which reads from
+# the source) by virtue of being on the same trigger. The extractor's
+# own workflow runs after via the [skip ci] commit chain.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/photos/img/**'
+      - 'scripts/optimize-photos.ts'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: photo-optim
+  cancel-in-progress: false
+
+jobs:
+  optimize:
+    name: Downscale + strip EXIF + reencode
+    # Don't recurse on our own commits.
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Optimise photos
+        run: npm run optimize-photos
+
+      - name: Commit back if changed
+        run: |
+          if [[ -z "$(git status --porcelain src/content/photos/img/)" ]]; then
+            echo "no source changes to commit"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/photos/img/
+          git commit -m "chore(photos): optimise sources (downscale + strip exif) [skip ci]"
+          git push

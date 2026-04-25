@@ -1,0 +1,492 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import ExifReveal from '@components/ExifReveal.astro';
+import PhotoLightbox from '@components/PhotoLightbox.tsx';
+import {
+  groupByYear, effectiveDisplayMode, loadExif, hasExif,
+  formatCamera, formatFocal, formatAperture, formatShutter,
+} from '@lib/photos';
+
+const allPhotos = (await getCollection('photos')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const visiblePhotos = allPhotos.filter((p) => p.data.visible);
+const groups = groupByYear(visiblePhotos);
+
+// Filter dimensions for the sticky bar.
+const allTags = [...new Set(visiblePhotos.flatMap((p) => p.data.tags))].sort();
+const allAlbums = [...new Set(visiblePhotos.map((p) => p.data.album).filter(Boolean) as string[])].sort();
+
+// Sequential figure index across the entire page (1-based).
+const figIndex = new Map<string, number>();
+visiblePhotos.forEach((p, i) => figIndex.set(p.slug, i + 1));
+
+// Build the lightbox data payload — ordered by display sequence so
+// prev/next navigation matches what the user sees scrolling.
+const lightboxData = visiblePhotos.map((p) => {
+  const exif = loadExif(p.slug);
+  const camera = formatCamera(exif.Make, exif.Model);
+  const focal = formatFocal(exif.FocalLength, exif.FocalLengthIn35mmFormat);
+  const aperture = formatAperture(exif.FNumber);
+  const shutter = formatShutter(exif.ExposureTime);
+  const iso = typeof exif.ISO === 'number' ? `ISO ${exif.ISO}` : undefined;
+  return {
+    slug: p.slug,
+    title: p.data.title,
+    date: p.data.date.toISOString().slice(0, 10),
+    location: p.data.location,
+    caption: p.data.caption,
+    tags: p.data.tags,
+    src: p.data.image.src,
+    fullSrc: p.data.image.src,
+    width: p.data.image.width,
+    height: p.data.image.height,
+    exif: hasExif(exif)
+      ? {
+          camera: camera ?? undefined,
+          lens: exif.LensModel,
+          focal: focal ?? undefined,
+          aperture: aperture ?? undefined,
+          shutter: shutter ?? undefined,
+          iso,
+        }
+      : undefined,
+  };
+});
+---
+
+<BaseLayout
+  title="Photos"
+  description="Hand-picked moments. Local image gallery with EXIF reveal and a custom lightbox."
+  breadcrumbs={[{ name: 'Photos', href: '/photos/' }]}
+>
+  <PageHeader number="11" eyebrow="photos" title="Photos" />
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    {/* IG callout — single line, restrained, the only IG presence on the site */}
+    <p class="mb-10 font-mono text-[0.75rem] uppercase tracking-eyebrow text-text-muted">
+      // hand-picked moments. for more, follow{' '}
+      <a
+        href="https://www.instagram.com/cyansubhra/"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="link-underline text-text hover:text-accent"
+      >
+        @cyansubhra on instagram →
+      </a>
+    </p>
+
+    {visiblePhotos.length === 0 ? (
+      <p class="border border-border bg-surface px-6 py-16 text-center font-mono text-sm uppercase tracking-eyebrow text-text-muted">
+        // gallery coming soon — no photos visible yet
+      </p>
+    ) : (
+      <>
+        {/* sticky filter bar */}
+        {(allTags.length > 0 || allAlbums.length > 0) && (
+          <section
+            class="sticky top-16 z-20 -mx-6 mb-10 border-y border-border bg-bg/85 px-6 py-3 backdrop-blur lg:-mx-8 lg:px-8"
+            data-photo-filters
+          >
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+              {allTags.length > 0 && (
+                <fieldset class="flex flex-wrap items-center gap-1.5">
+                  <legend class="mr-1 inline-block font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">// tags</legend>
+                  {allTags.map((t) => (
+                    <button type="button" class="filter-chip" data-filter="tag" data-value={t}>{t}</button>
+                  ))}
+                </fieldset>
+              )}
+              {allAlbums.length > 0 && (
+                <fieldset class="ml-auto">
+                  <legend class="sr-only">Album</legend>
+                  <select class="album-select" data-filter="album">
+                    <option value="">all albums</option>
+                    {allAlbums.map((a) => <option value={a}>{a}</option>)}
+                  </select>
+                </fieldset>
+              )}
+              <button
+                type="button"
+                class="ml-auto hidden font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted hover:text-accent"
+                data-photo-clear
+              >
+                [ clear ]
+              </button>
+            </div>
+            <p class="mt-2 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted" data-photo-counter>
+              showing {visiblePhotos.length} / {visiblePhotos.length}
+            </p>
+          </section>
+        )}
+
+        {groups.map((g) => (
+          <section class="mb-16" data-year-section data-year={g.year}>
+            <header class="mb-6 flex items-baseline gap-4">
+              <h2
+                class="font-display leading-none text-ink"
+                style="font-size: clamp(3rem, 6vw, 5rem); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;"
+              >{g.year}</h2>
+              <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+                ({g.photos.length} photo{g.photos.length === 1 ? '' : 's'})
+              </p>
+            </header>
+            <ul class="photo-grid">
+              {g.photos.map((p) => {
+                const mode = effectiveDisplayMode(p);
+                const exif = loadExif(p.slug);
+                const fig = figIndex.get(p.slug) ?? 0;
+                // First 6 figures are eagerly loaded (likely above the fold).
+                // Use `< 7` instead of `<= 6` — Astro's parser misreads the
+                // `<=` as an opening JSX tag inside `.map()` callbacks.
+                const eager = fig < 7 && fig > 0;
+                return (
+                  <li
+                    class:list={[
+                      'photo-cell',
+                      mode === 'tall' && 'photo-cell-tall',
+                      p.data.featured && 'photo-cell-featured',
+                    ]}
+                    data-photo-cell
+                    data-tags={p.data.tags.join('|')}
+                    data-album={p.data.album ?? ''}
+                  >
+                    <p
+                      id={`fig-${p.slug}`}
+                      class="font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted"
+                    >
+                      Fig. {String(fig).padStart(2, '0')}
+                    </p>
+                    <a
+                      href={`#photo=${p.slug}`}
+                      class="photo-frame"
+                      data-lightbox-trigger={p.slug}
+                      aria-label={`Open ${p.data.title}`}
+                    >
+                      <Image
+                        src={p.data.image}
+                        alt={p.data.caption ?? p.data.title}
+                        loading={eager ? 'eager' : 'lazy'}
+                        decoding={eager ? 'sync' : 'async'}
+                        widths={[480, 800, 1200, 1600]}
+                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                        class:list={[
+                          'photo-img',
+                          mode === 'contain' && 'photo-img-contain',
+                        ]}
+                      />
+                      <ExifReveal slug={p.slug} title={p.data.title} exif={exif} />
+                    </a>
+                    <p class="mt-1 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+                      {p.data.date.toISOString().slice(0, 10)}
+                      {p.data.location && <> · {p.data.location}</>}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ))}
+      </>
+    )}
+  </div>
+
+  {/* Lightbox island + the JSON payload it reads from. */}
+  <script
+    type="application/json"
+    id="photo-lightbox-data"
+    is:inline
+    set:html={JSON.stringify(lightboxData)}
+  />
+  <PhotoLightbox client:idle />
+</BaseLayout>
+
+<style>
+  /* ─── grid: 4-col desktop, 3-col tablet, 2-col mobile ─────────── */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .photo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .photo-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.75rem; }
+  }
+
+  .photo-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  /* featured: 2x2 on desktop, 2x2 on tablet, 2x1 on mobile (full-width single row) */
+  .photo-cell-featured { grid-column: span 2; grid-row: span 2; }
+  @media (max-width: 639px) {
+    .photo-cell-featured { grid-column: span 2; grid-row: auto; }
+  }
+  /* tall: 1x2 — for portrait photos worth showing tall */
+  .photo-cell-tall { grid-row: span 2; }
+
+  /* the framed image area — sharp 2px border, accent on hover */
+  .photo-frame {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    border: 2px solid rgb(var(--color-border));
+    background: rgb(var(--color-surface));
+    overflow: hidden;
+    transition: border-color 200ms ease-out;
+    text-decoration: none;
+  }
+  .photo-cell-tall .photo-frame { aspect-ratio: 1 / 2; }
+  .photo-cell-featured .photo-frame { aspect-ratio: 1; }
+  .photo-frame:hover,
+  .photo-frame:focus-visible { border-color: rgb(var(--color-accent)); }
+  .photo-frame:hover ~ p,
+  .photo-frame:focus-visible ~ p { color: rgb(var(--color-accent)); }
+  .photo-cell:hover > p:first-child { color: rgb(var(--color-accent)); }
+
+  .photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-img-contain {
+    object-fit: contain;
+    background: rgb(var(--color-bg));
+    padding: 0.75rem;
+  }
+
+  /* filter chips reuse styles from publications page */
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.5rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(var(--color-text-muted));
+    border: 1px solid rgb(var(--color-border));
+    background: transparent;
+    cursor: pointer;
+    transition: color 180ms ease-out, border-color 180ms ease-out, background 180ms ease-out;
+  }
+  .filter-chip:hover { color: rgb(var(--color-accent)); border-color: rgb(var(--color-accent)); }
+  .filter-chip[aria-pressed='true'] {
+    color: rgb(var(--color-bg));
+    background: rgb(var(--color-accent));
+    border-color: rgb(var(--color-accent));
+  }
+  .album-select {
+    padding: 0.2rem 0.5rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(var(--color-text-muted));
+    background: transparent;
+    border: 1px solid rgb(var(--color-border));
+  }
+
+  /* ─── lightbox ─────────────────────────────────────────────── */
+  .lightbox {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(var(--color-bg) / 0.96);
+    color: rgb(var(--color-text));
+  }
+  :global(.dark) .lightbox { background: rgb(var(--color-bg) / 0.96); }
+  .lightbox::backdrop {
+    background: rgb(0 0 0 / 0.5);
+    backdrop-filter: blur(8px);
+  }
+  .lightbox-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .lb-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgb(var(--color-border));
+  }
+  .lb-title { font-family: 'Fraunces Variable', ui-serif, serif; font-size: 1.125rem; }
+  .lb-meta {
+    margin-top: 0.15rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    color: rgb(var(--color-text-muted));
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .lb-counter { color: rgb(var(--color-text-muted)); }
+  .lb-actions { display: flex; gap: 0.5rem; }
+  .lb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid rgb(var(--color-border));
+    background: transparent;
+    color: rgb(var(--color-text));
+    cursor: pointer;
+    transition: color 180ms ease-out, border-color 180ms ease-out;
+    font-size: 1rem;
+    line-height: 1;
+    text-decoration: none;
+  }
+  .lb-btn:hover { color: rgb(var(--color-accent)); border-color: rgb(var(--color-accent)); }
+  .lb-stage {
+    flex: 1;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    user-select: none;
+    touch-action: none;
+    cursor: zoom-in;
+  }
+  .lb-stage.lb-zoomed { cursor: grab; }
+  .lb-stage img {
+    max-width: 90vw;
+    max-height: 75vh;
+    object-fit: contain;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .lb-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 64px;
+    background: rgb(var(--color-bg) / 0.6);
+    border: 1px solid rgb(var(--color-border));
+    color: rgb(var(--color-text));
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: color 180ms ease-out, border-color 180ms ease-out, background 180ms ease-out;
+  }
+  .lb-nav:hover {
+    color: rgb(var(--color-accent));
+    border-color: rgb(var(--color-accent));
+    background: rgb(var(--color-bg) / 0.95);
+  }
+  .lb-prev { left: 1rem; }
+  .lb-next { right: 1rem; }
+  .lb-foot {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgb(var(--color-border));
+    font-size: 0.875rem;
+  }
+  .lb-cap { color: rgb(var(--color-text)); }
+  .lb-exif {
+    margin-top: 0.5rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    color: rgb(var(--color-text-muted));
+    letter-spacing: 0.05em;
+  }
+  .lb-tags { margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.25rem; }
+  .lb-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.4rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.625rem;
+    color: rgb(var(--color-text-muted));
+    border: 1px solid rgb(var(--color-border));
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo-frame,
+    .filter-chip,
+    .lb-btn,
+    .lb-nav { transition: none; }
+  }
+</style>
+
+<script>
+  // ─── filter logic for the sticky bar ─────────────────────────
+  const root = document.querySelector('[data-photo-filters]');
+  const counter = document.querySelector('[data-photo-counter]');
+  const clearBtn = document.querySelector<HTMLButtonElement>('[data-photo-clear]');
+  if (root && counter) {
+    const cells = Array.from(document.querySelectorAll<HTMLElement>('[data-photo-cell]'));
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-year-section]'));
+    const total = cells.length;
+    const tagSel = new Set<string>();
+    let albumSel = '';
+
+    function apply() {
+      let visible = 0;
+      for (const c of cells) {
+        const tags = (c.dataset.tags ?? '').split('|').filter(Boolean);
+        const album = c.dataset.album ?? '';
+        const tagOk = tagSel.size === 0 || [...tagSel].every((t) => tags.includes(t));
+        const albumOk = !albumSel || album === albumSel;
+        const ok = tagOk && albumOk;
+        c.classList.toggle('hidden', !ok);
+        if (ok) visible++;
+      }
+      // hide year sections whose every cell is filtered out
+      for (const s of sections) {
+        const sc = Array.from(s.querySelectorAll<HTMLElement>('[data-photo-cell]'));
+        const any = sc.some((c) => !c.classList.contains('hidden'));
+        s.classList.toggle('hidden', !any);
+      }
+      counter!.textContent = `showing ${visible} / ${total}`;
+      if (clearBtn) clearBtn.classList.toggle('hidden', tagSel.size === 0 && !albumSel);
+    }
+
+    root.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-chip');
+      if (!btn) return;
+      const v = btn.dataset.value ?? '';
+      if (tagSel.has(v)) tagSel.delete(v); else tagSel.add(v);
+      btn.setAttribute('aria-pressed', tagSel.has(v) ? 'true' : 'false');
+      apply();
+    });
+
+    root.addEventListener('change', (e) => {
+      const sel = e.target as HTMLSelectElement;
+      if (sel?.dataset.filter === 'album') {
+        albumSel = sel.value;
+        apply();
+      }
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      tagSel.clear();
+      albumSel = '';
+      root.querySelectorAll<HTMLButtonElement>('.filter-chip[aria-pressed="true"]')
+        .forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      const sel = root.querySelector<HTMLSelectElement>('select[data-filter="album"]');
+      if (sel) sel.value = '';
+      apply();
+    });
+
+    apply();
+  }
+</script>

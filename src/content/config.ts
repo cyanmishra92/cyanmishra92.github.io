@@ -102,10 +102,47 @@ const blog = defineCollection({
   }),
 });
 
+/**
+ * Photos collection — MDX entries under src/content/photos/, one per
+ * photo. Image source files live alongside under src/content/photos/img/.
+ * Privacy: GPS is never stored in the sidecar JSON or rendered; the
+ * frontmatter `location` field is free-text only.
+ */
+const photos = defineCollection({
+  type: 'content',
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    /** Optional free-text location. Don't put GPS or precise addresses. */
+    location: z.string().optional(),
+    /** Optional caption (markdown supported in body). */
+    caption: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    /** Relative path to the source image — Astro's image() helper. */
+    image: image(),
+    /** Optional grouping; the /photos UI shows an album filter when set. */
+    album: z.string().optional(),
+    /** Larger 2×2 cell in the grid. */
+    featured: z.boolean().default(false),
+    /** Set false to hide without deleting (also hidden in the lightbox). */
+    visible: z.boolean().default(true),
+    /**
+     * Layout mode for the cell:
+     *   - cover  (default): fill cell, crop overflow
+     *   - contain: fit whole image inside cell with paper-bg padding
+     *   - tall: 1×2 cell for portrait orientation
+     * If unset, the page picks `contain` for ~1 in 5 photos
+     * deterministically (stable hash of slug) for visual rhythm.
+     */
+    displayMode: z.enum(['cover', 'contain', 'tall']).optional(),
+  }),
+});
+
 export const collections = {
   publications,
   projects,
   news,
   blog,
+  photos,
 };
 

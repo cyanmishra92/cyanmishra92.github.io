@@ -1,0 +1,61 @@
+name: Photos — extract EXIF
+
+# When images under src/content/photos/img/ change, regenerate the
+# privacy-safe EXIF sidecars at src/content/photos/_exif/<slug>.json
+# and commit them back. The sidecars are committed so the build is
+# reproducible without re-parsing JPEGs every time, and so the EXIF
+# popover can render on the static site without bundling the EXIF
+# parser to clients.
+#
+# GPS-prefixed fields and serial numbers are stripped — see
+# scripts/extract-photo-exif.ts SAFE_FIELDS / BANNED_PATTERNS.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/photos/img/**'
+      - 'scripts/extract-photo-exif.ts'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: photo-exif
+  cancel-in-progress: false
+
+jobs:
+  extract:
+    name: Extract sidecars
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Extract EXIF sidecars
+        run: npm run extract-photo-exif
+
+      - name: Commit back if changed
+        run: |
+          if [[ -z "$(git status --porcelain src/content/photos/_exif/)" ]]; then
+            echo "no sidecar changes to commit"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/photos/_exif/
+          git commit -m "chore(photos): regenerate exif sidecars [skip ci]"
+          git push
