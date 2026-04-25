@@ -1,0 +1,51 @@
+---
+title: Seeker
+tagline: Coreset-based partial inference on energy-harvesting wearables.
+summary: >-
+  Sensors compute compressed coresets locally and ship only those to the
+  host for final inference. Up to 8.9× communication reduction with
+  near-baseline accuracy.
+venue: arXiv
+year: 2022
+status: published
+topics: [EH-WSN, HAR, Coreset, Edge, Partial Inference]
+paperId: seeker-arxiv
+paperUrl: https://arxiv.org/abs/2204.13106
+order: 4
+---
+
+## The problem
+
+In an energy-harvesting wearable network, radio is the most expensive
+operation by an order of magnitude. Streaming raw sensor traces back to
+a host phone or hub burns the energy budget before anything useful gets
+classified.
+
+## What Seeker does
+
+Each sensor node runs a *partial* DNN locally — just enough to
+construct a **coreset**: a compressed, representative subset of features
+that preserves the decision-theoretic information about the input. The
+host receives the coreset, not the raw stream, and finishes inference
+with near-baseline accuracy.
+
+Two co-design pieces make this work on a tiny budget:
+- Lightweight hardware support for coreset construction, with
+  store-and-execute on non-volatile memory so power loss doesn't lose
+  the in-flight features.
+- Edge-host synergy: the sensor and the host share a learned
+  representation that's tuned for the specific upstream model the host
+  will run.
+
+## Results
+
+Up to **8.9× reduction in communication** versus full-trace baselines,
+with classification accuracy within a few percent of cloud-only
+inference. Energy savings dominate compute overhead by a wide margin
+because radio is so much more expensive than local arithmetic.
+
+## Why it matters
+
+The bottleneck on energy-harvesting wearables isn't the model — it's
+the bus to the model. Seeker makes the bus quiet enough that intermittent
+nodes can stay useful long-term.

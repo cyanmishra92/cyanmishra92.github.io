@@ -1,0 +1,50 @@
+---
+title: Origin
+tagline: Scheduling and ensemble learning for HAR on energy-harvesting body networks.
+summary: >-
+  Coordinates intermittent sensors across the body for human activity
+  recognition. 2.5–5% accuracy gain under tight harvested-power
+  constraints.
+venue: DATE
+year: 2021
+status: published
+awards: [Best Paper Nominee]
+topics: [EH-WSN, HAR, Ensemble Learning, Scheduling]
+paperId: origin-date-2021
+order: 5
+---
+
+## The problem
+
+Human activity recognition with energy-harvesting body-area networks
+sounds great on paper — wrist, ankle, chest sensors all reporting,
+no batteries — but in practice each node is independently intermittent.
+Some sensors miss inferences while others overproduce. The system has
+to coordinate them without a central, always-on clock.
+
+## What Origin does
+
+An **activity-aware scheduler** decides which sensor attempts the next
+inference based on (a) the energy the sensor expects to harvest in the
+next window and (b) which sensor's vantage point is most useful for the
+predicted activity class.
+
+A **lightweight ensemble aggregator** fuses partial and confident
+results from whichever nodes successfully completed their slice. The
+ensemble is structurally tolerant to missing voters — losing one sensor
+to a bad harvest window degrades gracefully instead of catastrophically.
+
+## Results
+
+**2.5–5% higher classification accuracy** than standard single-sensor
+HAR baselines under sporadic harvested power, with negligible
+coordination overhead. The ensemble structure also dramatically
+increases the *number of completed inferences per minute* — the metric
+that actually matters for practical wearable HAR.
+
+## Why it matters
+
+This was an early demonstration that *coordination*, not bigger models,
+is the right axis for improving HAR on energy-harvesting bodies. The
+DATE community recognized it: Origin was a Best Paper Nominee at
+DATE '21.

@@ -1,0 +1,24 @@
+{
+  "id": "edge-host-arxiv",
+  "title": "Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks",
+  "authors": [
+    "Cyan Subhra Mishra",
+    "Jack Sampson",
+    "Mahmut Taylan Kandemir",
+    "Vijaykrishnan Narayanan"
+  ],
+  "year": 2024,
+  "venue": "arXiv",
+  "venueFull": "arXiv preprint",
+  "type": "arxiv",
+  "status": "published",
+  "arxivId": "2408.14379",
+  "pdfUrl": "https://arxiv.org/pdf/2408.14379",
+  "topics": [
+    "EH-WSN",
+    "Edge",
+    "Communication"
+  ],
+  "myAuthorIndex": 0,
+  "bibtex": "@article{edgehostarxiv,\n  title     = {Synergistic and Efficient Edge-Host Communication for Energy Harvesting Wireless Sensor Networks},\n  author    = {Cyan Subhra Mishra and Jack Sampson and Mahmut Taylan Kandemir and Vijaykrishnan Narayanan},\n  journal   = {arXiv preprint arXiv:2408.14379},\n  year      = {2024},\n}"
+}

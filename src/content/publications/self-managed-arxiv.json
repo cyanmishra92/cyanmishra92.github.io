@@ -1,0 +1,24 @@
+{
+  "id": "self-managed-arxiv",
+  "title": "Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud",
+  "authors": [
+    "Jashwant Raj Gunasekaran",
+    "Prashanth Thinakaran",
+    "Cyan Subhra Mishra",
+    "Mahmut Taylan Kandemir",
+    "Chita R. Das"
+  ],
+  "myAuthorIndex": 2,
+  "year": 2020,
+  "venue": "arXiv",
+  "venueFull": "arXiv preprint",
+  "type": "arxiv",
+  "status": "published",
+  "arxivId": "2008.09491",
+  "pdfUrl": "https://arxiv.org/pdf/2008.09491",
+  "topics": [
+    "Cloud",
+    "Inference Serving"
+  ],
+  "bibtex": "@article{selfmanagedarxiv,\n  title     = {Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud},\n  author    = {Jashwant Raj Gunasekaran and Prashanth Thinakaran and Cyan Subhra Mishra and Mahmut Taylan Kandemir and Chita R. Das},\n  journal   = {arXiv preprint arXiv:2008.09491},\n  year      = {2020},\n}"
+}

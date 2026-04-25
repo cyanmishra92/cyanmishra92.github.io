@@ -1,0 +1,143 @@
+---
+interface Props {
+  /** All papers — modal renders one hidden <template> per entry. */
+  papers: { id: string; title: string; bibtex: string }[];
+}
+
+const { papers } = Astro.props;
+---
+
+{/* hidden templates — one per paper */}
+<div hidden id="bibtex-store">
+  {papers.map((p) => (
+    <template data-bibtex-id={p.id}>
+      <span data-title set:text={p.title} />
+      <pre data-bibtex set:text={p.bibtex} />
+    </template>
+  ))}
+</div>
+
+{/* the modal itself */}
+<dialog
+  id="bibtex-modal"
+  class="m-0 w-full max-w-2xl border-2 border-border bg-bg p-0 text-text shadow-none backdrop:bg-ink/40 sm:m-auto"
+  aria-labelledby="bibtex-title"
+>
+  <div class="flex items-start justify-between gap-4 border-b border-border px-6 py-4">
+    <div>
+      <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+        // bibtex
+      </p>
+      <h2 id="bibtex-title" class="mt-1 font-display text-lg leading-snug">
+        {/* set by JS */}
+      </h2>
+    </div>
+    <button
+      type="button"
+      data-bibtex-close
+      class="-mr-2 inline-flex h-9 w-9 shrink-0 items-center justify-center border border-border text-text-muted transition-colors hover:border-accent hover:text-accent"
+      aria-label="Close BibTeX dialog"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <line x1="6" y1="6" x2="18" y2="18" />
+        <line x1="6" y1="18" x2="18" y2="6" />
+      </svg>
+    </button>
+  </div>
+
+  <pre
+    id="bibtex-content"
+    class="m-0 max-h-[60vh] overflow-auto bg-surface px-6 py-5 font-mono text-xs leading-relaxed text-text"
+  ><code>{/* set by JS */}</code></pre>
+
+  <div class="flex flex-wrap items-center gap-2 border-t border-border px-6 py-4">
+    <button type="button" data-bibtex-copy class="btn">
+      <span data-copy-label>[ copy to clipboard ]</span>
+    </button>
+    <a download data-bibtex-download class="btn">
+      [ download .bib ]
+    </a>
+  </div>
+</dialog>
+
+<script>
+  type Entry = { title: string; bibtex: string };
+
+  const _modal = document.getElementById('bibtex-modal') as HTMLDialogElement | null;
+  const _titleEl = document.getElementById('bibtex-title');
+  const _codeEl = document.querySelector<HTMLElement>('#bibtex-content code');
+  const _copyBtn = document.querySelector<HTMLButtonElement>('[data-bibtex-copy]');
+  const _copyLabel = document.querySelector<HTMLElement>('[data-copy-label]');
+  const _downloadBtn = document.querySelector<HTMLAnchorElement>('[data-bibtex-download]');
+  const _closeBtn = document.querySelector<HTMLButtonElement>('[data-bibtex-close]');
+
+  if (_modal && _titleEl && _codeEl && _copyBtn && _downloadBtn && _closeBtn && _copyLabel) {
+    // Capture as non-nullable locals so closures don't need narrowing.
+    const modal = _modal;
+    const titleEl = _titleEl;
+    const codeEl = _codeEl;
+    const copyBtn = _copyBtn;
+    const copyLabel = _copyLabel;
+    const downloadBtn = _downloadBtn;
+    const closeBtn = _closeBtn;
+    function loadEntry(id: string): Entry | null {
+      const tpl = document.querySelector<HTMLTemplateElement>(
+        `template[data-bibtex-id="${CSS.escape(id)}"]`,
+      );
+      if (!tpl) return null;
+      const titleSpan = tpl.content.querySelector('[data-title]');
+      const bibtexPre = tpl.content.querySelector('[data-bibtex]');
+      if (!titleSpan || !bibtexPre) return null;
+      return {
+        title: titleSpan.textContent ?? '',
+        bibtex: bibtexPre.textContent ?? '',
+      };
+    }
+
+    function open(id: string) {
+      const entry = loadEntry(id);
+      if (!entry) return;
+      titleEl.textContent = entry.title;
+      codeEl.textContent = entry.bibtex;
+      downloadBtn.href = URL.createObjectURL(
+        new Blob([entry.bibtex], { type: 'text/plain' }),
+      );
+      downloadBtn.download = `${id}.bib`;
+      copyLabel.textContent = '[ copy to clipboard ]';
+      modal.showModal();
+    }
+    function close() {
+      modal.close();
+    }
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const trigger = target.closest<HTMLElement>('[data-cite-trigger]');
+      if (trigger?.dataset.paperId) {
+        e.preventDefault();
+        open(trigger.dataset.paperId);
+      }
+    });
+
+    closeBtn.addEventListener('click', close);
+
+    // Click on backdrop closes (clicks land on the dialog itself if outside the inner content).
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) close();
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const text = codeEl.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        copyLabel.textContent = '[ copied ✓ ]';
+      } catch {
+        copyLabel.textContent = '[ press ⌘C ]';
+      }
+      setTimeout(() => {
+        copyLabel.textContent = '[ copy to clipboard ]';
+      }, 2000);
+    });
+  }
+</script>

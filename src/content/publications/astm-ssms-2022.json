@@ -1,0 +1,35 @@
+{
+  "id": "astm-ssms-2022",
+  "title": "A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing",
+  "authors": [
+    "Abhishek Hanchate",
+    "Parth Sanjaybhai Dave",
+    "Ankur Verma",
+    "Akash Tiwari",
+    "Cyan Subhra Mishra",
+    "Soundar R. T. Kumara",
+    "Anil Srivastava",
+    "Hui Yang",
+    "Vijaykrishnan Narayanan",
+    "John Morgan Sampson",
+    "Mahmut Taylan Kandemir",
+    "Kye-Hwan Lee",
+    "Tanna Marie Pugh",
+    "Amy Jorden",
+    "Gautam Natarajan",
+    "Dinakar Sagapuram",
+    "Satish T. S. Bukkapatnam"
+  ],
+  "myAuthorIndex": 4,
+  "year": 2022,
+  "venue": "ASTM SSMS",
+  "venueFull": "ASTM Smart and Sustainable Manufacturing Systems",
+  "type": "journal",
+  "status": "published",
+  "topics": [
+    "Sensors",
+    "Manufacturing",
+    "Prognostics"
+  ],
+  "bibtex": "@article{astmssms2022,\n  title     = {A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing},\n  author    = {Abhishek Hanchate and Parth Sanjaybhai Dave and Ankur Verma and Akash Tiwari and Cyan Subhra Mishra and Soundar R. T. Kumara and Anil Srivastava and Hui Yang and Vijaykrishnan Narayanan and John Morgan Sampson and Mahmut Taylan Kandemir and Kye-Hwan Lee and Tanna Marie Pugh and Amy Jorden and Gautam Natarajan and Dinakar Sagapuram and Satish T. S. Bukkapatnam},\n  journal   = {ASTM Smart and Sustainable Manufacturing Systems},\n  year      = {2022},\n}"
+}

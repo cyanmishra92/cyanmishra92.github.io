@@ -1,0 +1,25 @@
+{
+  "id": "holoar-micro-2021",
+  "title": "HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality",
+  "authors": [
+    "Shulin Zhao",
+    "Haibo Zhang",
+    "Cyan Subhra Mishra",
+    "Sandeepa Bhuyan",
+    "Ziyu Ying",
+    "Mahmut T. Kandemir",
+    "Chita R. Das"
+  ],
+  "myAuthorIndex": 2,
+  "year": 2021,
+  "venue": "MICRO",
+  "venueFull": "54th IEEE/ACM International Symposium on Microarchitecture (MICRO)",
+  "type": "conference",
+  "status": "published",
+  "topics": [
+    "AR/VR",
+    "Holographic",
+    "Hardware Co-design"
+  ],
+  "bibtex": "@inproceedings{holoarmicro2021,\n  title     = {HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality},\n  author    = {Shulin Zhao and Haibo Zhang and Cyan Subhra Mishra and Sandeepa Bhuyan and Ziyu Ying and Mahmut T. Kandemir and Chita R. Das},\n  booktitle = {54th IEEE/ACM International Symposium on Microarchitecture (MICRO)},\n  year      = {2021},\n  publisher = {IEEE},\n}"
+}

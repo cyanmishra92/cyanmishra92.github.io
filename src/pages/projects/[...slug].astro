@@ -1,0 +1,158 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const d = entry.data;
+
+// Find related publication if linked.
+let paper: any = null;
+if (d.paperId) {
+  const all = await getCollection('publications');
+  paper = all.find((p) => p.data.id === d.paperId)?.data ?? null;
+}
+---
+
+<BaseLayout title={d.title} description={d.summary}>
+  {/* page header — asymmetric, mono meta column on the right */}
+  <header class="border-b border-border">
+    <div class="mx-auto grid max-w-page grid-cols-12 gap-x-6 gap-y-8 px-6 py-16 lg:gap-x-10 lg:px-8 lg:py-24">
+      <div class="col-span-12 lg:col-span-8">
+        <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          <a href="/projects/" class="link-underline text-accent">/projects</a>
+          <span class="mx-2">·</span>
+          <span>{entry.slug}</span>
+        </p>
+        <h1 class="mt-3 font-display text-display-1 leading-[1.05] text-ink">
+          {d.title}
+        </h1>
+        <p class="mt-5 max-w-prose text-lg leading-relaxed text-text-muted">
+          {d.tagline}
+        </p>
+
+        <div class="mt-6 flex flex-wrap items-baseline gap-2">
+          {d.venue && (
+            <span class="tag tag-accent">{d.venue}{d.year ? ` ${d.year}` : ''}</span>
+          )}
+          {d.status === 'to-appear' && <span class="tag tag-accent">to appear</span>}
+          {d.status === 'under-review' && <span class="tag">under review</span>}
+          {d.status === 'ongoing' && <span class="tag">ongoing</span>}
+          {d.awards.map((a) => (
+            <span class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+              ★ {a}
+            </span>
+          ))}
+        </div>
+
+        {(d.paperUrl || d.codeUrl) && (
+          <div class="mt-8 flex flex-wrap gap-2">
+            {d.paperUrl && (
+              <a class="btn btn-primary" href={d.paperUrl} rel="noopener noreferrer" target="_blank">
+                <span>Read paper</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
+            {d.codeUrl && (
+              <a class="btn" href={d.codeUrl} rel="noopener noreferrer" target="_blank">
+                <span>Code</span>
+                <span class="font-mono text-[0.625rem] text-text-muted">[ github ]</span>
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* meta column */}
+      <aside class="col-span-12 lg:col-span-4 lg:border-l lg:border-border lg:pl-8">
+        {d.topics.length > 0 && (
+          <div>
+            <p class="eyebrow">topics</p>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              {d.topics.map((t) => <span class="tag">{t}</span>)}
+            </div>
+          </div>
+        )}
+        {paper && (
+          <div class="mt-8">
+            <p class="eyebrow">linked paper</p>
+            <p class="mt-2 text-sm text-text">{paper.title}</p>
+            <p class="mt-1 text-xs text-text-muted">
+              {paper.authors.join(', ')}
+            </p>
+            <p class="mt-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+              {paper.venue} {paper.year}
+            </p>
+          </div>
+        )}
+      </aside>
+    </div>
+  </header>
+
+  {/* MDX body */}
+  <article class="mx-auto max-w-prose px-6 py-16 lg:px-8 lg:py-20">
+    <div class="prose-content text-base leading-relaxed text-text">
+      <Content />
+    </div>
+
+    <footer class="mt-16 border-t border-border pt-8">
+      <a href="/projects/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+        ← all projects
+      </a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style is:global>
+  /* Light typographic styling for MDX-rendered project bodies. */
+  .prose-content h2 {
+    font-family: 'Fraunces Variable', ui-serif, Georgia, serif;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    color: rgb(var(--color-text));
+    letter-spacing: -0.015em;
+  }
+  .prose-content h2::before {
+    content: '§ ';
+    color: rgb(var(--color-accent));
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    vertical-align: 4px;
+    margin-right: 0.25rem;
+  }
+  .prose-content p {
+    margin-bottom: 1.25rem;
+  }
+  .prose-content strong {
+    color: rgb(var(--color-text));
+    font-weight: 500;
+  }
+  .prose-content a {
+    color: rgb(var(--color-accent));
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .prose-content ul,
+  .prose-content ol {
+    margin: 1.25rem 0 1.25rem 1.25rem;
+  }
+  .prose-content li {
+    margin-bottom: 0.5rem;
+  }
+</style>

@@ -1,0 +1,24 @@
+{
+  "id": "usas-hpca-2024",
+  "title": "Usás: A Sustainable Continuous-Learning Framework for Edge Servers",
+  "authors": [
+    "Cyan Subhra Mishra",
+    "Jack Sampson",
+    "Mahmut Taylan Kandemir",
+    "Vijaykrishnan Narayanan",
+    "Chita R. Das"
+  ],
+  "year": 2024,
+  "venue": "HPCA",
+  "venueFull": "IEEE International Symposium on High-Performance Computer Architecture (HPCA)",
+  "type": "conference",
+  "status": "published",
+  "topics": [
+    "Sustainable Computing",
+    "Continuous Learning",
+    "Edge",
+    "Solar"
+  ],
+  "myAuthorIndex": 0,
+  "bibtex": "@inproceedings{usashpca2024,\n  title     = {Usás: A Sustainable Continuous-Learning Framework for Edge Servers},\n  author    = {Cyan Subhra Mishra and Jack Sampson and Mahmut Taylan Kandemir and Vijaykrishnan Narayanan and Chita R. Das},\n  booktitle = {IEEE International Symposium on High-Performance Computer Architecture (HPCA)},\n  pages     = {891--907},\n  year      = {2024},\n  publisher = {IEEE},\n}"
+}

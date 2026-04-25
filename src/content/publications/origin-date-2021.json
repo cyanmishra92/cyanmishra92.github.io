@@ -1,0 +1,26 @@
+{
+  "id": "origin-date-2021",
+  "title": "Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks",
+  "authors": [
+    "Cyan Subhra Mishra",
+    "Jack Sampson",
+    "Mahmut T. Kandemir",
+    "Vijaykrishnan Narayanan"
+  ],
+  "year": 2021,
+  "venue": "DATE",
+  "venueFull": "Design, Automation & Test in Europe Conference & Exhibition (DATE)",
+  "type": "conference",
+  "status": "published",
+  "awards": [
+    "Best Paper Nominee"
+  ],
+  "videoUrl": "https://drive.google.com/file/d/1zM1oaPxZSWI2VyBMHivl1utpkjMVrACI/view",
+  "topics": [
+    "EH-WSN",
+    "HAR",
+    "Ensemble Learning"
+  ],
+  "myAuthorIndex": 0,
+  "bibtex": "@inproceedings{origindate2021,\n  title     = {Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting Wireless Sensor Networks},\n  author    = {Cyan Subhra Mishra and Jack Sampson and Mahmut T. Kandemir and Vijaykrishnan Narayanan},\n  booktitle = {Design, Automation & Test in Europe Conference & Exhibition (DATE)},\n  year      = {2021},\n  publisher = {IEEE},\n}"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "ieee-esl-2022",
+  "title": "An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks",
+  "authors": [
+    "Tianyi Shen",
+    "Cyan Subhra Mishra",
+    "Jack Sampson",
+    "Mahmut Taylan Kandemir",
+    "Vijaykrishnan Narayanan"
+  ],
+  "myAuthorIndex": 1,
+  "year": 2022,
+  "venue": "IEEE ESL",
+  "venueFull": "IEEE Embedded Systems Letters",
+  "type": "journal",
+  "status": "published",
+  "topics": [
+    "Edge-Cloud",
+    "Random Forest",
+    "Privacy"
+  ],
+  "bibtex": "@article{ieeeesl2022,\n  title     = {An Efficient Edge-Cloud Partitioning of Random Forests for Distributed Sensor Networks},\n  author    = {Tianyi Shen and Cyan Subhra Mishra and Jack Sampson and Mahmut Taylan Kandemir and Vijaykrishnan Narayanan},\n  journal   = {IEEE Embedded Systems Letters},\n  year      = {2022},\n}"
+}

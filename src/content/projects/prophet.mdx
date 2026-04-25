@@ -1,0 +1,44 @@
+---
+title: Prophet
+tagline: Neural expert prediction for efficient mixture-of-experts inference.
+summary: >-
+  Predicts which experts will be activated before the routing layer fires,
+  letting MoE inference avoid round-trips to dormant experts.
+status: under-review
+topics: [MoE, LLM Inference, ML Systems, Efficient Inference]
+paperId: prophet-2025
+paperUrl: https://drive.google.com/file/d/1n4RoKUPws2BikLI4gpDKDBD_a1vMhsiA/view
+order: 6
+---
+
+## The problem
+
+Mixture-of-experts inference is fast in theory and slow in practice.
+The router decides which experts to activate per token, and serving
+infrastructure has to either keep all experts hot (memory blowup) or
+pay the latency cost of materializing experts on demand. Neither is
+satisfying for production-scale MoE LLMs.
+
+## What Prophet does
+
+A small **neural expert predictor** learned alongside the router that
+predicts the *next layer's* expert assignments before the current
+layer's routing has even committed. The serving runtime uses the
+prediction to start prefetching, decompressing, or materializing
+experts speculatively, hiding the latency in the critical path.
+
+The predictor is small enough to run alongside the routing layer for
+near-zero overhead, and accurate enough that the speculative prefetches
+mostly hit the right experts.
+
+## Status
+
+Under review (R2025#3). Joint work with Deeksha Chaudhary, Soumya Prakash
+Mishra, Rui Zhang, Jack Sampson, Mahmut Taylan Kandemir, and Chita R. Das.
+
+## Why it matters
+
+If MoE inference is going to scale to truly large expert pools without
+keeping every expert hot in memory, we need the routing decision to
+arrive *early*. Prophet is a step in that direction — turning routing
+from a critical-path operation into a predictable one.

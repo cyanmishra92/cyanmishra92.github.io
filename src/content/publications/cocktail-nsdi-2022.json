@@ -1,0 +1,25 @@
+{
+  "id": "cocktail-nsdi-2022",
+  "title": "Cocktail: A Multidimensional Optimization for Model Serving in Cloud",
+  "authors": [
+    "Jashwant Raj Gunasekaran",
+    "Cyan Subhra Mishra",
+    "Prashanth Thinakaran",
+    "Bikash Sharma",
+    "Mahmut T. Kandemir",
+    "Chita R. Das"
+  ],
+  "myAuthorIndex": 1,
+  "year": 2022,
+  "venue": "NSDI",
+  "venueFull": "19th USENIX Symposium on Networked Systems Design and Implementation (NSDI)",
+  "type": "conference",
+  "status": "published",
+  "videoUrl": "https://youtu.be/VAsB1XBuRZ0",
+  "topics": [
+    "Cloud",
+    "Inference Serving",
+    "Ensemble"
+  ],
+  "bibtex": "@inproceedings{cocktailnsdi2022,\n  title     = {Cocktail: A Multidimensional Optimization for Model Serving in Cloud},\n  author    = {Jashwant Raj Gunasekaran and Cyan Subhra Mishra and Prashanth Thinakaran and Bikash Sharma and Mahmut T. Kandemir and Chita R. Das},\n  booktitle = {19th USENIX Symposium on Networked Systems Design and Implementation (NSDI)},\n  year      = {2022},\n  publisher = {USENIX},\n}"
+}

@@ -1,0 +1,19 @@
+{
+  "id": "dsj-azimuthal-2015",
+  "title": "A Generic Method for Azimuthal Map Projection",
+  "authors": [
+    "Narayan Panigrahi",
+    "Cyan Subhra Mishra"
+  ],
+  "myAuthorIndex": 1,
+  "year": 2015,
+  "venue": "DSJ",
+  "venueFull": "Defence Science Journal",
+  "type": "journal",
+  "status": "published",
+  "topics": [
+    "Map Projection",
+    "Geometry"
+  ],
+  "bibtex": "@article{dsjazimuthal2015,\n  title     = {A Generic Method for Azimuthal Map Projection},\n  author    = {Narayan Panigrahi and Cyan Subhra Mishra},\n  journal   = {Defence Science Journal},\n  year      = {2015},\n}"
+}

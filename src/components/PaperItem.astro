@@ -1,0 +1,174 @@
+---
+import type { Paper } from '@lib/papers';
+import { TOP_VENUES, VENUE_TYPE_LABELS } from '@lib/papers';
+
+interface Props {
+  paper: Paper;
+  index: number;
+}
+
+const { paper, index } = Astro.props;
+const isTopVenue = TOP_VENUES.has(paper.venue);
+const arxivLink = paper.arxivId ? `https://arxiv.org/abs/${paper.arxivId}` : undefined;
+---
+
+<article
+  class="paper-item grid grid-cols-12 gap-x-4 gap-y-2 border-t border-border py-6 sm:gap-x-6 sm:py-7"
+  data-paper-id={paper.id}
+  data-year={paper.year}
+  data-venue={paper.venue}
+  data-type={paper.type}
+  data-topics={paper.topics.join('|')}
+>
+  {/* venue + year column */}
+  <div class="col-span-12 lg:col-span-3">
+    <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+      <span class="text-accent">{String(index).padStart(2, '0')}</span>
+      {paper.status === 'under-review' && <span class="ml-2 tag">under review</span>}
+      {paper.status === 'to-appear' && <span class="ml-2 tag tag-accent">to appear</span>}
+    </p>
+    <p class="mt-2 inline-flex flex-wrap items-center gap-2">
+      <span class:list={['tag', isTopVenue && 'tag-accent']}>{paper.venue}</span>
+      <span class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+        {paper.year}
+      </span>
+    </p>
+    {paper.awards.length > 0 && (
+      <p class="mt-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+        ★ {paper.awards.join(' · ')}
+      </p>
+    )}
+  </div>
+
+  {/* title + authors + actions */}
+  <div class="col-span-12 lg:col-span-9">
+    <h3 class="font-display text-lg leading-snug text-text sm:text-xl">
+      {paper.pdfUrl ? (
+        <a
+          href={paper.pdfUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+          class="link-underline"
+        >
+          {paper.title}
+        </a>
+      ) : (
+        paper.title
+      )}
+    </h3>
+
+    <p class="mt-2 text-sm text-text-muted">
+      {paper.authors.map((a, i) => {
+        const me = i === paper.myAuthorIndex;
+        return (
+          <span>
+            {me ? (
+              <span class="font-medium text-text underline decoration-accent decoration-1 underline-offset-4">
+                {a}
+              </span>
+            ) : (
+              a
+            )}
+            {i < paper.authors.length - 1 ? ', ' : ''}
+          </span>
+        );
+      })}
+    </p>
+
+    <p class="mt-1 text-xs text-text-muted">
+      <span class="font-mono uppercase tracking-eyebrow">
+        {VENUE_TYPE_LABELS[paper.type]}
+      </span>
+      <span class="mx-2 text-border">·</span>
+      <span>{paper.venueFull}</span>
+    </p>
+
+    {/* action row */}
+    <div class="mt-4 flex flex-wrap items-center gap-2">
+      {paper.pdfUrl && (
+        <a
+          class="paper-action"
+          href={paper.pdfUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          [ pdf ]
+        </a>
+      )}
+      {arxivLink && (
+        <a
+          class="paper-action"
+          href={arxivLink}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          [ arxiv ]
+        </a>
+      )}
+      <button
+        type="button"
+        class="paper-action"
+        data-cite-trigger
+        data-paper-id={paper.id}
+      >
+        [ cite ]
+      </button>
+      {paper.codeUrl && (
+        <a
+          class="paper-action"
+          href={paper.codeUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          [ code ]
+        </a>
+      )}
+      {paper.slidesUrl && (
+        <a
+          class="paper-action"
+          href={paper.slidesUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          [ slides ]
+        </a>
+      )}
+      {paper.videoUrl && (
+        <a
+          class="paper-action"
+          href={paper.videoUrl}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          [ video ]
+        </a>
+      )}
+      {typeof paper.citations === 'number' && paper.citations > 0 && (
+        <span class="ml-auto font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          cited by {paper.citations}
+        </span>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .paper-action {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: rgb(var(--color-text-muted));
+    border: 1px solid rgb(var(--color-border));
+    background: transparent;
+    cursor: pointer;
+    transition: color 180ms ease-out, border-color 180ms ease-out;
+  }
+  .paper-action:hover {
+    color: rgb(var(--color-accent));
+    border-color: rgb(var(--color-accent));
+  }
+</style>

@@ -1,0 +1,26 @@
+{
+  "id": "frame-similarity-icdcs-2022",
+  "title": "Exploiting Frame Similarity for Efficient Inference on Edge Devices",
+  "authors": [
+    "Ziyu Ying",
+    "Shulin Zhao",
+    "Haibo Zhang",
+    "Cyan Subhra Mishra",
+    "Sandeepa Bhuyan",
+    "Mahmut T. Kandemir",
+    "Anand Sivasubramaniam",
+    "Chita R. Das"
+  ],
+  "myAuthorIndex": 3,
+  "year": 2022,
+  "venue": "ICDCS",
+  "venueFull": "IEEE 42nd International Conference on Distributed Computing Systems (ICDCS)",
+  "type": "conference",
+  "status": "published",
+  "topics": [
+    "Video Analytics",
+    "Edge",
+    "Frame Similarity"
+  ],
+  "bibtex": "@inproceedings{framesimilarityicdcs2022,\n  title     = {Exploiting Frame Similarity for Efficient Inference on Edge Devices},\n  author    = {Ziyu Ying and Shulin Zhao and Haibo Zhang and Cyan Subhra Mishra and Sandeepa Bhuyan and Mahmut T. Kandemir and Anand Sivasubramaniam and Chita R. Das},\n  booktitle = {IEEE 42nd International Conference on Distributed Computing Systems (ICDCS)},\n  pages     = {1073--1084},\n  year      = {2022},\n  publisher = {IEEE},\n}"
+}

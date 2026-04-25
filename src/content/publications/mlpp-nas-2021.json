@@ -1,0 +1,19 @@
+{
+  "id": "mlpp-nas-2021",
+  "title": "MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance",
+  "authors": [
+    "Jashwant Raj Gunasekaran",
+    "Cyan Subhra Mishra"
+  ],
+  "myAuthorIndex": 1,
+  "year": 2021,
+  "venue": "NAS",
+  "venueFull": "IEEE Network, Architecture, and Storage (NAS '21)",
+  "type": "conference",
+  "status": "published",
+  "topics": [
+    "Performance Prediction",
+    "Transfer Learning"
+  ],
+  "bibtex": "@inproceedings{mlppnas2021,\n  title     = {MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance},\n  author    = {Jashwant Raj Gunasekaran and Cyan Subhra Mishra},\n  booktitle = {IEEE Network, Architecture, and Storage (NAS '21)},\n  year      = {2021},\n  publisher = {IEEE},\n}"
+}
