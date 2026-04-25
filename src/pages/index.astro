@@ -29,6 +29,9 @@ const citations = {
   totalCitations: overlay?.totalCitations ?? '—',
   hIndex: overlay?.hIndex ?? '—',
 };
+const citationsLastUpdated = overlay?.lastUpdated
+  ? new Date(overlay.lastUpdated).toISOString().slice(0, 10)
+  : null;
 
 // ─── live news ────────────────────────────────────────────────────
 const allNews = (await getCollection('news', ({ data }) => !data.draft)).sort(compareNews);
@@ -88,6 +91,23 @@ const stats = [
         </div>
       ))}
     </div>
+    <p class="mx-auto max-w-page px-6 pb-6 pt-2 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted lg:px-8">
+      // citations &amp; h-index from{' '}
+      <a
+        href="https://scholar.google.com/citations?user=oizH-wQAAAAJ"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="link-underline text-text-muted hover:text-accent"
+      >
+        Google Scholar
+      </a>
+      {citationsLastUpdated && (
+        <>
+          {' · '}
+          <span>last refresh {citationsLastUpdated}</span>
+        </>
+      )}
+    </p>
   </section>
 
   {/* ─── §04 featured projects ────────────────────────────────── */}
