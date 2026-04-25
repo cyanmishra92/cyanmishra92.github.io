@@ -105,4 +105,23 @@ and commits it to `public/cv/Cyan_Subhra_Mishra_Resume.pdf` (Phase 2).
 | 3 | Publications + projects collections, filter/search, BibTeX modal | ⏳ |
 | 4 | News, blog, RSS, citation refresh, GitHub stats | ✅ |
 | 5 | OG images (satori), JSON-LD, link checker, PR smoke check | ✅ |
-| 6 | Cutover to `main`, tag `v2.0.0` | ⏳ |
+| 6 | Cutover, Scholar-sourced citations, `v2.0.0` release | ✅ |
+
+## How citations stay accurate
+
+Source of truth is the **[Google Scholar profile](https://scholar.google.com/citations?user=oizH-wQAAAAJ)**.
+
+- Per-paper Scholar values are mirrored into `src/data/manual-citations.json`
+  with the date of the last manual sync (`_lastVerified`). They override
+  anything the automated fetch returns.
+- `scripts/refresh-citations.ts` runs on every deploy and on a daily
+  cron, pulling fresh values from Semantic Scholar (batch endpoint) and
+  OpenAlex (DOI + title search) — but those are **fallbacks** for any
+  paper not in the manual file.
+- The home page footer under the stats strip shows the source +
+  last-refresh date. When you check Scholar and find updated counts:
+  edit `src/data/manual-citations.json`, bump `_lastVerified`, push.
+
+This gives the right tradeoff: Scholar's authoritative numbers + the
+APIs as a daily auto-refresh safety net for any paper you forget to
+update manually.
