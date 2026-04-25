@@ -277,12 +277,27 @@ const scholarlyLd = all.map((p) => {
       corpus.set(el.dataset.paperId ?? '', text);
     }
 
+    // Initial filters — search query reads from `?q=...` so the
+    // `WebSite > SearchAction` JSON-LD on the home page (which advertises
+    // /publications/?q={search_term_string} as the search endpoint)
+    // actually deep-links into a filtered view. Decoded once; URL changes
+    // are not observed (the input drives subsequent filtering).
+    const initialQ = (() => {
+      try {
+        const v = new URLSearchParams(window.location.search).get('q') ?? '';
+        return v.trim().toLowerCase();
+      } catch {
+        return '';
+      }
+    })();
+    if (initialQ && input.value === '') input.value = initialQ;
+
     const filters: Filters = {
       year: new Set(),
       type: new Set(),
       venue: new Set(),
       topic: new Set(),
-      q: '',
+      q: initialQ,
     };
 
     function matches(el: HTMLElement): boolean {

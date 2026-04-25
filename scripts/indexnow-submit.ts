@@ -60,18 +60,31 @@ function pathToUrls(path: string): string[] {
   return [];
 }
 
+const FALLBACK_URLS = ['', 'about/', 'publications/', 'projects/', 'blog/', 'news/', 'cv/'].map(
+  (p) => `${SITE}/${p}`,
+);
+
 const urlSet = new Set<string>();
 if (changed.length === 0) {
-  // Nothing diffable — just nudge the home and the high-traffic indexes.
-  ['', 'about/', 'publications/', 'projects/', 'blog/', 'news/', 'cv/'].forEach((p) =>
-    urlSet.add(`${SITE}/${p}`),
-  );
+  // Nothing diffable — nudge the home and the high-traffic indexes.
+  FALLBACK_URLS.forEach((u) => urlSet.add(u));
 } else {
   for (const f of changed) {
     for (const u of pathToUrls(f)) urlSet.add(u);
   }
-  // Always nudge the home if anything changed.
-  if (urlSet.size > 0) urlSet.add(`${SITE}/`);
+  if (urlSet.size > 0) {
+    // At least one route mapped — also nudge the home.
+    urlSet.add(`${SITE}/`);
+  } else {
+    // Files changed but none mapped to public URLs (layouts, components,
+    // styles, scripts, configs, etc.). These can still affect every
+    // crawlable page, so submit the fallback set rather than skipping.
+    console.log(
+      `${changed.length} files changed but none mapped to URLs ` +
+        `(layouts/components/styles only) — falling back to index URLs`,
+    );
+    FALLBACK_URLS.forEach((u) => urlSet.add(u));
+  }
 }
 
 const urlList = [...urlSet];
