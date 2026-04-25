@@ -1,0 +1,51 @@
+name: Build resume PDF
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/texsources/resume.tex'
+      - '.github/workflows/build-resume.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Compile resume.tex
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need full ref so we can push the regenerated PDF back.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: resume.tex
+          working_directory: assets/texsources
+          latexmk_use_xelatex: false
+          # pdflatex with shell-escape disabled — safer.
+          args: -pdf -interaction=nonstopmode -halt-on-error
+
+      - name: Move PDF into public/cv/
+        run: |
+          mkdir -p public/cv
+          cp assets/texsources/resume.pdf public/cv/Cyan_Subhra_Mishra_Resume.pdf
+          # Mirror the source so /cv/ users can grab the .tex too.
+          cp assets/texsources/resume.tex public/cv/resume.tex
+
+      - name: Commit regenerated PDF
+        run: |
+          if [[ -z "$(git status --porcelain public/cv/)" ]]; then
+            echo "No PDF changes to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/cv/Cyan_Subhra_Mishra_Resume.pdf public/cv/resume.tex
+          git commit -m "chore(cv): rebuild resume PDF [skip ci]"
+          git push

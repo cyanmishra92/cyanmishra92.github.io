@@ -1,18 +1,240 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PageHeader from '@components/PageHeader.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import Timeline from '@components/Timeline.astro';
+import Tag from '@components/Tag.astro';
+import { SITE } from '@lib/site';
+
+const education = [
+  {
+    date: '2018 — 2025',
+    role: 'Ph.D., Computer Science and Engineering',
+    org: 'The Pennsylvania State University',
+    location: 'University Park, PA',
+    detail:
+      'Advised by Mahmut Taylan Kandemir and Jack Sampson at the Microsystems Design Lab. Thesis work on hardware/software co-design for ML systems — energy-harvesting sensors, computational storage, intermittent computing, and continuous learning at the edge.',
+    tags: ['Computer Architecture', 'ML Systems', 'Energy Harvesting', 'Computational Storage'],
+  },
+  {
+    date: '2011 — 2016',
+    role: 'B.Tech + M.Tech (dual), Electronics & Communication Engineering',
+    org: 'National Institute of Technology, Rourkela',
+    location: 'Odisha, India',
+    detail:
+      'Graduated with Honors (CGPA 8.39/10). Advised by Sarat Kumar Patra and (industry mentor) Tarjinder Singh at Intel.',
+    tags: ['Honors', 'FPGA', 'Embedded Systems'],
+  },
+];
+
+const experience = [
+  {
+    date: '2026 · Jan — present',
+    role: 'Performance and Power Engineer · SoC Architecture Performance',
+    org: 'Arm',
+    location: 'San Diego, CA',
+    detail:
+      'Pre-silicon performance and power analysis for next-generation heterogeneous SoCs targeting Edge AI, IoT, and automotive workloads.',
+    bullets: [
+      'Quantify latency, throughput, energy, and area impacts of compute subsystems across hardware and software stacks.',
+      'Develop performance evaluation and automation frameworks in Python and C++ for large-scale workload profiling, simulation, and regression benchmarking.',
+      'Characterize workloads with hardware counters and custom telemetry pipelines to identify bottlenecks and optimization opportunities.',
+      'Integrate performance data into CI workflows for automated regression detection.',
+    ],
+  },
+  {
+    date: '2018 · Dec — 2025 · Dec',
+    role: 'Graduate Research Assistant · Microsystems Design Lab',
+    org: 'Penn State',
+    location: 'University Park, PA',
+    detail:
+      'Designed hardware/software co-design methodologies for ML systems with a focus on performance, energy efficiency, and resource utilization across heterogeneous platforms.',
+    bullets: [
+      'Up to 22% higher accuracy on intermittently-powered DNNs with minimal computational overhead (NExUME, ICLR 2025).',
+      'High-throughput computational storage architectures reducing data movement by 6.1× (Salient Store, PACT 2025).',
+      'Performance modeling for multi-dimensional optimization of large-scale ML deployments.',
+    ],
+  },
+  {
+    date: '2021 · Jun — Aug',
+    role: 'Research Intern',
+    org: 'Bell Labs',
+    location: 'Murray Hill, NJ',
+    detail:
+      'Optimization strategies for autonomous ML inference serving across heterogeneous platforms (GPUs, FPGAs), leveraging Apache TVM for cross-platform kernel optimization. Implemented pruning, quantization, and knowledge distillation pipelines.',
+  },
+  {
+    date: '2016 · Jun — 2018 · Jun',
+    role: 'Design Engineer',
+    org: 'Intel',
+    location: 'Bengaluru, India',
+    bullets: [
+      'Hardware/software co-design for ML accelerators (GPU + FPGA), with systematic perf modeling.',
+      'FPGA-deployable convolution and softmax kernels balancing efficiency and resource utilization.',
+      'Software/hardware simulation frameworks for accelerator validation and rapid iteration.',
+    ],
+  },
+  {
+    date: '2015 · Dec — 2016 · Jun',
+    role: 'Research Intern',
+    org: 'Intel',
+    location: 'Bengaluru, India',
+    detail:
+      'FPGA-based accelerators for protein search algorithms (pairHMM, HMMer) using OpenCL. Significant speedups over CPU implementations.',
+  },
+  {
+    date: '2014 · May — Jul',
+    role: 'Research Intern · CSRE',
+    org: 'IIT Bombay',
+    location: 'Mumbai, India',
+    detail:
+      'Computational models for pre-processing hyperspectral satellite imagery — feature identification and data extraction algorithms.',
+  },
+  {
+    date: '2013 · May — Jul',
+    role: 'Research Intern',
+    org: 'Centre for Artificial Intelligence and Robotics (CAIR)',
+    location: 'Bengaluru, India',
+    detail:
+      'Generic method for azimuthal map projection and coordinate transformation — published in Defence Science Journal (2015).',
+  },
+];
+
+const interests = [
+  'Computer Architecture for ML',
+  'Sustainable Computing',
+  'Edge & Energy Harvesting',
+  'Intermittent Computing',
+  'Hardware/Software Co-design',
+  'Continuous Learning',
+  'MoE Inference',
+  'Computational Storage',
+  'Performance Modeling',
+];
 ---
 
-<BaseLayout title="About" description="About Cyan Subhra Mishra — Performance and Power Engineer at Arm. Ph.D. from Penn State (2025).">
+<BaseLayout
+  title="About"
+  description="About Cyan Subhra Mishra — Performance and Power Engineer at Arm. Ph.D. from Penn State (2025) in hardware/software co-design for ML systems."
+>
   <PageHeader
     number="01"
     eyebrow="about"
     title="Cyan Subhra Mishra"
-    intro="Stub page — full bio, education timeline, experience timeline, and research interests land in Phase 2."
   />
-  <section class="mx-auto max-w-prose px-6 pb-24 lg:px-8">
-    <p class="font-mono text-xs uppercase tracking-eyebrow text-text-muted">
-      Phase status: scaffolded · content arrives in Phase 2.
-    </p>
+
+  {/* ─── identity strip — photo + lead bio ────────────────────── */}
+  <section class="mx-auto max-w-page px-6 pb-16 lg:px-8">
+    <div class="grid grid-cols-12 gap-6 lg:gap-10">
+      <figure class="col-span-12 sm:col-span-5 lg:col-span-4">
+        <img
+          src="/img/profile.jpg"
+          alt="Cyan Subhra Mishra, head and shoulders portrait"
+          width="320"
+          height="322"
+          class="block w-full max-w-[320px] border border-accent"
+          style="border-radius: 4px;"
+          decoding="async"
+        />
+        <figcaption class="mt-3 max-w-[320px] font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          Fig. 0 — author photo · 2024
+        </figcaption>
+      </figure>
+
+      <div class="col-span-12 max-w-prose space-y-5 text-base leading-relaxed text-text sm:col-span-7 lg:col-span-8 sm:text-lg">
+        <p>
+          I'm a <span class="text-accent">Performance and Power Engineer</span> on
+          the SoC Architecture Performance team at <strong class="font-medium">Arm</strong> in
+          San Diego, where I work on pre-silicon performance and power analysis
+          for next-generation heterogeneous SoCs targeting Edge AI, IoT, and
+          automotive workloads.
+        </p>
+        <p>
+          I completed my Ph.D. in Computer Science and Engineering at
+          <strong class="font-medium">Penn State</strong> in 2025, advised by
+          Mahmut Taylan Kandemir and Jack Sampson at the Microsystems Design Lab.
+          My research sits at the intersection of computer architecture and
+          machine learning systems, with a focus on energy-efficient computing
+          for resource-constrained environments — energy-harvesting sensors,
+          computational storage, intermittent computing, and continuous learning
+          at the edge.
+        </p>
+        <p>
+          Before Penn State I was a Design Engineer at <strong class="font-medium">Intel</strong> in
+          Bangalore working on FPGA accelerators for ML and bioinformatics, and
+          I did my B.Tech + M.Tech dual degree at <strong class="font-medium">NIT Rourkela</strong>.
+          I've also interned at Bell Labs (TVM-based inference serving) and earlier
+          at Intel, IIT Bombay, and CAIR India.
+        </p>
+        <p>
+          Outside of work I think about mentoring, write occasional technical
+          posts, and build tools for SoC performance work in my spare time.
+          Based in {SITE.location}.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* ─── §02 education ────────────────────────────────────────── */}
+  <section class="mx-auto max-w-page px-6 py-12 lg:px-8">
+    <SectionHeader number="02" eyebrow="education" />
+    <Timeline entries={education} />
+  </section>
+
+  {/* ─── §03 experience ───────────────────────────────────────── */}
+  <section class="mx-auto max-w-page px-6 py-12 lg:px-8">
+    <SectionHeader number="03" eyebrow="experience" />
+    <Timeline entries={experience} />
+  </section>
+
+  {/* ─── §04 research interests ───────────────────────────────── */}
+  <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
+    <SectionHeader number="04" eyebrow="research interests" />
+    <div class="flex flex-wrap gap-2">
+      {interests.map((i) => <Tag>{i}</Tag>)}
+    </div>
+  </section>
+
+  {/* ─── §05 elsewhere ────────────────────────────────────────── */}
+  <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
+    <SectionHeader number="05" eyebrow="elsewhere" title="Find me" />
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <li>
+        <a href="https://github.com/cyanmishra92" rel="noopener noreferrer" target="_blank" class="card-sharp block p-5">
+          <p class="eyebrow">github</p>
+          <p class="mt-2 font-mono text-sm text-text">@cyanmishra92</p>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/cyan-subhra-mishra/" rel="noopener noreferrer" target="_blank" class="card-sharp block p-5">
+          <p class="eyebrow">linkedin</p>
+          <p class="mt-2 font-mono text-sm text-text">cyan-subhra-mishra</p>
+        </a>
+      </li>
+      <li>
+        <a href="https://scholar.google.com/citations?user=oizH-wQAAAAJ" rel="noopener noreferrer" target="_blank" class="card-sharp block p-5">
+          <p class="eyebrow">google scholar</p>
+          <p class="mt-2 font-mono text-sm text-text">oizH-wQAAAAJ</p>
+        </a>
+      </li>
+      <li>
+        <a href="https://dblp.org/pid/263/7470.html" rel="noopener noreferrer" target="_blank" class="card-sharp block p-5">
+          <p class="eyebrow">dblp</p>
+          <p class="mt-2 font-mono text-sm text-text">263/7470</p>
+        </a>
+      </li>
+      <li>
+        <a href={`mailto:${SITE.email}`} class="card-sharp block p-5">
+          <p class="eyebrow">email</p>
+          <p class="mt-2 font-mono text-sm text-text">{SITE.email}</p>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.instagram.com/cyansubhra/" rel="noopener noreferrer" target="_blank" class="card-sharp block p-5">
+          <p class="eyebrow">instagram</p>
+          <p class="mt-2 font-mono text-sm text-text">@cyansubhra</p>
+        </a>
+      </li>
+    </ul>
   </section>
 </BaseLayout>

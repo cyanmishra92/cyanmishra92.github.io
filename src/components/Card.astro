@@ -6,14 +6,14 @@ interface Props {
 }
 
 const { index, href, className = '' } = Astro.props;
-const Tag = href ? 'a' : 'div';
+const El = href ? 'a' : 'div';
 const linkProps = href ? { href } : {};
 ---
 
-<Tag
+<El
   class:list={['card-sharp block p-6 sm:p-7', className]}
   {...linkProps}
 >
   {index && <span class="card-index">{index}</span>}
   <slot />
-</Tag>
+</El>

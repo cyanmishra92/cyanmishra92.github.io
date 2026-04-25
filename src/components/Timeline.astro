@@ -1,0 +1,87 @@
+---
+/**
+ * Vertical timeline — mono date column on the left, content rows on the right.
+ * No bullet dots, no centered axis line. Each row carries a measurement-rule
+ * style hairline that extends from the date column into the content area —
+ * schematic, not generic.
+ *
+ * Each entry's slot is rendered inside a grid cell; consumers pass `.entries`
+ * arrays of objects, or use the named slots for richer content.
+ */
+
+interface Entry {
+  date: string;       // mono-formatted, e.g. "2026 · Jan — present"
+  role: string;       // bold display text
+  org: string;        // organisation name
+  location?: string;  // city, country
+  detail?: string;    // optional one-paragraph summary
+  bullets?: string[]; // optional bullet list
+  tags?: string[];    // optional tag chips
+  href?: string;      // optional link wrapping the entry
+}
+
+interface Props {
+  entries: Entry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ol class="relative grid gap-px border-y border-border bg-border">
+  {entries.map((e, i) => (
+    <li class="grid grid-cols-12 gap-x-4 bg-bg p-6 sm:gap-x-6 sm:p-8 lg:p-10">
+      {/* date column — mono, top-aligned */}
+      <div class="col-span-12 lg:col-span-3">
+        <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          <span class="text-accent">{String(i + 1).padStart(2, '0')}</span>
+          <span class="ml-2">{e.date}</span>
+        </p>
+      </div>
+
+      {/* content column */}
+      <div class="col-span-12 mt-3 lg:col-span-9 lg:mt-0">
+        <h3 class="font-display text-xl text-text sm:text-2xl">
+          {e.href ? (
+            <a href={e.href} class="link-underline" rel={e.href.startsWith('http') ? 'noopener noreferrer' : undefined} target={e.href.startsWith('http') ? '_blank' : undefined}>
+              {e.role}
+            </a>
+          ) : (
+            e.role
+          )}
+        </h3>
+        <p class="mt-1 text-sm text-text-muted">
+          <span class="text-text">{e.org}</span>
+          {e.location && (
+            <>
+              {' '}
+              <span aria-hidden="true">·</span> {e.location}
+            </>
+          )}
+        </p>
+
+        {e.detail && (
+          <p class="mt-4 max-w-prose text-base leading-relaxed text-text">
+            {e.detail}
+          </p>
+        )}
+
+        {e.bullets && e.bullets.length > 0 && (
+          <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-text-muted">
+            {e.bullets.map((b) => (
+              <li class="flex gap-3">
+                <span class="mt-2.5 inline-block h-px w-3 shrink-0 bg-accent" aria-hidden="true"></span>
+                <span class="text-text">{b}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {e.tags && e.tags.length > 0 && (
+          <div class="mt-5 flex flex-wrap gap-1.5">
+            {e.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+        )}
+      </div>
+    </li>
+  ))}
+</ol>

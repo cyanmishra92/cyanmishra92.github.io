@@ -1,0 +1,16 @@
+---
+interface Props {
+  variant?: 'default' | 'accent';
+  href?: string;
+  className?: string;
+}
+
+const { variant = 'default', href, className = '' } = Astro.props;
+const cls = ['tag', variant === 'accent' && 'tag-accent', className].filter(Boolean).join(' ');
+const El = href ? 'a' : 'span';
+const linkProps = href ? { href } : {};
+---
+
+<El class={cls} {...linkProps}>
+  <slot />
+</El>

@@ -4,6 +4,12 @@ Personal site of Cyan Subhra Mishra — Performance and Power Engineer at Arm.
 
 The site lives at https://cyanmishra92.github.io/.
 
+> **One-time setup needed.** GitHub Pages must be set to **"GitHub Actions"** as
+> the build source — _not_ "Deploy from a branch" — or the legacy Jekyll
+> builder will try to parse `.astro` files as YAML and fail. Settings → Pages
+> → Source → **GitHub Actions**. Full details and the failure mode are in
+> [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md).
+
 ## Stack
 
 - **Astro 4** — static output, island architecture, content collections.
@@ -95,7 +101,7 @@ and commits it to `public/cv/Cyan_Subhra_Mishra_Resume.pdf` (Phase 2).
 | Phase | Scope | Status |
 |------:|---------------------------------------------------------------|--------|
 | 1 | Scaffold + design system + hero + deploy workflow | ✅ |
-| 2 | Static content pages (about, research, teaching, talks, cv, contact, 404) | ⏳ |
+| 2 | Static content pages (about, research, teaching, talks, cv, contact) + resume PDF auto-build | ✅ |
 | 3 | Publications + projects collections, filter/search, BibTeX modal | ⏳ |
 | 4 | News, blog, RSS, citation refresh, GitHub stats | ⏳ |
 | 5 | OG images, JSON-LD, polish, Lighthouse pass | ⏳ |

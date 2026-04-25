@@ -1,18 +1,137 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PageHeader from '@components/PageHeader.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+
+interface Talk {
+  year: number;
+  date: string;
+  venue: string;
+  venueFull: string;
+  title: string;
+  location: string;
+  type: 'conference' | 'invited';
+  videoUrl?: string;
+  awards?: string[];
+}
+
+const talks: Talk[] = [
+  {
+    year: 2022,
+    date: '2022 · Apr',
+    venue: 'NSDI',
+    venueFull: '19th USENIX Symposium on Networked Systems Design and Implementation',
+    title: 'Cocktail: A Multidimensional Optimization for Model Serving in Cloud',
+    location: 'Renton, WA',
+    type: 'conference',
+    videoUrl: 'https://youtu.be/VAsB1XBuRZ0',
+  },
+  {
+    year: 2021,
+    date: '2021 · Oct',
+    venue: 'NAS',
+    venueFull: 'IEEE Network, Architecture, and Storage',
+    title: 'MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance',
+    location: 'Riverside, CA',
+    type: 'conference',
+  },
+  {
+    year: 2021,
+    date: '2021 · Oct',
+    venue: 'NAS',
+    venueFull: 'IEEE Network, Architecture, and Storage',
+    title: 'PowerPrep: A Power Management Proposal for User-Facing Datacenter Workloads',
+    location: 'Riverside, CA',
+    type: 'conference',
+    awards: ['Best Paper Award'],
+  },
+  {
+    year: 2021,
+    date: '2021',
+    venue: 'DATE',
+    venueFull: 'Design, Automation & Test in Europe',
+    title: 'Origin: Enabling On-Device Intelligence for Human Activity Recognition Using Energy Harvesting WSNs',
+    location: 'Online',
+    type: 'conference',
+    videoUrl: 'https://drive.google.com/file/d/1zM1oaPxZSWI2VyBMHivl1utpkjMVrACI/view',
+  },
+  {
+    year: 2017,
+    date: '2017 · Nov',
+    venue: 'IIIT Vadodara',
+    venueFull: 'Indian Institute of Information Technology, Vadodara',
+    title: 'The Future of Machine Learning in Computer Science',
+    location: 'Vadodara, India',
+    type: 'invited',
+  },
+];
+
+const years = [...new Set(talks.map((t) => t.year))].sort((a, b) => b - a);
 ---
 
-<BaseLayout title="Talks" description="Conference talks and invited lectures.">
+<BaseLayout
+  title="Talks"
+  description="Conference talks and invited lectures from Cyan Subhra Mishra."
+>
   <PageHeader
     number="06"
     eyebrow="talks"
     title="Talks"
-    intro="Conference talks and invited lectures. Wires up in Phase 2."
+    intro="Conference presentations and invited lectures, grouped by year. Video links where available."
   />
-  <section class="mx-auto max-w-page px-6 pb-24 lg:px-8">
-    <p class="font-mono text-xs uppercase tracking-eyebrow text-text-muted">
-      Phase status: scaffolded · content arrives in Phase 2.
-    </p>
-  </section>
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    {years.map((year, yi) => {
+      const items = talks.filter((t) => t.year === year);
+      return (
+        <section class="mb-12">
+          <SectionHeader number={String(yi + 1).padStart(2, '0')} eyebrow={String(year)} />
+          <ol class="grid gap-px border-y border-border bg-border">
+            {items.map((t, i) => (
+              <li class="grid grid-cols-12 gap-x-4 bg-bg p-6 sm:gap-x-6 sm:p-7">
+                {/* date + venue */}
+                <div class="col-span-12 lg:col-span-3">
+                  <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+                    <span class="text-accent">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="ml-2">{t.date}</span>
+                  </p>
+                  <p class="mt-2 inline-flex items-center gap-2">
+                    <span class="tag tag-accent">{t.venue}</span>
+                    {t.type === 'invited' && <span class="tag">invited</span>}
+                  </p>
+                </div>
+
+                {/* body */}
+                <div class="col-span-12 mt-3 lg:col-span-9 lg:mt-0">
+                  <h3 class="font-display text-xl leading-snug text-text sm:text-2xl">
+                    {t.title}
+                  </h3>
+                  <p class="mt-2 text-sm text-text-muted">
+                    {t.venueFull} · {t.location}
+                  </p>
+                  {t.awards && (
+                    <p class="mt-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+                      ★ {t.awards.join(' · ')}
+                    </p>
+                  )}
+                  {t.videoUrl && (
+                    <p class="mt-3">
+                      <a
+                        href={t.videoUrl}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        class="link-underline font-mono text-xs uppercase tracking-eyebrow text-accent"
+                      >
+                        watch recording →
+                      </a>
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      );
+    })}
+  </div>
 </BaseLayout>

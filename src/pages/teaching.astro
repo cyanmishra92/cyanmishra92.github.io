@@ -1,18 +1,71 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PageHeader from '@components/PageHeader.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+
+interface Course {
+  code: string;
+  title: string;
+  level: 'Undergrad' | 'Graduate';
+  semester: string;
+  institution: string;
+  role: 'Instructor' | 'Guest Lecture' | 'Teaching Assistant';
+}
+
+const all: Course[] = [
+  { code: 'CMPEN 431', title: 'Introduction to Computer Architecture', level: 'Undergrad', semester: 'Spring 2024', institution: 'Penn State', role: 'Instructor' },
+  { code: 'CMPEN 431', title: 'Introduction to Computer Architecture', level: 'Undergrad', semester: 'Spring 2022', institution: 'Penn State', role: 'Instructor' },
+  { code: 'CSE 530',   title: 'Computer Architecture',                 level: 'Graduate', semester: 'Fall 2024',   institution: 'Penn State', role: 'Guest Lecture' },
+  { code: 'CSE 530',   title: 'Computer Architecture',                 level: 'Graduate', semester: 'Fall 2023',   institution: 'Penn State', role: 'Guest Lecture' },
+  { code: 'CMPEN 431', title: 'Introduction to Computer Architecture', level: 'Undergrad', semester: 'Fall 2024',   institution: 'Penn State', role: 'Guest Lecture' },
+  { code: 'CMPEN 431', title: 'Introduction to Computer Architecture', level: 'Undergrad', semester: 'Spring 2023', institution: 'Penn State', role: 'Guest Lecture' },
+  { code: 'CMPSC 497', title: 'Architecture for Deep Learning',        level: 'Undergrad', semester: 'Fall 2019',   institution: 'Penn State', role: 'Guest Lecture' },
+  { code: 'CMPEN 270', title: 'Introduction to Digital Design',        level: 'Undergrad', semester: 'Fall 2018',   institution: 'Penn State', role: 'Teaching Assistant' },
+  { code: 'EC 270',    title: 'Basic Electronics Laboratory',          level: 'Undergrad', semester: 'Fall 2015',   institution: 'NIT Rourkela', role: 'Teaching Assistant' },
+];
+
+const groups = [
+  { role: 'Instructor', items: all.filter((c) => c.role === 'Instructor') },
+  { role: 'Guest Lecture', items: all.filter((c) => c.role === 'Guest Lecture') },
+  { role: 'Teaching Assistant', items: all.filter((c) => c.role === 'Teaching Assistant') },
+] as const;
 ---
 
-<BaseLayout title="Teaching" description="Courses taught at Penn State and guest lectures.">
+<BaseLayout
+  title="Teaching"
+  description="Courses taught and guest lectures at Penn State and NIT Rourkela."
+>
   <PageHeader
     number="07"
     eyebrow="teaching"
     title="Teaching"
-    intro="Instructor and guest lecture history at Penn State. Wires up in Phase 2."
+    intro="Instructor of record for CMPEN 431 Introduction to Computer Architecture at Penn State, plus guest lectures and TA appointments across architecture, deep learning, and digital design."
   />
-  <section class="mx-auto max-w-page px-6 pb-24 lg:px-8">
-    <p class="font-mono text-xs uppercase tracking-eyebrow text-text-muted">
-      Phase status: scaffolded · content arrives in Phase 2.
-    </p>
-  </section>
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    {groups.map((g, gi) => (
+      <section class="mb-14">
+        <SectionHeader number={String(gi + 1).padStart(2, '0')} eyebrow={g.role} />
+        <ol class="grid gap-px border-y border-border bg-border">
+          {g.items.map((c, i) => (
+            <li class="grid grid-cols-12 gap-x-4 bg-bg p-5 sm:gap-x-6 sm:p-6">
+              <p class="col-span-12 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted sm:col-span-2">
+                <span class="text-accent">{String(i + 1).padStart(2, '0')}</span>
+                <span class="ml-2">{c.code}</span>
+              </p>
+              <div class="col-span-12 mt-2 sm:col-span-7 sm:mt-0">
+                <p class="text-text"><span class="font-medium">{c.title}</span></p>
+                <p class="mt-0.5 text-sm text-text-muted">
+                  {c.institution} · {c.level}
+                </p>
+              </div>
+              <p class="col-span-12 mt-1 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted sm:col-span-3 sm:mt-0 sm:text-right">
+                {c.semester}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </div>
 </BaseLayout>
