@@ -5,7 +5,7 @@ import Hero from '@components/Hero.astro';
 import SectionHeader from '@components/SectionHeader.astro';
 import Card from '@components/Card.astro';
 import PaperItem from '@components/PaperItem.astro';
-import { compare, TOP_VENUES, withCitations, loadCitations } from '@lib/papers';
+import { compare, TOP_VENUES, withCitations, loadCitations, loadDriftTimestamp } from '@lib/papers';
 import { compareNews, prettyDate, approximateDate, isoDate } from '@lib/news';
 import { loadGithubStats } from '@lib/github-stats';
 import { SITE } from '@lib/site';
@@ -24,15 +24,15 @@ const selected = [...allPapers]
   .filter((p) => p.status !== 'under-review' || TOP_VENUES.has(p.venue))
   .slice(0, 5);
 
-// ─── citation totals ──────────────────────────────────────────────
+// ─── citation totals (Scholar-sourced via src/data/citations-source.json) ──
 const overlay = loadCitations();
 const citations = {
-  totalCitations: overlay?.totalCitations ?? '—',
-  hIndex: overlay?.hIndex ?? '—',
+  totalCitations: overlay?.totals.citations ?? '—',
+  hIndex: overlay?.totals.hIndex ?? '—',
+  i10Index: overlay?.totals.i10Index ?? '—',
 };
-const citationsLastUpdated = overlay?.lastUpdated
-  ? new Date(overlay.lastUpdated).toISOString().slice(0, 10)
-  : null;
+const syncedOn = overlay?._lastVerified ?? null;
+const driftCheckedOn = loadDriftTimestamp();
 
 // ─── live news ────────────────────────────────────────────────────
 const allNews = (await getCollection('news', ({ data }) => !data.draft)).sort(compareNews);
@@ -116,19 +116,25 @@ const websiteLd = {
       ))}
     </div>
     <p class="mx-auto max-w-page px-6 pb-6 pt-2 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted lg:px-8">
-      // citations &amp; h-index from{' '}
+      // source:{' '}
       <a
-        href="https://scholar.google.com/citations?user=oizH-wQAAAAJ"
+        href={overlay?._scholarUrl ?? 'https://scholar.google.com/citations?user=oizH-wQAAAAJ'}
         rel="noopener noreferrer"
         target="_blank"
         class="link-underline text-text-muted hover:text-accent"
       >
         Google Scholar
       </a>
-      {citationsLastUpdated && (
+      {syncedOn && (
         <>
           {' · '}
-          <span>last refresh {citationsLastUpdated}</span>
+          <span>synced {syncedOn}</span>
+        </>
+      )}
+      {driftCheckedOn && (
+        <>
+          {' · '}
+          <span>drift checked {driftCheckedOn}</span>
         </>
       )}
     </p>

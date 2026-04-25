@@ -1,0 +1,112 @@
+{
+  "_source": "Google Scholar",
+  "_scholarUrl": "https://scholar.google.com/citations?user=oizH-wQAAAAJ",
+  "_lastVerified": "2026-04-25",
+  "totals": {
+    "citations": 498,
+    "hIndex": 10,
+    "i10Index": 10
+  },
+  "perPaper": {
+    "cocktail-nsdi-2022": {
+      "citations": 133,
+      "lastUpdated": "2026-04-25"
+    },
+    "kraken-socc-2021": {
+      "citations": 130,
+      "lastUpdated": "2026-04-25"
+    },
+    "resirca-hpca-2020": {
+      "citations": 48,
+      "lastUpdated": "2026-04-25"
+    },
+    "dejaview-isca-2020": {
+      "citations": 47,
+      "lastUpdated": "2026-04-25"
+    },
+    "holoar-micro-2021": {
+      "citations": 33,
+      "lastUpdated": "2026-04-25"
+    },
+    "point-cloud-micro-2022": {
+      "citations": 21,
+      "lastUpdated": "2026-04-25"
+    },
+    "origin-date-2021": {
+      "citations": 18,
+      "lastUpdated": "2026-04-25"
+    },
+    "frame-similarity-icdcs-2022": {
+      "citations": 17,
+      "lastUpdated": "2026-04-25"
+    },
+    "usas-hpca-2024": {
+      "citations": 11,
+      "lastUpdated": "2026-04-25"
+    },
+    "ieee-esl-2022": {
+      "citations": 10,
+      "lastUpdated": "2026-04-25"
+    },
+    "wosc-cloud-heterogeneity-2020": {
+      "citations": 10,
+      "lastUpdated": "2026-04-25"
+    },
+    "astm-ssms-2022": {
+      "citations": 6,
+      "lastUpdated": "2026-04-25"
+    },
+    "edge-host-arxiv": {
+      "citations": 3,
+      "lastUpdated": "2026-04-25"
+    },
+    "seeker-arxiv": {
+      "citations": 2,
+      "lastUpdated": "2026-04-25"
+    },
+    "self-managed-arxiv": {
+      "citations": 2,
+      "lastUpdated": "2026-04-25"
+    },
+    "salient-store-pact-2025": {
+      "citations": 1,
+      "lastUpdated": "2026-04-25"
+    },
+    "salient-store-arxiv": {
+      "citations": 0,
+      "lastUpdated": "2026-04-25"
+    },
+    "cord-ipdps-2025": {
+      "citations": 1,
+      "lastUpdated": "2026-04-25"
+    },
+    "nexume-iclr-2025": {
+      "citations": 1,
+      "lastUpdated": "2026-04-25"
+    },
+    "nexume-arxiv": {
+      "citations": 1,
+      "lastUpdated": "2026-04-25"
+    },
+    "dsj-azimuthal-2015": {
+      "citations": 1,
+      "lastUpdated": "2026-04-25"
+    },
+    "maestrorag-2025": {
+      "citations": 0,
+      "lastUpdated": "2026-04-25"
+    },
+    "prophet-2025": {
+      "citations": 0,
+      "lastUpdated": "2026-04-25"
+    },
+    "reram-coastal-2025": {
+      "citations": 0,
+      "lastUpdated": "2026-04-25"
+    },
+    "mlpp-nas-2021": {
+      "citations": 0,
+      "lastUpdated": "2026-04-25"
+    }
+  }
+}
