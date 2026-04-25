@@ -2,6 +2,109 @@
 
 ## Unreleased
 
+### feat(photos): local schematic grid + exif reveal + custom lightbox + image optim bot
+*Phase 7.6.1 — 2026-04-25*
+
+A new `/photos` route — local image gallery in the Technical Editorial
+vocabulary. No Instagram embed, no third-party hosting, no GPS leakage.
+
+Content collection:
+- `src/content/photos/` (MDX) with schema: title, date, location
+  (free-text only — never GPS), caption (markdown), tags, image
+  (Astro `image()`-resolved relative path), album (optional), featured
+  (bool, 2×2 cell), visible (bool, hide without deleting), displayMode
+  (cover | contain | tall, optional override).
+- Image source files in `src/content/photos/img/`.
+- EXIF sidecars in `src/content/photos/_exif/` — leading underscore so
+  Astro's content collection ignores the JSONs (otherwise they'd
+  conflict with the MDX entries).
+
+EXIF extraction (`scripts/extract-photo-exif.ts` +
+`.github/workflows/photo-exif.yml`):
+- Allowlist-only extraction via `exifr`. Keeps Make / Model /
+  LensModel / FNumber / ExposureTime / ISO / FocalLength /
+  FocalLengthIn35mmFormat / DateTimeOriginal / Flash / WhiteBalance /
+  MeteringMode / Orientation. Drops everything else.
+- Defensive blocklist as a second line of defense: any field matching
+  `/^GPS/i`, `/Serial/i`, `/OwnerName/i`, `/CameraOwnerName/i`,
+  `/Artist/i`, `/Copyright/i`, `/UserComment/i` is rejected even if
+  the allowlist were widened by mistake.
+- Sidecar JSON committed back with `[skip ci]`.
+
+Photo optimisation (`scripts/optimize-photos.ts` +
+`.github/workflows/photo-optim.yml`):
+- Downscales any image > 2400px on the long edge.
+- **Strips ALL EXIF from the JPEG itself** (sharp default — never
+  calls `.withMetadata()`). The privacy-safe subset stays in the
+  sidecar JSON; the JPEG carries nothing.
+- Converts HEIC/PNG/WebP/TIFF sources to JPEG quality 85, mozjpeg
+  progressive.
+- Idempotent — files already at ≤2400px with no embedded EXIF are
+  skipped.
+- Commits the optimised source back with `[skip ci]`.
+
+Schematic grid (`src/pages/photos.astro`):
+- CSS Grid, 4-col desktop / 3-col tablet / 2-col mobile.
+- 1×1 default cells; `featured: true` → 2×2 (2×1 on mobile);
+  `displayMode: tall` → 1×2.
+- `Fig. NN` Commit Mono label above each cell, `YYYY-MM-DD · location`
+  caption below. Sharp 2px border, accent on hover.
+- ~1-in-5 photos auto-pick `displayMode: contain` deterministically
+  via stable hash of the slug, breaking up the visual rhythm so the
+  grid doesn't read as a uniform Instagram square wall. Frontmatter
+  override is honored.
+- Year-grouped sections, year heading in big Fraunces, mono `(N
+  photos)` subhead.
+- Sticky tag + album filter bar at the top; tag chips are AND-mode
+  (must match all selected); album is a single-select dropdown,
+  rendered only when any album exists in the data.
+
+EXIF reveal popover (`src/components/ExifReveal.astro`):
+- 24×24 `(i)` button bottom-right of every cell. Hidden when the
+  sidecar carries no usable fields (so screenshots don't show one).
+- Click → in-cell popover with mono 2-col table (CAMERA / LENS /
+  FOCAL / APERTURE / SHUTTER / ISO / TAKEN). Esc and outside-click
+  dismiss.
+- Pure Astro + a tiny IIFE for the toggle. Data is rendered at build
+  time, hidden behind `[hidden]`, shown on click — no JS sent for the
+  EXIF parser itself.
+
+Custom lightbox (`src/components/PhotoLightbox.tsx`):
+- Native `<dialog>` + Preact island, ~2.5KB gzipped (8KB budget).
+  No PhotoSwipe — built bespoke to fit the aesthetic.
+- Keyboard: Esc / ← / → / + / - / 0 / D.
+- Mouse: scroll-zoom · drag-pan when zoomed · double-click toggles
+  fit/2×.
+- Touch: pinch-zoom · drag-pan · swipe nav at zoom 1.
+- URL hash `#photo=<slug>` for shareable views.
+- Preloads next/prev image when current opens.
+- Honors `prefers-reduced-motion` — disables the transform
+  transitions.
+
+Page header — restrained IG callout:
+- Single mono line: `// hand-picked moments. for more, follow
+  @cyansubhra on instagram →`. The link is the entire IG presence
+  on this site. No icons, no banners, no embeds.
+
+Astro `<Image>`:
+- Responsive variants (`widths={[480, 800, 1200, 1600]}`) with
+  appropriate `sizes`. First 6 images on the page are `loading="eager"`
+  with `decoding="sync"`; the rest lazy.
+
+Seed:
+- 3 placeholder MDX entries (`placeholder-square`, `-tall`, `-wide`)
+  with `visible: false` so the page builds before real photos exist.
+  Each has a TODO pointing at `docs/CONTENT_GUIDE.md`.
+- 3 synthetic placeholder JPEGs in `src/content/photos/img/`.
+
+Nav + footer:
+- `/photos` added to NAV between Blog and CV. Footer site-map updated
+  to match.
+
+Docs:
+- `docs/CONTENT_GUIDE.md` — full "How to add a photo" workflow plus
+  short references for news / blog / publications / projects entries.
+
 ### refactor(citations): github-only sync via web ui + auto date stamp + drift detector
 *Phase 7.6.2 — 2026-04-25*
 

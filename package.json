@@ -16,7 +16,9 @@
     "check": "astro check",
     "citations-stamp": "tsx scripts/citations-stamp.ts",
     "citation-drift": "tsx scripts/citation-drift.ts",
-    "indexnow-submit": "tsx scripts/indexnow-submit.ts"
+    "indexnow-submit": "tsx scripts/indexnow-submit.ts",
+    "extract-photo-exif": "tsx scripts/extract-photo-exif.ts",
+    "optimize-photos": "tsx scripts/optimize-photos.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -31,8 +33,10 @@
     "@resvg/resvg-js": "^2.6.2",
     "astro": "^4.16.10",
     "astro-icon": "^1.1.5",
+    "exifr": "^7.1.3",
     "preact": "^10.24.3",
     "satori": "^0.26.0",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
   },
