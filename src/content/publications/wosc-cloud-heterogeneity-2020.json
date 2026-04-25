@@ -19,5 +19,6 @@
     "Inference Serving",
     "Resource Heterogeneity"
   ],
-  "bibtex": "@inproceedings{wosccloudheterogeneity2020,\n  title     = {Implications of Public Cloud Resource Heterogeneity for Inference Serving},\n  author    = {Jashwant Raj Gunasekaran and Cyan Subhra Mishra and Prashanth Thinakaran and Mahmut T. Kandemir and Chita R. Das},\n  booktitle = {6th International Workshop on Serverless Computing (WoSC)},\n  year      = {2020},\n  publisher = {IEEE},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@inproceedings{gunasekaran2020wosccloudhet,\n  title     = {Implications of Public Cloud Resource Heterogeneity for Inference Serving},\n  author    = {Gunasekaran, Jashwant Raj and Mishra, Cyan Subhra and Thinakaran, Prashanth and Kandemir, Mahmut T. and Das, Chita R.},\n  booktitle = {6th International Workshop on Serverless Computing (WoSC)},\n  year      = {2020},\n  publisher = {ACM},\n}"
 }

@@ -8,6 +8,7 @@
     "Mahmut Taylan Kandemir",
     "Chita R. Das"
   ],
+  "myAuthorIndex": 0,
   "year": 2024,
   "venue": "arXiv",
   "venueFull": "arXiv preprint",
@@ -20,6 +21,8 @@
     "Intermittent Computing",
     "DNN Training"
   ],
-  "myAuthorIndex": 0,
-  "bibtex": "@article{nexumearxiv,\n  title     = {Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers},\n  author    = {Cyan Subhra Mishra and Deeksha Chaudhary and Jack Sampson and Mahmut Taylan Kandemir and Chita R. Das},\n  journal   = {arXiv preprint arXiv:2408.13696},\n  year      = {2024},\n}"
+  "relatedPaperIds": [
+    "nexume-iclr-2025"
+  ],
+  "bibtex": "@article{mishra2024nexume,\n  title     = {Revisiting DNN Training for Intermittently Powered Energy Harvesting Micro Computers},\n  author    = {Mishra, Cyan Subhra and Chaudhary, Deeksha and Sampson, Jack and Kandemir, Mahmut Taylan and Das, Chita R.},\n  journal   = {arXiv preprint arXiv:2408.13696},\n  year      = {2024},\n  eprint    = {2408.13696},\n  archivePrefix = {arXiv},\n}"
 }

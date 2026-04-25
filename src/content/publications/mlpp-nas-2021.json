@@ -15,5 +15,6 @@
     "Performance Prediction",
     "Transfer Learning"
   ],
-  "bibtex": "@inproceedings{mlppnas2021,\n  title     = {MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance},\n  author    = {Jashwant Raj Gunasekaran and Cyan Subhra Mishra},\n  booktitle = {IEEE Network, Architecture, and Storage (NAS '21)},\n  year      = {2021},\n  publisher = {IEEE},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@inproceedings{gunasekaran2021mlppnas,\n  title     = {MLPP: Exploring Transfer Learning and Model Distillation for Predicting Application Performance},\n  author    = {Gunasekaran, Jashwant Raj and Mishra, Cyan Subhra},\n  booktitle = {IEEE Network, Architecture, and Storage (NAS '21)},\n  year      = {2021},\n  publisher = {IEEE},\n}"
 }

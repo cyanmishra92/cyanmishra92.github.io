@@ -20,5 +20,6 @@
     "Cloud",
     "Container Provisioning"
   ],
-  "bibtex": "@inproceedings{krakensocc2021,\n  title     = {Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms},\n  author    = {Vivek M. Bhasi and Jashwant Raj Gunasekaran and Prashanth Thinakaran and Cyan Subhra Mishra and Mahmut T. Kandemir and Chita R. Das},\n  booktitle = {ACM Symposium on Cloud Computing (SoCC '21)},\n  year      = {2021},\n  publisher = {ACM},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@inproceedings{bhasi2021krakensocc,\n  title     = {Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms},\n  author    = {Bhasi, Vivek M. and Gunasekaran, Jashwant Raj and Thinakaran, Prashanth and Mishra, Cyan Subhra and Kandemir, Mahmut T. and Das, Chita R.},\n  booktitle = {ACM Symposium on Cloud Computing (SoCC '21)},\n  year      = {2021},\n  publisher = {ACM},\n}"
 }

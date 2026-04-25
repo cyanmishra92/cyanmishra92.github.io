@@ -22,5 +22,6 @@
     "360 Video",
     "Compute Reuse"
   ],
-  "bibtex": "@inproceedings{dejaviewisca2020,\n  title     = {Déjà view: Spatio-Temporal Compute Reuse for Energy-Efficient 360° VR Video Streaming},\n  author    = {Shulin Zhao and Haibo Zhang and Sandeepa Bhuyan and Cyan Subhra Mishra and Ziyu Ying and Mahmut T. Kandemir and Anand Sivasubramaniam and Chita R. Das},\n  booktitle = {ACM/IEEE 47th Annual International Symposium on Computer Architecture (ISCA)},\n  year      = {2020},\n  publisher = {IEEE},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@inproceedings{zhao2020dejaviewisca,\n  title     = {Déjà view: Spatio-Temporal Compute Reuse for Energy-Efficient 360° VR Video Streaming},\n  author    = {Zhao, Shulin and Zhang, Haibo and Bhuyan, Sandeepa and Mishra, Cyan Subhra and Ying, Ziyu and Kandemir, Mahmut T. and Sivasubramaniam, Anand and Das, Chita R.},\n  booktitle = {ACM/IEEE 47th Annual International Symposium on Computer Architecture (ISCA)},\n  year      = {2020},\n  publisher = {IEEE},\n}"
 }

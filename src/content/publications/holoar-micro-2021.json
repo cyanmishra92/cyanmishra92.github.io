@@ -21,5 +21,6 @@
     "Holographic",
     "Hardware Co-design"
   ],
-  "bibtex": "@inproceedings{holoarmicro2021,\n  title     = {HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality},\n  author    = {Shulin Zhao and Haibo Zhang and Cyan Subhra Mishra and Sandeepa Bhuyan and Ziyu Ying and Mahmut T. Kandemir and Chita R. Das},\n  booktitle = {54th IEEE/ACM International Symposium on Microarchitecture (MICRO)},\n  year      = {2021},\n  publisher = {IEEE},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@inproceedings{zhao2021holoarmicro,\n  title     = {HoloAR: On-the-fly Optimization of 3D Holographic Processing for Augmented Reality},\n  author    = {Zhao, Shulin and Zhang, Haibo and Mishra, Cyan Subhra and Bhuyan, Sandeepa and Ying, Ziyu and Kandemir, Mahmut T. and Das, Chita R.},\n  booktitle = {54th IEEE/ACM International Symposium on Microarchitecture (MICRO)},\n  year      = {2021},\n  publisher = {IEEE},\n}"
 }

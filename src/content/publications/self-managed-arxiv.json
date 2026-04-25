@@ -20,5 +20,6 @@
     "Cloud",
     "Inference Serving"
   ],
-  "bibtex": "@article{selfmanagedarxiv,\n  title     = {Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud},\n  author    = {Jashwant Raj Gunasekaran and Prashanth Thinakaran and Cyan Subhra Mishra and Mahmut Taylan Kandemir and Chita R. Das},\n  journal   = {arXiv preprint arXiv:2008.09491},\n  year      = {2020},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@article{gunasekaran2020selfmanaged,\n  title     = {Towards Designing a Self-Managed Machine Learning Inference Serving System in Public Cloud},\n  author    = {Gunasekaran, Jashwant Raj and Thinakaran, Prashanth and Mishra, Cyan Subhra and Kandemir, Mahmut Taylan and Das, Chita R.},\n  journal   = {arXiv preprint arXiv:2008.09491},\n  year      = {2020},\n  eprint    = {2008.09491},\n  archivePrefix = {arXiv},\n}"
 }

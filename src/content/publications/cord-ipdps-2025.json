@@ -13,10 +13,11 @@
   "venue": "IPDPS",
   "venueFull": "IEEE International Parallel and Distributed Processing Symposium (IPDPS '25)",
   "type": "conference",
-  "status": "to-appear",
+  "status": "published",
   "topics": [
     "Computational Storage",
     "Query Processing"
   ],
-  "bibtex": "@inproceedings{cordipdps2025,\n  title     = {CORD: Parallelizing Query Processing across Multiple Computational Storage Devices},\n  author    = {Wahid Uz Zaman and Cyan Subhra Mishra and Saleh AlSaleh and Abutalib Aghayev and Mahmut Taylan Kandemir},\n  booktitle = {IEEE International Parallel and Distributed Processing Symposium (IPDPS '25)},\n  year      = {2025},\n  publisher = {IEEE},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@inproceedings{zaman2025cordipdps,\n  title     = {CORD: Parallelizing Query Processing across Multiple Computational Storage Devices},\n  author    = {Zaman, Wahid Uz and Mishra, Cyan Subhra and AlSaleh, Saleh and Aghayev, Abutalib and Kandemir, Mahmut Taylan},\n  booktitle = {IEEE International Parallel and Distributed Processing Symposium (IPDPS '25)},\n  year      = {2025},\n  publisher = {IEEE},\n}"
 }

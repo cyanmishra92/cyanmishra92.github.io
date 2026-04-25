@@ -31,5 +31,6 @@
     "Manufacturing",
     "Prognostics"
   ],
-  "bibtex": "@article{astmssms2022,\n  title     = {A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing},\n  author    = {Abhishek Hanchate and Parth Sanjaybhai Dave and Ankur Verma and Akash Tiwari and Cyan Subhra Mishra and Soundar R. T. Kumara and Anil Srivastava and Hui Yang and Vijaykrishnan Narayanan and John Morgan Sampson and Mahmut Taylan Kandemir and Kye-Hwan Lee and Tanna Marie Pugh and Amy Jorden and Gautam Natarajan and Dinakar Sagapuram and Satish T. S. Bukkapatnam},\n  journal   = {ASTM Smart and Sustainable Manufacturing Systems},\n  year      = {2022},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@article{hanchate2022astmssms,\n  title     = {A Graphical Representation of Sensor Mapping for Machine Tool Fault Monitoring and Prognostics for Smart Manufacturing},\n  author    = {Hanchate, Abhishek and Dave, Parth Sanjaybhai and Verma, Ankur and Tiwari, Akash and Mishra, Cyan Subhra and Kumara, Soundar R. T. and Srivastava, Anil and Yang, Hui and Narayanan, Vijaykrishnan and Sampson, John Morgan and Kandemir, Mahmut Taylan and Lee, Kye-Hwan and Pugh, Tanna Marie and Jorden, Amy and Natarajan, Gautam and Sagapuram, Dinakar and Bukkapatnam, Satish T. S.},\n  journal   = {ASTM Smart and Sustainable Manufacturing Systems},\n  year      = {2022},\n}"
 }

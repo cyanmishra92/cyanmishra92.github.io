@@ -20,5 +20,6 @@
     "Compression",
     "Edge"
   ],
-  "bibtex": "@inproceedings{pointcloudmicro2022,\n  title     = {Pushing Point Cloud Compression to the Edge},\n  author    = {Ziyu Ying and Shulin Zhao and Sandeepa Bhuyan and Cyan Subhra Mishra and Mahmut Kandemir and Chita R. Das},\n  booktitle = {IEEE/ACM International Symposium on Microarchitecture (MICRO)},\n  pages     = {282--299},\n  year      = {2022},\n  publisher = {IEEE},\n}"
+  "relatedPaperIds": [],
+  "bibtex": "@inproceedings{ying2022pointcloudmi,\n  title     = {Pushing Point Cloud Compression to the Edge},\n  author    = {Ying, Ziyu and Zhao, Shulin and Bhuyan, Sandeepa and Mishra, Cyan Subhra and Kandemir, Mahmut and Das, Chita R.},\n  booktitle = {IEEE/ACM International Symposium on Microarchitecture (MICRO)},\n  pages     = {282--299},\n  year      = {2022},\n  publisher = {IEEE},\n}"
 }
