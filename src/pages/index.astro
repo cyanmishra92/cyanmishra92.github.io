@@ -1,48 +1,48 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/Hero.astro';
 import SectionHeader from '@components/SectionHeader.astro';
 import Card from '@components/Card.astro';
+import PaperItem from '@components/PaperItem.astro';
+import { compare, TOP_VENUES, withCitations, loadCitations } from '@lib/papers';
+import { compareNews, prettyDate, approximateDate, isoDate } from '@lib/news';
+import { loadGithubStats } from '@lib/github-stats';
 
-// Phase-1 placeholder data — content collections wire in Phase 3-4.
+// ─── projects ─────────────────────────────────────────────────────
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99))
+  .slice(0, 3);
+
+// ─── publications ─────────────────────────────────────────────────
+const allPapers = withCitations((await getCollection('publications')).map((e) => e.data));
+const totalPubs = allPapers.length;
+
+const selected = [...allPapers]
+  .sort(compare)
+  .filter((p) => p.status !== 'under-review' || TOP_VENUES.has(p.venue))
+  .slice(0, 5);
+
+// ─── citation totals ──────────────────────────────────────────────
+const overlay = loadCitations();
+const citations = {
+  totalCitations: overlay?.totalCitations ?? '—',
+  hIndex: overlay?.hIndex ?? '—',
+};
+
+// ─── live news ────────────────────────────────────────────────────
+const allNews = (await getCollection('news', ({ data }) => !data.draft)).sort(compareNews);
+const recentNews = allNews.slice(0, 4);
+
+// ─── github stats ────────────────────────────────────────────────
+const ghStats = await loadGithubStats();
+
+// ─── home stats strip ─────────────────────────────────────────────
 const stats = [
-  { value: '24', unit: 'publications' },
-  { value: '—', unit: 'citations' },
-  { value: '—', unit: 'h-index' },
-  { value: '10+', unit: 'years' },
-];
-
-const featuredPlaceholders = [
-  {
-    index: '01 / 06',
-    title: 'NExUME',
-    venue: 'ICLR 2025',
-    summary:
-      'Intermittency-aware DNN training: dynamic dropout and quantization that adapt to harvested energy. Up to 22% accuracy gain at <5% compute overhead.',
-    href: '/projects/nexume/',
-  },
-  {
-    index: '02 / 06',
-    title: 'Salient Store',
-    venue: 'PACT 2025',
-    summary:
-      'Computational storage for continuous learning. FPGA-accelerated CSDs handle compression and encryption near data — 6× throughput, 6.1× less data movement.',
-    href: '/projects/salient-store/',
-  },
-  {
-    index: '03 / 06',
-    title: 'Usás',
-    venue: 'HPCA 2024',
-    summary:
-      'Battery-free continuous learning on solar-powered edge servers. Morphable accelerator + teacher-student training. Hundreds of kWh/year saved.',
-    href: '/projects/usas/',
-  },
-];
-
-const newsPlaceholders = [
-  { date: '2026-01-15', body: 'Joined Arm in San Diego as a Performance and Power Engineer on the SoC Architecture Performance team.' },
-  { date: '2025-08-15', body: 'Defended my Ph.D. thesis at Penn State and officially graduated.' },
-  { date: '2025-04-01', body: 'Salient Store accepted at PACT 2025.' },
+  { value: String(totalPubs), unit: 'publications' },
+  { value: String(citations.totalCitations), unit: 'citations' },
+  { value: String(citations.hIndex), unit: 'h-index' },
+  { value: '10+', unit: 'years exp.' },
 ];
 ---
 
@@ -95,12 +95,15 @@ const newsPlaceholders = [
     <SectionHeader number="04" eyebrow="featured projects" title="Selected work" />
 
     <div class="grid gap-6 lg:grid-cols-3">
-      {featuredPlaceholders.map((p) => (
-        <Card index={p.index} href={p.href}>
+      {projects.map((p, i) => (
+        <Card index={`${String(i + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`} href={`/projects/${p.slug}/`}>
           <div class="mt-8">
-            <span class="tag tag-accent">{p.venue}</span>
-            <h3 class="mt-4 font-display text-2xl text-text">{p.title}</h3>
-            <p class="mt-3 text-sm leading-relaxed text-text-muted">{p.summary}</p>
+            {p.data.venue && (
+              <span class="tag tag-accent">{p.data.venue} {p.data.year}</span>
+            )}
+            <h3 class="mt-4 font-display text-2xl text-text">{p.data.title}</h3>
+            <p class="mt-2 text-sm font-medium text-text-muted">{p.data.tagline}</p>
+            <p class="mt-3 text-sm leading-relaxed text-text-muted">{p.data.summary}</p>
             <p class="mt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
               read more →
             </p>
@@ -121,32 +124,115 @@ const newsPlaceholders = [
     <SectionHeader number="05" eyebrow="latest" title="News" />
 
     <ul class="divide-y divide-border border-y border-border">
-      {newsPlaceholders.map((n) => (
+      {recentNews.map((n) => (
         <li class="grid grid-cols-12 gap-4 py-5">
-          <time datetime={n.date} class="col-span-12 font-mono text-xs uppercase tracking-eyebrow text-text-muted lg:col-span-2">
-            {n.date}
+          <time
+            datetime={isoDate(n.data.date)}
+            class="col-span-12 font-mono text-xs uppercase tracking-eyebrow text-text-muted lg:col-span-2"
+          >
+            {n.data.approximateDate ? approximateDate(n.data.date) : prettyDate(n.data.date)}
           </time>
-          <p class="col-span-12 text-text lg:col-span-10">{n.body}</p>
+          <p class="col-span-12 text-text lg:col-span-10">
+            {n.data.href ? (
+              <a
+                href={n.data.href}
+                class="link-underline"
+                rel={n.data.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                target={n.data.href.startsWith('http') ? '_blank' : undefined}
+              >
+                {n.data.title}
+              </a>
+            ) : (
+              n.data.title
+            )}
+          </p>
         </li>
       ))}
     </ul>
 
-    <p class="mt-8 text-right">
+    <p class="mt-8 flex items-center justify-between">
+      <a href="/rss.xml" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted hover:text-accent">
+        // rss
+      </a>
       <a href="/news/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
         full news archive →
       </a>
     </p>
   </section>
 
-  {/* ─── §06 selected publications — placeholder ───────────────── */}
+  {/* ─── §06 selected publications ─────────────────────────────── */}
   <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
     <SectionHeader number="06" eyebrow="selected" title="Publications" />
-    <p class="text-text-muted">
-      Full filterable publication list lives at{' '}
-      <a href="/publications/" class="link-underline text-accent">
-        /publications
+    <div>
+      {selected.map((paper, i) => (
+        <PaperItem paper={paper} index={i + 1} />
+      ))}
+    </div>
+    <p class="mt-8 text-right">
+      <a href="/publications/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+        all {totalPubs} publications →
       </a>
-      . Wires up in Phase 3.
     </p>
+  </section>
+
+  {/* ─── §07 elsewhere — github + blog teaser ───────────────────── */}
+  <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
+    <SectionHeader number="07" eyebrow="elsewhere" title="Code & writing" />
+
+    <div class="grid gap-6 lg:grid-cols-2">
+      <a
+        href="https://github.com/cyanmishra92"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="card-sharp block p-6 sm:p-7"
+      >
+        <span class="card-index">01 / 02</span>
+        <p class="mt-7 eyebrow">github</p>
+        {ghStats ? (
+          <>
+            <p class="mt-4 font-mono text-sm text-text">@{ghStats.username}</p>
+            <div class="mt-6 grid grid-cols-2 gap-y-4 lg:grid-cols-3">
+              <div>
+                <p class="font-display text-3xl leading-none text-ink" style="font-variation-settings: 'opsz' 72, 'SOFT' 30;">{ghStats.publicRepos}</p>
+                <p class="mt-1 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">repos</p>
+              </div>
+              <div>
+                <p class="font-display text-3xl leading-none text-ink" style="font-variation-settings: 'opsz' 72, 'SOFT' 30;">{ghStats.totalStars}</p>
+                <p class="mt-1 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">stars</p>
+              </div>
+            </div>
+            {ghStats.topLanguages.length > 0 && (
+              <div class="mt-6">
+                <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">top languages</p>
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  {ghStats.topLanguages.map((l) => (
+                    <span class="tag">{l.name} · {l.count}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <p class="mt-4 font-mono text-sm text-text-muted">// fetch failed; visit github directly</p>
+        )}
+        <p class="mt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+          view on github →
+        </p>
+      </a>
+
+      <a href="/blog/" class="card-sharp block p-6 sm:p-7">
+        <span class="card-index">02 / 02</span>
+        <p class="mt-7 eyebrow">blog</p>
+        <p class="mt-4 font-display text-2xl text-text">Notes &amp; long-form</p>
+        <p class="mt-3 text-sm leading-relaxed text-text-muted">
+          Performance engineering pragmatics, ML systems on constrained
+          hardware, side projects, and the occasional paper read. Roughly
+          monthly.
+        </p>
+        <p class="mt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+          read posts →
+        </p>
+      </a>
+    </div>
   </section>
 </BaseLayout>

@@ -1,18 +1,66 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PageHeader from '@components/PageHeader.astro';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 ---
 
-<BaseLayout title="Projects" description="Featured research projects — NExUME, Salient Store, Usás, Seeker, Origin, Prophet.">
+<BaseLayout
+  title="Projects"
+  description="Featured research and engineering projects — NExUME, Salient Store, Usás, Seeker, Origin, Prophet, and current SoC perf work at Arm."
+>
   <PageHeader
     number="04"
     eyebrow="projects"
     title="Projects"
-    intro="Six featured projects plus current work at Arm. Per-project deep-dives wire up in Phase 3."
+    intro="Six research projects from the Penn State years plus the current ongoing work at Arm. Each card links to a deeper write-up."
   />
+
   <section class="mx-auto max-w-page px-6 pb-24 lg:px-8">
-    <p class="font-mono text-xs uppercase tracking-eyebrow text-text-muted">
-      Phase status: scaffolded · content arrives in Phase 3.
-    </p>
+    <ol class="grid gap-6 lg:grid-cols-2">
+      {projects.map((p, i) => (
+        <li>
+          <a href={`/projects/${p.slug}/`} class="card-sharp block h-full p-6 sm:p-7">
+            <span class="card-index">{String(i + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+
+            <header class="mt-7 flex flex-wrap items-baseline gap-2">
+              {p.data.venue && (
+                <span class="tag tag-accent">{p.data.venue} {p.data.year}</span>
+              )}
+              {p.data.status === 'to-appear' && <span class="tag tag-accent">to appear</span>}
+              {p.data.status === 'under-review' && <span class="tag">under review</span>}
+              {p.data.status === 'ongoing' && <span class="tag">ongoing</span>}
+              {p.data.awards.length > 0 && (
+                <span class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+                  ★ {p.data.awards[0]}
+                </span>
+              )}
+            </header>
+
+            <h2 class="mt-4 font-display text-2xl leading-tight text-text">
+              {p.data.title}
+            </h2>
+            <p class="mt-2 text-sm font-medium text-text-muted">
+              {p.data.tagline}
+            </p>
+            <p class="mt-4 max-w-prose text-sm leading-relaxed text-text">
+              {p.data.summary}
+            </p>
+
+            {p.data.topics.length > 0 && (
+              <div class="mt-5 flex flex-wrap gap-1.5">
+                {p.data.topics.slice(0, 4).map((t) => <span class="tag">{t}</span>)}
+              </div>
+            )}
+
+            <p class="mt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+              read more →
+            </p>
+          </a>
+        </li>
+      ))}
+    </ol>
   </section>
 </BaseLayout>

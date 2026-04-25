@@ -1,0 +1,24 @@
+{
+  "id": "kraken-socc-2021",
+  "title": "Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms",
+  "authors": [
+    "Vivek M. Bhasi",
+    "Jashwant Raj Gunasekaran",
+    "Prashanth Thinakaran",
+    "Cyan Subhra Mishra",
+    "Mahmut T. Kandemir",
+    "Chita R. Das"
+  ],
+  "myAuthorIndex": 3,
+  "year": 2021,
+  "venue": "SoCC",
+  "venueFull": "ACM Symposium on Cloud Computing (SoCC '21)",
+  "type": "conference",
+  "status": "published",
+  "topics": [
+    "Serverless",
+    "Cloud",
+    "Container Provisioning"
+  ],
+  "bibtex": "@inproceedings{krakensocc2021,\n  title     = {Kraken: Adaptive Container Provisioning for Deploying Dynamic DAGs in Serverless Platforms},\n  author    = {Vivek M. Bhasi and Jashwant Raj Gunasekaran and Prashanth Thinakaran and Cyan Subhra Mishra and Mahmut T. Kandemir and Chita R. Das},\n  booktitle = {ACM Symposium on Cloud Computing (SoCC '21)},\n  year      = {2021},\n  publisher = {ACM},\n}"
+}

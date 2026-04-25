@@ -1,0 +1,53 @@
+---
+title: Salient Store
+tagline: Computational storage for continuous-learning edge servers.
+summary: >-
+  FPGA-accelerated computational storage devices handle compression,
+  encryption, and redundancy near the data. 6× throughput, 6.1× less data
+  movement.
+venue: PACT
+year: 2025
+status: to-appear
+topics: [Computational Storage, Continuous Learning, Edge, FPGA, Near-Data Processing]
+paperId: salient-store-pact-2025
+paperUrl: https://arxiv.org/abs/2410.05435
+order: 2
+---
+
+## The problem
+
+Continuous-learning edge servers swallow huge volumes of video and sensor
+data. With conventional storage, every byte the model wants to look at has
+to cross the I/O bus into the host's DRAM, run through compression and
+encryption on the CPU, then move again into the accelerator. The data
+movement, not the compute, is the bottleneck.
+
+## What Salient Store does
+
+We push the data-intensive operations *into the storage itself*.
+FPGA-equipped computational storage devices (CSDs) handle:
+
+- **Neural compression** — learned codecs tuned for the workload's data
+  distribution, not generic gzip.
+- **Quantum-safe encryption** — done at rest, in the device, not in the
+  CPU.
+- **Redundancy and error correction** — co-designed with the codec so we
+  don't pay for both layers separately.
+
+The host sees a thinner, validated stream and a much lower CPU load. The
+training loop doesn't change its API.
+
+## Results
+
+Prototype results show **6× faster end-to-end data handling** and
+**6.1× less data movement** across the host's I/O fabric. The win
+compounds when you scale: many drives, each doing local work, aggregate
+into a serious bandwidth advantage that pure host scaling can't match.
+
+## Why it matters
+
+Continuous learning at the edge fails silently when the I/O can't keep
+up with the model's appetite. Salient Store moves the bottleneck from a
+shared resource (host DRAM) to a parallelizable one (per-device FPGAs).
+That's the architectural change that makes large-scale on-edge training
+practical.

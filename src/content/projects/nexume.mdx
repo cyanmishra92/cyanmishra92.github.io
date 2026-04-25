@@ -1,0 +1,53 @@
+---
+title: NExUME
+tagline: Intermittency-aware DNN training for energy-harvesting micro-computers.
+summary: >-
+  Dynamically adjusts dropout and quantization in response to intermittent
+  energy. DynFit optimizer + DynInfer scheduler. Up to 22% accuracy gain at
+  &lt;5% compute overhead.
+venue: ICLR
+year: 2025
+status: to-appear
+topics: [Energy Harvesting, Intermittent Computing, DNN Training, Quantization]
+paperId: nexume-iclr-2025
+paperUrl: https://arxiv.org/abs/2408.13696
+order: 1
+---
+
+## The problem
+
+A DNN trained on a wall-powered server doesn't run gracefully on a sensor
+node that loses power every few seconds. Conventional training assumes
+reliable execution and gradient stability. Energy-harvesting micro-computers
+break both assumptions: the device boots, runs for milliseconds to seconds,
+checkpoints, dies, and reboots. The model has to keep producing useful
+inferences across that pattern.
+
+## What NExUME does
+
+**DynFit** — the training side. We bake intermittency into the optimizer
+itself: dropout rates and quantization levels are functions of the energy
+profile the device is expected to see in deployment, not constants. The
+network learns to be robust to *partial* execution by experiencing partial
+execution while it's training.
+
+**DynInfer** — the inference side. A power-and-platform-aware scheduler
+handles partial computations and checkpointing, so the device can resume
+from wherever it died without redoing finished work. The scheduler watches
+the harvested-energy signal and dynamically picks which layers to run at
+which precision.
+
+## Results
+
+Across sensor data, image, and audio benchmarks, NExUME delivers up to
+**22% higher accuracy** than the strongest intermittency baseline at
+**less than 5% extra compute overhead**. The benefit holds across power
+profiles ranging from steady solar to bursty RF harvesting.
+
+## Why it matters
+
+Energy-harvesting devices are how you put ML in places no battery
+replacement schedule reaches — soil sensors, structural-health monitors,
+remote wildlife trackers. NExUME is what makes accurate, on-device
+inference at those nodes structurally possible, not just an academic
+exercise on stable hardware.

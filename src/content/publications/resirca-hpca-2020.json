@@ -1,0 +1,27 @@
+{
+  "id": "resirca-hpca-2020",
+  "title": "ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors",
+  "authors": [
+    "Keni Qiu",
+    "Nicholas Jao",
+    "Mengying Zhao",
+    "Cyan Subhra Mishra",
+    "Gulsum Gudukbay",
+    "Sethu Jose",
+    "Jack Sampson",
+    "Mahmut T. Kandemir",
+    "Vijaykrishnan Narayanan"
+  ],
+  "myAuthorIndex": 3,
+  "year": 2020,
+  "venue": "HPCA",
+  "venueFull": "IEEE International Symposium on High Performance Computer Architecture (HPCA)",
+  "type": "conference",
+  "status": "published",
+  "topics": [
+    "ReRAM",
+    "Energy Harvesting",
+    "Intermittent Computing"
+  ],
+  "bibtex": "@inproceedings{resircahpca2020,\n  title     = {ResiRCA: A Resilient Energy Harvesting ReRAM-based Accelerator for Intelligent Embedded Processors},\n  author    = {Keni Qiu and Nicholas Jao and Mengying Zhao and Cyan Subhra Mishra and Gulsum Gudukbay and Sethu Jose and Jack Sampson and Mahmut T. Kandemir and Vijaykrishnan Narayanan},\n  booktitle = {IEEE International Symposium on High Performance Computer Architecture (HPCA)},\n  year      = {2020},\n  publisher = {IEEE},\n}"
+}

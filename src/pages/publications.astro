@@ -1,18 +1,342 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PageHeader from '@components/PageHeader.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import PaperItem from '@components/PaperItem.astro';
+import BibtexModal from '@components/BibtexModal.astro';
+import { groupPapers, TOP_VENUES, VENUE_TYPE_LABELS, withCitations } from '@lib/papers';
+
+const all = withCitations((await getCollection('publications')).map((e) => e.data));
+const groups = groupPapers(all);
+const total = all.length;
+
+// Filter dimensions.
+const years = [...new Set(all.map((p) => p.year))].sort((a, b) => b - a);
+const venues = [...new Set(all.map((p) => p.venue))].sort();
+const topVenues = venues.filter((v) => TOP_VENUES.has(v));
+const otherVenues = venues.filter((v) => !TOP_VENUES.has(v));
+const types = [...new Set(all.map((p) => p.type))];
+const topics = [...new Set(all.flatMap((p) => p.topics))].sort();
+
+// BibTeX templates for the modal.
+const bibtexEntries = all.map((p) => ({
+  id: p.id,
+  title: p.title,
+  bibtex: p.bibtex,
+}));
+
+// Pre-flatten papers in display order, with their group heading.
+let runningIndex = 0;
+const flat: { paper: (typeof all)[number]; index: number; heading: string; first: boolean }[] = [];
+for (const g of groups) {
+  let first = true;
+  for (const p of g.papers) {
+    runningIndex += 1;
+    flat.push({ paper: p, index: runningIndex, heading: g.heading, first });
+    first = false;
+  }
+}
 ---
 
-<BaseLayout title="Publications" description="Filterable publication list — ISCA, MICRO, HPCA, ICLR, NSDI, PACT, IPDPS, DATE.">
+<BaseLayout
+  title="Publications"
+  description="Filterable, searchable list of publications by Cyan Subhra Mishra — ISCA, MICRO, HPCA, ICLR, NSDI, PACT, IPDPS, DATE, ICDCS, SoCC, NAS."
+>
   <PageHeader
     number="03"
     eyebrow="publications"
     title="Publications"
-    intro="Filterable, searchable, with BibTeX modal. Wires up in Phase 3."
+    intro={`${total} papers across hardware/software co-design, ML systems, energy-efficient computing, and cloud serving. Filter by year, venue, type, or topic — or search title and authors.`}
   />
-  <section class="mx-auto max-w-page px-6 pb-24 lg:px-8">
-    <p class="font-mono text-xs uppercase tracking-eyebrow text-text-muted">
-      Phase status: scaffolded · content arrives in Phase 3.
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    {/* ─── search + filters ─────────────────────────────────────── */}
+    <section class="mb-12 border border-border bg-surface p-6 sm:p-7" data-pubs-controls>
+      <label class="block">
+        <span class="eyebrow">search</span>
+        <div class="mt-2 flex items-center border-b border-border focus-within:border-accent">
+          <span class="font-mono text-text-muted">$ </span>
+          <input
+            type="search"
+            id="pubs-search"
+            placeholder="title, author, keyword..."
+            class="w-full bg-transparent py-2 pl-2 font-mono text-sm text-text placeholder:text-text-muted focus:outline-none"
+            autocomplete="off"
+            data-pubs-input
+          />
+          <button
+            type="button"
+            class="hidden font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted hover:text-accent"
+            data-pubs-clear
+            aria-label="Clear all filters and search"
+          >
+            [ clear ]
+          </button>
+        </div>
+      </label>
+
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <fieldset>
+          <legend class="eyebrow">year</legend>
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            {years.map((y) => (
+              <button
+                type="button"
+                class="filter-chip"
+                data-filter="year"
+                data-value={String(y)}
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="eyebrow">type</legend>
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            {types.map((t) => (
+              <button
+                type="button"
+                class="filter-chip"
+                data-filter="type"
+                data-value={t}
+              >
+                {VENUE_TYPE_LABELS[t]}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset class="sm:col-span-2">
+          <legend class="eyebrow">venue</legend>
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            {topVenues.map((v) => (
+              <button
+                type="button"
+                class="filter-chip filter-chip-accent"
+                data-filter="venue"
+                data-value={v}
+              >
+                {v}
+              </button>
+            ))}
+            {otherVenues.map((v) => (
+              <button
+                type="button"
+                class="filter-chip"
+                data-filter="venue"
+                data-value={v}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      </div>
+
+      <fieldset class="mt-6">
+        <legend class="eyebrow">topics</legend>
+        <div class="mt-2 flex flex-wrap gap-1.5">
+          {topics.map((t) => (
+            <button
+              type="button"
+              class="filter-chip"
+              data-filter="topic"
+              data-value={t}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </fieldset>
+
+      <p class="mt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted" data-pubs-counter>
+        showing {total} / {total}
+      </p>
+    </section>
+
+    {/* ─── paper list ───────────────────────────────────────────── */}
+    <div data-pubs-list>
+      {flat.map((row) => (
+        <>
+          {row.first && (
+            <div class="mt-12 first:mt-0" data-group-heading={row.heading}>
+              <SectionHeader number={row.heading === 'Under Review' ? 'UR' : row.heading.slice(-2)} eyebrow={row.heading} />
+            </div>
+          )}
+          <PaperItem paper={row.paper} index={row.index} />
+        </>
+      ))}
+    </div>
+
+    {/* empty state */}
+    <p
+      class="hidden py-16 text-center font-mono text-sm uppercase tracking-eyebrow text-text-muted"
+      data-pubs-empty
+    >
+      // no papers match the current filters
     </p>
-  </section>
+  </div>
+
+  <BibtexModal papers={bibtexEntries} />
 </BaseLayout>
+
+<style>
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(var(--color-text-muted));
+    border: 1px solid rgb(var(--color-border));
+    background: transparent;
+    cursor: pointer;
+    transition: color 180ms ease-out, border-color 180ms ease-out, background 180ms ease-out;
+  }
+  .filter-chip:hover {
+    color: rgb(var(--color-accent));
+    border-color: rgb(var(--color-accent));
+  }
+  .filter-chip[aria-pressed='true'] {
+    color: rgb(var(--color-bg));
+    background: rgb(var(--color-accent));
+    border-color: rgb(var(--color-accent));
+  }
+  .filter-chip-accent {
+    color: rgb(var(--color-accent));
+  }
+  .filter-chip-accent[aria-pressed='true'] {
+    color: rgb(var(--color-bg));
+  }
+</style>
+
+<script>
+  // Vanilla-TS filter+search island. Lighter than fuse.js, fewer bytes.
+  type Filters = {
+    year: Set<string>;
+    type: Set<string>;
+    venue: Set<string>;
+    topic: Set<string>;
+    q: string;
+  };
+
+  const _root = document.querySelector('[data-pubs-controls]');
+  const _list = document.querySelector('[data-pubs-list]');
+  const _counter = document.querySelector('[data-pubs-counter]');
+  const empty = document.querySelector<HTMLElement>('[data-pubs-empty]');
+  const _input = document.querySelector<HTMLInputElement>('[data-pubs-input]');
+  const clear = document.querySelector<HTMLButtonElement>('[data-pubs-clear]');
+
+  if (_root && _list && _counter && _input) {
+    const root = _root;
+    const list = _list;
+    const counter = _counter;
+    const input = _input;
+    const items = Array.from(list.querySelectorAll<HTMLElement>('[data-paper-id]'));
+    const groups = Array.from(list.querySelectorAll<HTMLElement>('[data-group-heading]'));
+    const total = items.length;
+
+    // Pre-extract a search corpus from each item's text content.
+    const corpus = new Map<string, string>();
+    for (const el of items) {
+      const text = (el.textContent ?? '').toLowerCase().replace(/\s+/g, ' ');
+      corpus.set(el.dataset.paperId ?? '', text);
+    }
+
+    const filters: Filters = {
+      year: new Set(),
+      type: new Set(),
+      venue: new Set(),
+      topic: new Set(),
+      q: '',
+    };
+
+    function matches(el: HTMLElement): boolean {
+      if (filters.year.size && !filters.year.has(el.dataset.year ?? '')) return false;
+      if (filters.type.size && !filters.type.has(el.dataset.type ?? '')) return false;
+      if (filters.venue.size && !filters.venue.has(el.dataset.venue ?? '')) return false;
+      if (filters.topic.size) {
+        const ts = (el.dataset.topics ?? '').split('|').filter(Boolean);
+        if (!ts.some((t) => filters.topic.has(t))) return false;
+      }
+      if (filters.q) {
+        const text = corpus.get(el.dataset.paperId ?? '') ?? '';
+        if (!text.includes(filters.q)) return false;
+      }
+      return true;
+    }
+
+    function apply() {
+      let visible = 0;
+      for (const el of items) {
+        const ok = matches(el);
+        el.classList.toggle('hidden', !ok);
+        if (ok) visible++;
+      }
+      // Hide group headings whose papers are all filtered out.
+      for (const heading of groups) {
+        const anyVisibleInGroup = items.some(
+          (it) => !it.classList.contains('hidden') && isSameGroup(it, heading),
+        );
+        heading.classList.toggle('hidden', !anyVisibleInGroup);
+      }
+      counter.textContent = `showing ${visible} / ${total}`;
+      if (empty) empty.classList.toggle('hidden', visible !== 0);
+      const anyFilter =
+        filters.q ||
+        filters.year.size ||
+        filters.type.size ||
+        filters.venue.size ||
+        filters.topic.size;
+      if (clear) clear.classList.toggle('hidden', !anyFilter);
+    }
+
+    /** A paper "belongs" to the heading immediately preceding it. */
+    function isSameGroup(paper: HTMLElement, heading: HTMLElement): boolean {
+      let el: Element | null = paper.previousElementSibling;
+      while (el) {
+        if (el === heading) return true;
+        if ((el as HTMLElement).dataset?.groupHeading) return false;
+        el = el.previousElementSibling;
+      }
+      return false;
+    }
+
+    root.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-chip');
+      if (!btn) return;
+      const dim = btn.dataset.filter as keyof Omit<Filters, 'q'>;
+      const val = btn.dataset.value ?? '';
+      const set = filters[dim];
+      if (set.has(val)) set.delete(val);
+      else set.add(val);
+      btn.setAttribute('aria-pressed', set.has(val) ? 'true' : 'false');
+      apply();
+    });
+
+    input.addEventListener('input', () => {
+      filters.q = input.value.trim().toLowerCase();
+      apply();
+    });
+
+    clear?.addEventListener('click', () => {
+      filters.q = '';
+      filters.year.clear();
+      filters.type.clear();
+      filters.venue.clear();
+      filters.topic.clear();
+      input.value = '';
+      root
+        .querySelectorAll<HTMLButtonElement>('.filter-chip[aria-pressed="true"]')
+        .forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      apply();
+    });
+
+    apply();
+  }
+</script>

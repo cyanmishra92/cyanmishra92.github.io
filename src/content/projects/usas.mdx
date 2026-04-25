@@ -1,0 +1,53 @@
+---
+title: Usás
+tagline: Battery-free continuous learning on solar-powered edge servers.
+summary: >-
+  A morphable accelerator that adapts to fluctuating solar power, paired
+  with teacher-student training. Hundreds of kWh/year saved per device, no
+  battery required.
+venue: HPCA
+year: 2024
+status: published
+topics: [Sustainable Computing, Continuous Learning, Solar, Edge, Morphable Accelerator]
+paperId: usas-hpca-2024
+order: 3
+---
+
+## The problem
+
+Battery-powered edge ML works until the battery doesn't. Grid power isn't
+always available where the data is. Solar is — but solar is *intermittent*
+in a way that conventional fixed-shape accelerators handle badly: when
+the panel goes quiet, training stalls; when it comes back, the model has
+to catch up on stale data.
+
+## What Usás does
+
+A **morphable DNN accelerator** that dynamically resizes its systolic
+array to match the available power envelope. When the panel is feeding a
+healthy current, the accelerator runs wide. When it dims, the array
+contracts and the active partition keeps making forward progress instead
+of stalling.
+
+A **teacher-student training procedure** keeps the smaller network
+useful: a heavier teacher model — trained when power permits —
+distills into a student that's the active inference path under
+power-constrained windows.
+
+A **micro-profiling engine** picks hyperparameters under hard power
+budgets, and a non-battery design stores minimal energy in capacitors
+plus aggressive checkpointing for resumability.
+
+## Results
+
+About **5% higher accuracy** over a multi-window horizon than
+conventional continuous-learning approaches at the same power budget,
+and **hundreds of kWh per year per device** saved compared to
+battery-buffered baselines.
+
+## Why it matters
+
+This is the architectural answer to the question "how does ML happen
+where the grid doesn't reach?" — not by shrinking the model until it
+fits a tiny battery, but by reshaping the silicon to match the energy
+that's actually available.

@@ -1,0 +1,134 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import type { GetStaticPathsOptions } from 'astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import { compareNews, prettyDate, approximateDate, isoDate } from '@lib/news';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const items = (await getCollection('news', ({ data }) => !data.draft)).sort(compareNews);
+  return paginate(items, { pageSize: 20 });
+}
+
+interface Props {
+  page: {
+    data: CollectionEntry<'news'>[];
+    currentPage: number;
+    lastPage: number;
+    total: number;
+    url: { current: string; prev: string | undefined; next: string | undefined };
+  };
+}
+
+const { page } = Astro.props;
+const items = page.data;
+
+// Pre-render MDX bodies in parallel.
+const rendered = await Promise.all(
+  items.map(async (entry) => ({ entry, body: await entry.render() })),
+);
+---
+
+<BaseLayout
+  title={page.currentPage === 1 ? 'News' : `News — page ${page.currentPage}`}
+  description="News, paper acceptances, talks, and milestones from Cyan Subhra Mishra."
+>
+  <PageHeader
+    number="05"
+    eyebrow={page.currentPage === 1 ? 'news' : `news · page ${page.currentPage}`}
+    title="News"
+    intro={`${page.total} entries — paper acceptances, talks, and milestones. ${page.lastPage > 1 ? `Page ${page.currentPage} of ${page.lastPage}.` : ''}`}
+  />
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    <a
+      href="/rss.xml"
+      class="link-underline mb-8 inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted hover:text-accent"
+      aria-label="Subscribe via RSS"
+    >
+      <span>// rss feed</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+
+    <ol class="grid gap-px border-y border-border bg-border">
+      {rendered.map(({ entry, body: { Content } }, i) => {
+        const idx = (page.currentPage - 1) * 20 + i + 1;
+        return (
+          <li id={entry.slug} class="grid grid-cols-12 gap-x-4 bg-bg p-6 sm:gap-x-6 sm:p-7 scroll-mt-24">
+            <div class="col-span-12 lg:col-span-3">
+              <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+                <span class="text-accent">{String(idx).padStart(3, '0')}</span>
+              </p>
+              <time
+                datetime={isoDate(entry.data.date)}
+                class="mt-2 block font-mono text-[0.75rem] uppercase tracking-eyebrow text-text"
+              >
+                {entry.data.approximateDate
+                  ? approximateDate(entry.data.date)
+                  : prettyDate(entry.data.date)}
+              </time>
+              {entry.data.tags.length > 0 && (
+                <div class="mt-3 flex flex-wrap gap-1">
+                  {entry.data.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}
+                </div>
+              )}
+            </div>
+            <div class="col-span-12 mt-3 lg:col-span-9 lg:mt-0">
+              <h2 class="font-display text-xl leading-snug text-text sm:text-2xl">
+                {entry.data.href ? (
+                  <a
+                    href={entry.data.href}
+                    class="link-underline"
+                    rel={entry.data.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    target={entry.data.href.startsWith('http') ? '_blank' : undefined}
+                  >
+                    {entry.data.title}
+                  </a>
+                ) : (
+                  entry.data.title
+                )}
+              </h2>
+              <div class="prose-content mt-3 text-base leading-relaxed text-text">
+                <Content />
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+
+    {page.lastPage > 1 && (
+      <nav class="mt-10 flex items-center justify-between font-mono text-[0.6875rem] uppercase tracking-eyebrow" aria-label="Pagination">
+        {page.url.prev ? (
+          <a href={page.url.prev} class="link-underline text-accent">← newer</a>
+        ) : (
+          <span class="text-border">← newer</span>
+        )}
+        <span class="text-text-muted">
+          page {page.currentPage} / {page.lastPage}
+        </span>
+        {page.url.next ? (
+          <a href={page.url.next} class="link-underline text-accent">older →</a>
+        ) : (
+          <span class="text-border">older →</span>
+        )}
+      </nav>
+    )}
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* Re-use the project deep-dive prose styling for short news bodies. */
+  .prose-content p {
+    margin-bottom: 0.75rem;
+  }
+  .prose-content p:last-child {
+    margin-bottom: 0;
+  }
+  .prose-content a {
+    color: rgb(var(--color-accent));
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+</style>

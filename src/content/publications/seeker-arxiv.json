@@ -1,0 +1,25 @@
+{
+  "id": "seeker-arxiv",
+  "title": "Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition",
+  "authors": [
+    "Cyan Subhra Mishra",
+    "Jack Sampson",
+    "Mahmut Taylan Kandemir",
+    "Vijaykrishnan Narayanan"
+  ],
+  "year": 2022,
+  "venue": "arXiv",
+  "venueFull": "arXiv preprint",
+  "type": "arxiv",
+  "status": "published",
+  "arxivId": "2204.13106",
+  "pdfUrl": "https://arxiv.org/pdf/2204.13106",
+  "topics": [
+    "EH-WSN",
+    "HAR",
+    "Coreset",
+    "Edge"
+  ],
+  "myAuthorIndex": 0,
+  "bibtex": "@article{seekerarxiv,\n  title     = {Seeker: Synergizing Mobile and Energy Harvesting Wearable Sensors for Human Activity Recognition},\n  author    = {Cyan Subhra Mishra and Jack Sampson and Mahmut Taylan Kandemir and Vijaykrishnan Narayanan},\n  journal   = {arXiv preprint arXiv:2204.13106},\n  year      = {2022},\n}"
+}

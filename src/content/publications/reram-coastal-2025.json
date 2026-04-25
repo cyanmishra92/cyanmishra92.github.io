@@ -1,0 +1,25 @@
+{
+  "id": "reram-coastal-2025",
+  "title": "Hardware-Aware Neural Network Co-Design with Analog Activation for Energy-Efficient ReRAM Crossbars",
+  "authors": [
+    "Cyan Subhra Mishra",
+    "Deeksha Chaudhary",
+    "Jack Sampson",
+    "Mahmut Taylan Kandemir",
+    "Chita R. Das"
+  ],
+  "year": 2025,
+  "venue": "Under Review",
+  "venueFull": "Under review (R2025#2)",
+  "type": "under-review",
+  "status": "under-review",
+  "pdfUrl": "https://drive.google.com/file/d/13B_9yXeTTqPra8d2fy-NVZXISsMfp_PZ/view",
+  "topics": [
+    "ReRAM",
+    "Analog",
+    "NN Co-design",
+    "Hardware"
+  ],
+  "myAuthorIndex": 0,
+  "bibtex": "@inproceedings{reramcoastal2025,\n  title     = {Hardware-Aware Neural Network Co-Design with Analog Activation for Energy-Efficient ReRAM Crossbars},\n  author    = {Cyan Subhra Mishra and Deeksha Chaudhary and Jack Sampson and Mahmut Taylan Kandemir and Chita R. Das},\n  booktitle = {Under review (R2025#2)},\n  year      = {2025},\n  publisher = {IEEE},\n}"
+}
