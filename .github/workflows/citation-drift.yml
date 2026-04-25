@@ -1,0 +1,132 @@
+name: Citations — drift detector
+
+# Weekly sanity check: compare each paper's count in
+# src/data/citations-source.json (the manually-synced authority)
+# against external APIs (Semantic Scholar batch + OpenAlex DOI +
+# optional OpenAlex author works). When external counts have moved
+# significantly past the threshold, open or update a tracking issue
+# so the user knows it's time to do a manual Scholar sync.
+#
+# The workflow NEVER edits citations-source.json. Only the user does
+# that, via the GitHub web UI per docs/CITATIONS.md. Drift counts are
+# advisory only.
+#
+# Threshold (both must hit, to avoid noise on low-cited papers):
+#   external_max ≥ 1.2 × source AND |delta| ≥ 3
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Mondays at 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: citation-drift
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    name: Detect drift vs source-of-truth
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Run drift detector
+        id: drift
+        env:
+          # Optional — lifts S2's rate limit from public quota when set.
+          SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+        run: npx tsx scripts/citation-drift.ts
+
+      - name: Commit drift report
+        run: |
+          if [[ -z "$(git status --porcelain .github/state/citation-drift.json)" ]]; then
+            echo "no drift state changes to commit"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/state/citation-drift.json
+          git commit -m "chore(citations): refresh drift report [skip ci]"
+          git push
+
+      - name: Upsert tracking issue (when drifted > 0)
+        if: ${{ steps.drift.outputs.drifted_count != '0' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Build the issue body from the drift report.
+          BODY=$(node -e "
+            const fs = require('node:fs');
+            const r = JSON.parse(fs.readFileSync('.github/state/citation-drift.json', 'utf8'));
+            const lines = [];
+            lines.push('External citation counts have moved past the drift threshold for ' + r.drifted.length + ' paper(s) since the last manual sync.');
+            lines.push('');
+            lines.push('Threshold: external ≥ ' + r.threshold.ratio + '× source AND |Δ| ≥ ' + r.threshold.absoluteDelta + '.');
+            lines.push('');
+            lines.push('| Paper | Source | External max | Δ | Ratio | S2 | OA-DOI | OA-Author |');
+            lines.push('|---|---:|---:|---:|---:|---:|---:|---:|');
+            for (const d of r.drifted) {
+              const ssa = d.externalBy['semantic-scholar'] ?? '—';
+              const oad = d.externalBy['openalex-doi'] ?? '—';
+              const oaa = d.externalBy['openalex-author'] ?? '—';
+              lines.push('| \`' + d.id + '\` | ' + d.source + ' | ' + d.externalMax + ' | ' + (d.delta >= 0 ? '+' : '') + d.delta + ' | ' + d.ratio + '× | ' + ssa + ' | ' + oad + ' | ' + oaa + ' |');
+            }
+            lines.push('');
+            lines.push('Source of truth: [Google Scholar](' + r.scholarUrl + ').');
+            lines.push('');
+            lines.push('To sync: edit \`src/data/citations-source.json\` in the GitHub web UI, paste in current Scholar counts, commit. The auto-stamp workflow handles the dates. This issue auto-closes the next Monday once counts are in sync. See \`docs/CITATIONS.md\`.');
+            console.log(lines.join('\n'));
+          ")
+
+          # Find an existing open issue with the bot label.
+          ISSUE_NUMBER=$(gh issue list \
+            --label bot:citation-drift \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty' || true)
+
+          # Make sure the label exists (idempotent).
+          gh label create bot:citation-drift \
+            --color "fbca04" \
+            --description "Auto-opened by citation-drift workflow" \
+            --force >/dev/null 2>&1 || true
+
+          if [[ -z "$ISSUE_NUMBER" ]]; then
+            gh issue create \
+              --title "chore: time to sync citations from Scholar" \
+              --label bot:citation-drift \
+              --body "$BODY" \
+              --assignee "${{ github.repository_owner }}"
+          else
+            gh issue edit "$ISSUE_NUMBER" --body "$BODY"
+            gh issue comment "$ISSUE_NUMBER" --body "🔄 Drift report refreshed at $(date -u +%Y-%m-%dT%H:%MZ)."
+          fi
+
+      - name: Close tracking issue (when in sync)
+        if: ${{ steps.drift.outputs.drifted_count == '0' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER=$(gh issue list \
+            --label bot:citation-drift \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty' || true)
+          if [[ -n "$ISSUE_NUMBER" ]]; then
+            gh issue close "$ISSUE_NUMBER" \
+              --comment "✓ Source file is in sync — closing. The drift detector will reopen if external counts pull ahead again."
+          fi

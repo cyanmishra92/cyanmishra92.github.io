@@ -2,6 +2,85 @@
 
 ## Unreleased
 
+### refactor(citations): github-only sync via web ui + auto date stamp + drift detector
+*Phase 7.6.2 — 2026-04-25*
+
+Single-source-of-truth model for citations:
+
+- **`src/data/citations-source.json`** is the new authority. Schema:
+  `_source` / `_scholarUrl` / `_lastVerified` / `totals` (citations,
+  hIndex, i10Index) / `perPaper.<id>` (citations, lastUpdated). Migrated
+  from `manual-citations.json` with current Scholar values
+  (498 / h=10 / i10=10).
+- The home stats strip and per-paper "cited by N" badge read from this
+  file *only*. `public/data/citations.json` and the previous overlay
+  loader are deleted.
+- Under-review and to-appear papers no longer render `cited by 0` —
+  they render nothing in that slot. (`withCitations` skips merging the
+  count.)
+
+GitHub-web-UI workflow (no clone needed):
+
+1. Edit `src/data/citations-source.json` in the GitHub web editor;
+   paste in fresh Scholar counts; commit.
+2. **`citations-stamp.yml`** triggers on push, runs
+   `scripts/citations-stamp.ts`, bumps `_lastVerified` to today and
+   `perPaper.<id>.lastUpdated` for any entry whose `citations` value
+   actually changed (compared against `HEAD~1`). Commits back with
+   `[skip ci]` so the workflow doesn't recurse. Idempotent.
+3. **`Deploy`** runs as normal on the new commit.
+
+Drift safety net:
+
+- **`citation-drift.yml`** runs Mondays 06:00 UTC + manual dispatch.
+  `scripts/citation-drift.ts` queries Semantic Scholar batch +
+  OpenAlex DOI + (optionally) OpenAlex author works. When external
+  high-water-mark exceeds **1.2× source AND |Δ| ≥ 3** for any paper,
+  opens or updates a tracking issue
+  `chore: time to sync citations from Scholar` (label
+  `bot:citation-drift`, assigned to repo owner). Auto-closes when in
+  sync.
+- `.github/state/citation-drift.json` carries the report between runs;
+  `lastRun` is read by the home page caption.
+- Drift detector NEVER writes back to the source file. Only the user
+  does that, by editing in the web UI.
+
+Honest captioning:
+
+- Home stats strip footer now reads
+  `// source: Google Scholar · synced YYYY-MM-DD · drift checked YYYY-MM-DD`
+  in Commit Mono. Source links to the Scholar profile. Synced date
+  comes from `citations-source.json._lastVerified`. Drift-checked
+  date comes from `.github/state/citation-drift.json.lastRun`
+  (omitted gracefully on first deploy when the file doesn't exist
+  yet).
+
+Site config:
+
+- New optional `SITE.openAlexAuthorId` slot in `src/lib/site.ts`.
+  When set, the drift detector uses `/authors/<id>/works` for cleaner
+  disambiguation than per-paper title search. Look up your ID at
+  <https://openalex.org/works?search=cyan+subhra+mishra> and drop it
+  into the file when convenient.
+
+Removed (superseded by the new model):
+
+- `.github/workflows/refresh-citations.yml`
+- `scripts/refresh-citations.ts`
+- The pre-build `npm run refresh-citations` step in `deploy.yml`
+- `npm run refresh-citations` script entry
+
+Docs:
+
+- **`docs/CITATIONS.md`** — monthly playbook for editing the source
+  file via the GitHub web UI. Step-by-step with selectors for
+  Scholar's right-sidebar totals.
+- **`docs/CITATIONS_FUTURE.md`** — deferred bookmarklet + Playwright
+  ideas with DOM selectors, JSON shape, and command structure
+  documented in enough detail that a future Cyan-or-Claude can
+  implement without re-reasoning. Marked as "deferred — implement
+  when manual sync becomes painful."
+
 ### feat(seo): indexing pipeline + statcounter verify + sites.google.com migration plan
 *Phase 7.6.4 — 2026-04-25*
 

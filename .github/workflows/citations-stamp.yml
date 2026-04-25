@@ -1,0 +1,61 @@
+name: Citations — auto-stamp dates
+
+# When src/data/citations-source.json changes on main (typically via a
+# manual edit through the GitHub web UI), update _lastVerified to today
+# and bump per-paper lastUpdated for any entry whose `citations` value
+# changed. Commit back with [skip ci] to break the recursive trigger.
+#
+# The user only ever needs to update the citation numbers; dates are
+# the workflow's job. Documented in docs/CITATIONS.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/data/citations-source.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: citations-stamp
+  cancel-in-progress: false
+
+jobs:
+  stamp:
+    name: Stamp dates
+    runs-on: ubuntu-latest
+    # Skip on commits the bot itself made.
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need the previous commit so the script can diff per-paper counts.
+          fetch-depth: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Stamp
+        run: npx tsx scripts/citations-stamp.ts
+
+      - name: Commit back if changed
+        run: |
+          if [[ -z "$(git status --porcelain src/data/citations-source.json)" ]]; then
+            echo "no stamp changes to commit"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/citations-source.json
+          git commit -m "chore(citations): auto-update _lastVerified [skip ci]"
+          git push

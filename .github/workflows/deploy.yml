@@ -3,8 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  # Daily rebuild at 06:30 UTC so citation counts and the GitHub stats
-  # card stay current without needing a code change.
+  # Daily rebuild at 06:30 UTC so the GitHub stats card stays current
+  # (citation counts come from the manually-synced
+  # src/data/citations-source.json file directly; no fetch step needed).
   schedule:
     - cron: '30 6 * * *'
   workflow_dispatch:
@@ -35,14 +36,9 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Refresh citations (best-effort)
-        # Best-effort: never block a deploy. If Semantic Scholar / OpenAlex
-        # are down, the previous citations.json on disk is used as-is.
-        continue-on-error: true
-        env:
-          SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
-        run: npm run refresh-citations
-
+      # Citation counts are sourced from src/data/citations-source.json
+      # (manually synced from Google Scholar — see docs/CITATIONS.md).
+      # Drift vs external APIs is checked weekly via citation-drift.yml.
       - name: Build
         run: npm run build
         env:
