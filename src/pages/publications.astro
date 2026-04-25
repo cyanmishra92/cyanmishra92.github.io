@@ -37,11 +37,39 @@ for (const g of groups) {
     first = false;
   }
 }
+
+// ScholarlyArticle JSON-LD per paper — emitted as an array so search
+// engines pick up the structured metadata for each entry.
+const SITE_URL = 'https://cyanmishra92.github.io';
+const scholarlyLd = all.map((p) => {
+  const ld: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'ScholarlyArticle',
+    headline: p.title,
+    name: p.title,
+    author: p.authors.map((a) => ({ '@type': 'Person', name: a })),
+    datePublished: `${p.year}`,
+    isPartOf: { '@type': 'PublicationVolume', name: p.venueFull },
+    publisher: { '@type': 'Organization', name: p.venueFull.split('(')[0].trim() },
+  };
+  if (p.doi) {
+    ld.identifier = `https://doi.org/${p.doi}`;
+    ld.sameAs = `https://doi.org/${p.doi}`;
+  } else if (p.arxivId) {
+    ld.identifier = `arXiv:${p.arxivId}`;
+    ld.sameAs = `https://arxiv.org/abs/${p.arxivId}`;
+  }
+  if (p.pdfUrl) ld.url = p.pdfUrl;
+  if (typeof p.citations === 'number') ld.citationCount = p.citations;
+  ld.image = `${SITE_URL}/og/papers/${p.id}.png`;
+  return ld;
+});
 ---
 
 <BaseLayout
   title="Publications"
   description="Filterable, searchable list of publications by Cyan Subhra Mishra — ISCA, MICRO, HPCA, ICLR, NSDI, PACT, IPDPS, DATE, ICDCS, SoCC, NAS."
+  jsonLd={scholarlyLd}
 >
   <PageHeader
     number="03"

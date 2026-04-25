@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Daily rebuild at 06:30 UTC so citation counts and the GitHub stats
+  # card stay current without needing a code change.
+  schedule:
+    - cron: '30 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -31,9 +35,18 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Refresh citations (best-effort)
+        # Best-effort: never block a deploy. If Semantic Scholar / OpenAlex
+        # are down, the previous citations.json on disk is used as-is.
+        continue-on-error: true
+        env:
+          SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+        run: npm run refresh-citations
+
       - name: Build
         run: npm run build
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.PUBLIC_PLAUSIBLE_DOMAIN }}
           PUBLIC_FORMSPREE_ENDPOINT: ${{ vars.PUBLIC_FORMSPREE_ENDPOINT }}
 
