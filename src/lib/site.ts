@@ -17,7 +17,13 @@ export const SITE = {
   coords: { lat: 32.7157, lon: -117.1611, label: '32.7157°N 117.1611°W' },
   role: 'Performance and Power Engineer',
   org: 'Arm',
-  twitter: undefined,
+  /** Optional — set when the user has them. Used in JSON-LD Person.sameAs. */
+  orcid: undefined as string | undefined,        // e.g. '0000-0000-0000-0000'
+  twitter: undefined as string | undefined,      // e.g. 'cyansubhra' (handle, no @)
+  /** OpenAlex Author ID for the citation drift detector (Phase 7.6.2). */
+  openAlexAuthorId: undefined as string | undefined, // TODO: look up at openalex.org
+  /** Buttondown username for the newsletter component (Phase 7.6.5). */
+  buttondownUsername: undefined as string | undefined,
 } as const;
 
 export const NAV = [

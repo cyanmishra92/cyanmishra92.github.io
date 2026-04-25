@@ -10,6 +10,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
 <BaseLayout
   title="Projects"
   description="Featured research and engineering projects — NExUME, Salient Store, Usás, Seeker, Origin, Prophet, and current SoC perf work at Arm."
+  breadcrumbs={[{ name: 'Projects', href: '/projects/' }]}
 >
   <PageHeader
     number="04"

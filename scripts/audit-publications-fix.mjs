@@ -143,28 +143,44 @@ for (const f of files) {
     changes.push('bibtex → regenerated');
   }
 
-  // Stable field order for diffs.
-  const ordered = {
-    id: d.id,
-    title: d.title,
-    authors: d.authors,
-    myAuthorIndex: d.myAuthorIndex,
-    year: d.year,
-    venue: d.venue,
-    venueFull: d.venueFull,
-    type: d.type,
-    status: d.status,
-    ...(d.doi && { doi: d.doi }),
-    ...(d.arxivId && { arxivId: d.arxivId }),
-    ...(d.pdfUrl && { pdfUrl: d.pdfUrl }),
-    ...(d.codeUrl && { codeUrl: d.codeUrl }),
-    ...(d.slidesUrl && { slidesUrl: d.slidesUrl }),
-    ...(d.videoUrl && { videoUrl: d.videoUrl }),
-    ...(d.awards?.length && { awards: d.awards }),
-    topics: d.topics,
-    relatedPaperIds: d.relatedPaperIds,
-    bibtex: d.bibtex,
-  };
+  // Stable field order for diffs. The whitelist below covers every
+  // optional and required field defined in the publications schema —
+  // adding a new schema field requires adding it here too, otherwise
+  // the script silently drops it on the next run.
+  //
+  // The trailing pass-through guarantees we never lose data even if
+  // a field exists in the JSON that isn't yet known to this script:
+  // anything not in the whitelist is appended at the end, sorted by
+  // key, with a console warning so the omission is caught.
+  const SCHEMA_FIELDS = [
+    'id', 'title', 'authors', 'myAuthorIndex',
+    'year', 'venue', 'venueFull', 'type', 'status',
+    'doi', 'arxivId', 'pdfUrl', 'codeUrl', 'slidesUrl', 'videoUrl',
+    'awards', 'topics',
+    'abstract', 'citations', 'citationKey',
+    'relatedPaperIds',
+    'bibtex',
+  ];
+
+  const ordered = {};
+  for (const k of SCHEMA_FIELDS) {
+    if (k in d) {
+      // Keep optional empty arrays / falsy strings out of the output
+      // unless they're a default we want to ship explicitly.
+      if (k === 'awards' && (!d[k] || d[k].length === 0)) continue;
+      if (typeof d[k] === 'string' && d[k] === '') continue;
+      ordered[k] = d[k];
+    }
+  }
+
+  // Fail-safe: any unknown key in the source JSON is preserved at the
+  // tail (sorted) and logged so the next person notices and updates
+  // SCHEMA_FIELDS.
+  const stray = Object.keys(d).filter((k) => !SCHEMA_FIELDS.includes(k)).sort();
+  for (const k of stray) {
+    ordered[k] = d[k];
+    console.warn(`  ⚠ ${d.id}: unknown field "${k}" preserved at tail; add it to SCHEMA_FIELDS`);
+  }
 
   const next = JSON.stringify(ordered, null, 2) + '\n';
   if (next !== before) {

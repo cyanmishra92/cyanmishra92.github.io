@@ -10,6 +10,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(comp
 <BaseLayout
   title="Blog"
   description="Notes on performance engineering, ML systems, and side projects from Cyan Subhra Mishra."
+  breadcrumbs={[{ name: 'Blog', href: '/blog/' }]}
 >
   <PageHeader
     number="08"

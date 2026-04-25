@@ -2,6 +2,46 @@
 
 ## Unreleased
 
+### feat(seo): indexing pipeline + statcounter verify + sites.google.com migration plan
+*Phase 7.6.4 — 2026-04-25*
+
+- **Search-engine verification, env-driven**: `<meta name="google-site-verification">`
+  and `<meta name="msvalidate.01">` only render when `PUBLIC_GSC_VERIFICATION`
+  / `PUBLIC_BING_VERIFICATION` are set. No empty-content placeholder tag.
+- **`WebSite` JSON-LD on home** with `SearchAction` `potentialAction`
+  pointing to `/publications/?q={search_term_string}`.
+- **`BreadcrumbList` JSON-LD on every nested page** via a new
+  `breadcrumbs` prop on `BaseLayout`.
+- **`Person` JSON-LD widened**: dual `alumniOf` (Penn State + NIT
+  Rourkela), optional ORCID + Twitter slots in `src/lib/site.ts`
+  (`SITE.orcid` / `SITE.twitter`); when set they appear in `sameAs` and
+  drive `twitter:creator`. Email correctly stays out of `sameAs`.
+- **StatCounter hash corrected** from `d3a06f8e` → `d39bf83e` to match
+  the legacy Jekyll site, preserving historical analytics continuity.
+  Both the async JS snippet and the `<noscript>` `<img>` fallback are
+  present and consistent.
+- **IndexNow wired**: 32-char API key at
+  `public/169cc72c88778a725f0e4b20ea849813.txt`,
+  `scripts/indexnow-submit.ts` script,
+  `.github/workflows/indexnow.yml` triggered on `workflow_run` of
+  `Deploy` completion. Maps deploy-commit diff → public URLs → POSTs
+  to `https://api.indexnow.org/IndexNow`. Best-effort with
+  soft-failures.
+- **`docs/SEO.md`** — full step-by-step verification walkthrough for
+  GSC, Bing Webmaster, IndexNow + key rotation procedure.
+- **`docs/MIGRATION.md`** — three-step `sites.google.com` deprecation
+  plan + a checkbox-tracked backlink audit checklist (Scholar,
+  LinkedIn, DBLP, Penn State, talk slides, email signature, etc.).
+- **`docs/ANALYTICS.md`** — StatCounter integration docs (project ID,
+  hash provenance, verification steps) + Plausible enablement
+  instructions.
+
+Also carries the fix the codex bot caught on PR #7:
+`scripts/audit-publications-fix.mjs` no longer drops schema-valid
+optional fields on re-run. `SCHEMA_FIELDS` whitelist now covers
+`abstract`, `citations`, and `citationKey`; a fail-safe pass-through
+preserves any unknown keys at the tail with a warning.
+
 ### chore(content): full publications + bibtex audit against resume.tex
 *Phase 7.6.3 — 2026-04-25*
 

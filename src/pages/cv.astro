@@ -3,7 +3,11 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import PageHeader from '@components/PageHeader.astro';
 ---
 
-<BaseLayout title="CV" description="Curriculum vitae of Cyan Subhra Mishra.">
+<BaseLayout
+  title="CV"
+  description="Curriculum vitae of Cyan Subhra Mishra."
+  breadcrumbs={[{ name: 'CV', href: '/cv/' }]}
+>
   <PageHeader
     number="09"
     eyebrow="cv"
