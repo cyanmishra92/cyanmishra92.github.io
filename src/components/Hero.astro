@@ -1,7 +1,9 @@
 ---
+import { Picture } from 'astro:assets';
 import { SITE, buildStamp } from '@lib/site';
 import SchematicBackdrop from './SchematicBackdrop.astro';
 import ProfileLinkBar from './ProfileLinkBar.astro';
+import profile from '@/assets/profile.jpg';
 
 const stamp = buildStamp();
 const coord = `${SITE.coords.label} // ${SITE.location} // ${stamp}`;
@@ -62,13 +64,15 @@ const coord = `${SITE.coords.label} // ${SITE.location} // ${stamp}`;
         At sm (<768): full-width row below the name+CTAs. */}
     <aside class="stage stage-4 col-span-12 lg:col-span-4 lg:row-start-2 lg:mt-32 lg:pl-4">
       <figure class="relative">
-        <img
-          src="/img/profile.jpg"
+        <Picture
+          src={profile}
+          formats={['avif', 'webp']}
+          widths={[160, 320, 520]}
+          sizes="(min-width: 1024px) 260px, (min-width: 768px) 140px, (min-width: 640px) 160px, 128px"
           alt="Cyan Subhra Mishra, head and shoulders portrait"
-          width="320"
-          height="322"
           class="block w-32 border border-accent sm:w-40 md:w-[140px] lg:w-full lg:max-w-[260px]"
           style="border-radius: 4px;"
+          loading="eager"
           decoding="async"
           fetchpriority="high"
         />
