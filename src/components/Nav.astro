@@ -12,11 +12,11 @@ function isActive(href: string): boolean {
   return path === href || path.startsWith(href);
 }
 
-// Primary nav per Phase 7.8 spec — five highest-traffic destinations.
-// Numbered prefixes deliberately dropped from primary; only overflow
-// items keep them.
+// At `lg` (1024–1279px) the nav shows the five highest-traffic items
+// + a MORE dropdown for the rest. At `xl`+ (≥1280px) every item shows
+// inline so wide-screen users get one-click access to the whole site
+// without an extra menu interaction.
 const PRIMARY = ['/about/', '/publications/', '/projects/', '/blog/', '/contact/'];
-const primaryItems = NAV.filter((n) => PRIMARY.includes(n.href));
 const overflowItems = NAV.filter((n) => !PRIMARY.includes(n.href));
 
 // Original NAV ordering for the numbered prefix on overflow items —
@@ -24,9 +24,9 @@ const overflowItems = NAV.filter((n) => !PRIMARY.includes(n.href));
 // across the whole site.
 const navIndex = new Map(NAV.map((n, i) => [n.href, i + 1]));
 
-// Two highest-traffic icon links surfaced in the header (xl only).
-// The full ProfileLinkBar lives in the hero; this is a discoverability
-// hint at the top of every page.
+// Two highest-traffic icon links surfaced in the header. Bumped to
+// `2xl` (≥1536px) so the lg/xl band stays roomy for the expanded
+// primary nav. Full ProfileLinkBar still lives in the hero.
 const HEADER_ICONS = ['mail', 'github'] as const;
 const headerIconProfiles = HEADER_ICONS
   .map((k) => PROFILES.find((p) => p.icon === k))
@@ -39,25 +39,34 @@ const headerIconProfiles = HEADER_ICONS
   >
     <SiteLogo />
 
-    {/* desktop primary nav (lg ≥1024px). Five items, no numbered prefix. */}
+    {/* desktop primary nav (lg ≥1024px). At lg the five primary items
+        show + MORE dropdown; at xl every item shows inline. Each anchor
+        renders unconditionally and gates its visibility via responsive
+        utility classes so the markup order matches NAV order. */}
     <nav class="ml-2 hidden items-center gap-x-0.5 lg:flex" aria-label="Primary">
-      {primaryItems.map(({ href, label }) => (
-        <a
-          href={href}
-          class:list={[
-            'group relative inline-flex items-baseline px-2.5 py-1.5 font-mono text-[0.75rem] uppercase tracking-eyebrow transition-colors',
-            isActive(href) ? 'text-accent' : 'text-text-muted hover:text-text',
-          ]}
-          aria-current={isActive(href) ? 'page' : undefined}
-        >
-          <span>{label}</span>
-          {isActive(href) && <span class="ml-1 text-accent" aria-hidden="true">·</span>}
-        </a>
-      ))}
+      {NAV.map(({ href, label }) => {
+        const isPrimary = PRIMARY.includes(href);
+        return (
+          <a
+            href={href}
+            class:list={[
+              'group relative items-baseline px-2.5 py-1.5 font-mono text-[0.75rem] uppercase tracking-eyebrow transition-colors',
+              // Primary items always visible at lg+; overflow items
+              // only appear at xl+, where the dropdown collapses.
+              isPrimary ? 'inline-flex' : 'hidden xl:inline-flex',
+              isActive(href) ? 'text-accent' : 'text-text-muted hover:text-text',
+            ]}
+            aria-current={isActive(href) ? 'page' : undefined}
+          >
+            <span>{label}</span>
+            {isActive(href) && <span class="ml-1 text-accent" aria-hidden="true">·</span>}
+          </a>
+        );
+      })}
 
-      {/* overflow MORE button — opens dropdown panel */}
+      {/* overflow MORE button — visible at lg only, hidden at xl */}
       {overflowItems.length > 0 && (
-        <div class="relative">
+        <div class="relative xl:hidden">
           <button
             type="button"
             class="more-btn group inline-flex items-center gap-1 px-2.5 py-1.5 font-mono text-[0.75rem] uppercase tracking-eyebrow text-text-muted transition-colors hover:text-text"
@@ -108,8 +117,9 @@ const headerIconProfiles = HEADER_ICONS
     <div class="ml-auto flex items-center gap-1">
       <span class="hidden lg:inline-flex"><SearchTrigger /></span>
 
-      {/* header icon row — top 2 channels, xl only to keep the header tight */}
-      <span class="hidden xl:inline-flex items-center gap-1">
+      {/* header icon row — top 2 channels, 2xl only so the xl band has
+          room for the fully expanded primary nav. */}
+      <span class="hidden 2xl:inline-flex items-center gap-1">
         {headerIconProfiles.map((p) => (
           <IconLink
             href={p.href}
