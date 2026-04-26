@@ -11,9 +11,12 @@ import { loadGithubStats } from '@lib/github-stats';
 import { SITE } from '@lib/site';
 
 // ─── projects ─────────────────────────────────────────────────────
-const projects = (await getCollection('projects', ({ data }) => !data.draft))
-  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99))
-  .slice(0, 3);
+// Split into the 3×2 featured grid (everything except `ongoing: true`)
+// and the single horizontal "ongoing" strip below it.
+const allProjects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+const featuredProjects = allProjects.filter((p) => !p.data.ongoing).slice(0, 6);
+const ongoingProject = allProjects.find((p) => p.data.ongoing);
 
 // ─── publications ─────────────────────────────────────────────────
 const allPapers = withCitations((await getCollection('publications')).map((e) => e.data));
@@ -34,12 +37,28 @@ const citations = {
 const syncedOn = overlay?._lastVerified ?? null;
 const driftCheckedOn = loadDriftTimestamp();
 
-// ─── live news ────────────────────────────────────────────────────
+// ─── live news (grouped by year for the desktop timeline view) ─────
 const allNews = (await getCollection('news', ({ data }) => !data.draft)).sort(compareNews);
-const recentNews = allNews.slice(0, 4);
+const recentNews = allNews.slice(0, 6);
+// Pre-group: { year, items[] } for the year-as-display-number layout.
+const newsByYear: { year: number; items: typeof recentNews }[] = [];
+for (const n of recentNews) {
+  const y = n.data.date.getUTCFullYear();
+  const last = newsByYear[newsByYear.length - 1];
+  if (last && last.year === y) last.items.push(n);
+  else newsByYear.push({ year: y, items: [n] });
+}
 
 // ─── github stats ────────────────────────────────────────────────
 const ghStats = await loadGithubStats();
+
+// ─── talks teaser ────────────────────────────────────────────────
+// Count total talks given (deep-dive entries) and pull the latest one
+// for the "code & writing" §06 strip.
+const talksAll = (await getCollection('talks', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const latestTalk = talksAll[0];
+const talksCount = talksAll.length;
 
 // ─── home stats strip ─────────────────────────────────────────────
 const stats = [
@@ -76,31 +95,11 @@ const websiteLd = {
 <BaseLayout jsonLd={websiteLd}>
   <Hero />
 
-  {/* ─── §02 currently ────────────────────────────────────────── */}
-  <section class="mx-auto max-w-page px-6 py-20 lg:px-8">
-    <SectionHeader number="02" eyebrow="currently" />
-    <div class="grid gap-10 lg:grid-cols-12">
-      <p class="lg:col-span-8 max-w-prose text-lg leading-relaxed text-text">
-        I'm a Performance and Power Engineer on the SoC Architecture Performance
-        team at <span class="text-accent">Arm</span> in San Diego, where I work
-        on pre-silicon performance and power analysis for next-generation
-        heterogeneous SoCs targeting Edge AI, IoT, and automotive workloads.
-        Recently completed my Ph.D. at Penn State, advised by
-        Mahmut Taylan Kandemir and Jack Sampson.
-      </p>
-      <aside class="lg:col-span-4 border-l border-border pl-6">
-        <p class="eyebrow">previously</p>
-        <ul class="mt-3 space-y-2 font-mono text-xs text-text-muted">
-          <li><span class="text-text">2018 — 2025</span> · Penn State (Ph.D.)</li>
-          <li><span class="text-text">2021</span> · Bell Labs (research intern)</li>
-          <li><span class="text-text">2016 — 2018</span> · Intel (design engineer)</li>
-          <li><span class="text-text">2011 — 2016</span> · NIT Rourkela</li>
-        </ul>
-      </aside>
-    </div>
-  </section>
+  {/* §02 currently — removed: the hero "Currently" right-column card
+      already carries this content. Long-form bio + the experience
+      timeline live on /about. Renumbered §03→§02 below. */}
 
-  {/* ─── §03 stats strip ────────────────────────────────────────── */}
+  {/* ─── §02 stats strip ────────────────────────────────────────── */}
   <section class="border-y border-border bg-surface/40">
     <div class="mx-auto grid max-w-page grid-cols-2 divide-x divide-border lg:grid-cols-4">
       {stats.map((s, i) => (
@@ -140,16 +139,24 @@ const websiteLd = {
     </p>
   </section>
 
-  {/* ─── §04 featured projects ────────────────────────────────── */}
+  {/* ─── §03 featured projects — 3×2 grid + ongoing strip ───── */}
   <section class="mx-auto max-w-page px-6 py-24 lg:px-8">
-    <SectionHeader number="04" eyebrow="featured projects" title="Selected work" />
+    <SectionHeader number="03" eyebrow="featured projects" title="Selected work" />
 
-    <div class="grid gap-6 lg:grid-cols-3">
-      {projects.map((p, i) => (
-        <Card index={`${String(i + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`} href={`/projects/${p.slug}/`}>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {featuredProjects.map((p, i) => (
+        <Card index={`${String(i + 1).padStart(2, '0')} / ${String(featuredProjects.length).padStart(2, '0')}`} href={`/projects/${p.slug}/`}>
           <div class="mt-8">
             {p.data.venue && (
               <span class="tag tag-accent">{p.data.venue} {p.data.year}</span>
+            )}
+            {p.data.status === 'under-review' && !p.data.venue && (
+              <span class="tag">under review</span>
+            )}
+            {p.data.awards.length > 0 && (
+              <span class="ml-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+                ★ {p.data.awards[0]}
+              </span>
             )}
             <h3 class="mt-4 font-display text-2xl text-text">{p.data.title}</h3>
             <p class="mt-2 text-sm font-medium text-text-muted">{p.data.tagline}</p>
@@ -162,6 +169,27 @@ const websiteLd = {
       ))}
     </div>
 
+    {/* ongoing — single horizontal strip below the grid */}
+    {ongoingProject && (
+      <a
+        href={`/projects/${ongoingProject.slug}/`}
+        class="card-sharp mt-6 grid gap-4 p-6 sm:grid-cols-12 sm:gap-6 sm:p-7"
+      >
+        <span class="card-index">07 / {String(featuredProjects.length).padStart(2, '0')}+</span>
+        <div class="mt-7 sm:col-span-3 sm:mt-7">
+          <span class="tag">ongoing</span>
+        </div>
+        <div class="sm:col-span-9 sm:mt-7">
+          <h3 class="font-display text-2xl text-text">{ongoingProject.data.title}</h3>
+          <p class="mt-2 text-sm font-medium text-text-muted">{ongoingProject.data.tagline}</p>
+          <p class="mt-3 max-w-prose text-sm leading-relaxed text-text-muted">{ongoingProject.data.summary}</p>
+          <p class="mt-4 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+            read more →
+          </p>
+        </div>
+      </a>
+    )}
+
     <p class="mt-8 text-right">
       <a href="/projects/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
         view all projects →
@@ -169,36 +197,53 @@ const websiteLd = {
     </p>
   </section>
 
-  {/* ─── §05 latest news ──────────────────────────────────────── */}
+  {/* ─── §04 latest news — year-grouped timeline (desktop) ────── */}
   <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
-    <SectionHeader number="05" eyebrow="latest" title="News" />
+    <SectionHeader number="04" eyebrow="latest" title="News" />
 
-    <ul class="divide-y divide-border border-y border-border">
-      {recentNews.map((n) => (
-        <li class="grid grid-cols-12 gap-4 py-5">
-          <time
-            datetime={isoDate(n.data.date)}
-            class="col-span-12 font-mono text-xs uppercase tracking-eyebrow text-text-muted lg:col-span-2"
-          >
-            {n.data.approximateDate ? approximateDate(n.data.date) : prettyDate(n.data.date)}
-          </time>
-          <p class="col-span-12 text-text lg:col-span-10">
-            {n.data.href ? (
-              <a
-                href={n.data.href}
-                class="link-underline"
-                rel={n.data.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                target={n.data.href.startsWith('http') ? '_blank' : undefined}
+    {/* desktop: year on the left as Fraunces display number,
+        entries flow right beside it. mobile: simple stacked list. */}
+    <div class="border-y border-border">
+      {newsByYear.map((g) => (
+        <div class="grid grid-cols-12 gap-4 py-6 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-border">
+          <h3
+            class="col-span-12 font-display leading-none text-ink lg:col-span-2"
+            style="font-size: clamp(2.5rem, 4vw, 3.5rem); font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;"
+          >{g.year}</h3>
+          <ul class="col-span-12 lg:col-span-10">
+            {g.items.map((n, i) => (
+              <li
+                class:list={[
+                  'grid grid-cols-12 gap-4 py-3',
+                  i > 0 && 'border-t border-border',
+                ]}
               >
-                {n.data.title}
-              </a>
-            ) : (
-              n.data.title
-            )}
-          </p>
-        </li>
+                <time
+                  datetime={isoDate(n.data.date)}
+                  class="col-span-12 font-mono text-xs uppercase tracking-eyebrow text-text-muted sm:col-span-3"
+                >
+                  {n.data.approximateDate ? approximateDate(n.data.date) : prettyDate(n.data.date)}
+                </time>
+                <p class="col-span-12 text-text sm:col-span-9">
+                  {n.data.href ? (
+                    <a
+                      href={n.data.href}
+                      class="link-underline"
+                      rel={n.data.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      target={n.data.href.startsWith('http') ? '_blank' : undefined}
+                    >
+                      {n.data.title}
+                    </a>
+                  ) : (
+                    n.data.title
+                  )}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       ))}
-    </ul>
+    </div>
 
     <p class="mt-8 flex items-center justify-between">
       <a href="/rss.xml" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted hover:text-accent">
@@ -212,7 +257,7 @@ const websiteLd = {
 
   {/* ─── §06 selected publications ─────────────────────────────── */}
   <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
-    <SectionHeader number="06" eyebrow="selected" title="Publications" />
+    <SectionHeader number="05" eyebrow="selected" title="Publications" />
     <div>
       {selected.map((paper, i) => (
         <PaperItem paper={paper} index={i + 1} />
@@ -227,16 +272,16 @@ const websiteLd = {
 
   {/* ─── §07 elsewhere — github + blog teaser ───────────────────── */}
   <section class="mx-auto max-w-page px-6 py-16 lg:px-8">
-    <SectionHeader number="07" eyebrow="elsewhere" title="Code & writing" />
+    <SectionHeader number="06" eyebrow="elsewhere" title="Code & writing" />
 
-    <div class="grid gap-6 lg:grid-cols-2">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <a
         href="https://github.com/cyanmishra92"
         rel="noopener noreferrer"
         target="_blank"
         class="card-sharp block p-6 sm:p-7"
       >
-        <span class="card-index">01 / 02</span>
+        <span class="card-index">01 / 03</span>
         <p class="mt-7 eyebrow">github</p>
         {ghStats ? (
           <>
@@ -271,7 +316,7 @@ const websiteLd = {
       </a>
 
       <a href="/blog/" class="card-sharp block p-6 sm:p-7">
-        <span class="card-index">02 / 02</span>
+        <span class="card-index">02 / 03</span>
         <p class="mt-7 eyebrow">blog</p>
         <p class="mt-4 font-display text-2xl text-text">Notes &amp; long-form</p>
         <p class="mt-3 text-sm leading-relaxed text-text-muted">
@@ -281,6 +326,32 @@ const websiteLd = {
         </p>
         <p class="mt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
           read posts →
+        </p>
+      </a>
+
+      <a href="/talks/" class="card-sharp block p-6 sm:p-7">
+        <span class="card-index">03 / 03</span>
+        <p class="mt-7 eyebrow">talks</p>
+        <p class="mt-4 font-display text-2xl text-text">Conference + invited</p>
+        <div class="mt-6 grid grid-cols-2 gap-y-4">
+          <div>
+            <p class="font-display text-3xl leading-none text-ink" style="font-variation-settings: 'opsz' 72, 'SOFT' 30;">{talksCount}</p>
+            <p class="mt-1 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">deep dives</p>
+          </div>
+        </div>
+        {latestTalk && (
+          <div class="mt-6">
+            <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">latest</p>
+            <p class="mt-1 text-sm text-text">
+              {latestTalk.data.title}
+            </p>
+            <p class="mt-1 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+              {latestTalk.data.venue} · {latestTalk.data.date.getUTCFullYear()}
+            </p>
+          </div>
+        )}
+        <p class="mt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+          view all talks →
         </p>
       </a>
     </div>

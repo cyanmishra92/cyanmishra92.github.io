@@ -15,13 +15,12 @@
   "type": "conference",
   "status": "published",
   "arxivId": "2408.13696",
+  "pdfUrl": "https://arxiv.org/pdf/2408.13696",
   "topics": [
     "Energy Harvesting",
     "Intermittent Computing",
     "DNN Training"
   ],
-  "relatedPaperIds": [
-    "nexume-arxiv"
-  ],
+  "relatedPaperIds": [],
   "bibtex": "@inproceedings{mishra2025nexumeiclr,\n  title     = {Revisiting DNN Training for Intermittently-Powered Energy-Harvesting Micro-Computers},\n  author    = {Mishra, Cyan Subhra and Chaudhary, Deeksha and Sampson, Jack and Kandemir, Mahmut Taylan and Das, Chita R.},\n  booktitle = {International Conference on Learning Representations (ICLR '25)},\n  year      = {2025},\n  publisher = {IEEE},\n}"
 }

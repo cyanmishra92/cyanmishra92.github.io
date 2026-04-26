@@ -1,55 +1,78 @@
 ---
-import { PROFILES, SITE, buildIso, buildStamp } from '@lib/site';
-import IconLink from './IconLink.astro';
+import { SITE, buildIso, buildStamp } from '@lib/site';
+import ProfileLinkBar from './ProfileLinkBar.astro';
 import NewsletterSubscribe from './NewsletterSubscribe.astro';
+import { lastModified } from '@lib/last-modified';
 
 const built = buildIso();
 const stamp = buildStamp();
 const year = new Date().getUTCFullYear();
+// Last commit on the home page itself — pulled into the meta strip so
+// every page footer carries both build-stamp and source-modified date.
+const homeModified = lastModified('src/pages/index.astro');
 ---
 
 <footer class="border-t border-border mt-32">
   <div class="mx-auto max-w-page px-6 py-12 lg:px-8">
+    {/* Three-column grid per Phase 7.7 spec: about / sitemap / channels.
+        Mobile collapses to a single stack. */}
     <div class="grid gap-10 lg:grid-cols-12">
-      {/* identity */}
-      <div class="lg:col-span-5">
+      {/* ─── about column ──────────────────────────────────── */}
+      <div class="lg:col-span-4">
         <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
           // {SITE.shortName}
         </p>
         <p class="mt-3 max-w-prose text-sm text-text-muted">
           {SITE.role} at {SITE.org}. Hardware/software co-design for ML systems.
+        </p>
+        <p class="mt-2 max-w-prose text-sm text-text-muted">
           Based in {SITE.location}.
         </p>
       </div>
 
-      {/* sitemap */}
+      {/* ─── sitemap column — grouped per spec ──────────────── */}
       <nav class="lg:col-span-4" aria-label="Footer">
         <p class="eyebrow">sitemap</p>
-        <ul class="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm">
-          <li><a href="/about/" class="link-underline text-text">About</a></li>
-          <li><a href="/research/" class="link-underline text-text">Research</a></li>
-          <li><a href="/publications/" class="link-underline text-text">Publications</a></li>
-          <li><a href="/projects/" class="link-underline text-text">Projects</a></li>
-          <li><a href="/news/" class="link-underline text-text">News</a></li>
-          <li><a href="/talks/" class="link-underline text-text">Talks</a></li>
-          <li><a href="/blog/" class="link-underline text-text">Blog</a></li>
-          <li><a href="/photos/" class="link-underline text-text">Photos</a></li>
-          <li><a href="/press/" class="link-underline text-text">Press</a></li>
-          <li><a href="/subscribe/" class="link-underline text-text">Subscribe</a></li>
-          <li><a href="/cv/" class="link-underline text-text">CV</a></li>
-          <li><a href="/contact/" class="link-underline text-text">Contact</a></li>
-          <li><a href="/rss.xml" class="link-underline text-text">RSS</a></li>
-        </ul>
+        <div class="mt-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm sm:grid-cols-3">
+          <div class="col-span-1">
+            <p class="font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">// research</p>
+            <ul class="mt-1.5 space-y-1">
+              <li><a href="/research/" class="link-underline text-text">Research</a></li>
+              <li><a href="/publications/" class="link-underline text-text">Publications</a></li>
+              <li><a href="/projects/" class="link-underline text-text">Projects</a></li>
+              <li><a href="/talks/" class="link-underline text-text">Talks</a></li>
+              <li><a href="/teaching/" class="link-underline text-text">Teaching</a></li>
+              <li><a href="/cv/" class="link-underline text-text">CV</a></li>
+            </ul>
+          </div>
+          <div class="col-span-1">
+            <p class="font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">// writing</p>
+            <ul class="mt-1.5 space-y-1">
+              <li><a href="/blog/" class="link-underline text-text">Blog</a></li>
+              <li><a href="/news/" class="link-underline text-text">News</a></li>
+              <li><a href="/press/" class="link-underline text-text">Press</a></li>
+              <li><a href="/subscribe/" class="link-underline text-text">Subscribe</a></li>
+              <li><a href="/rss.xml" class="link-underline text-text">RSS</a></li>
+            </ul>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <p class="font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">// personal</p>
+            <ul class="mt-1.5 space-y-1">
+              <li><a href="/about/" class="link-underline text-text">About</a></li>
+              <li><a href="/photos/" class="link-underline text-text">Photos</a></li>
+              <li><a href="/contact/" class="link-underline text-text">Contact</a></li>
+            </ul>
+          </div>
+        </div>
       </nav>
 
-      {/* socials */}
-      <div class="lg:col-span-3">
+      {/* ─── channels column ─────────────────────────────────── */}
+      <div class="lg:col-span-4">
         <p class="eyebrow">channels</p>
-        <div class="mt-3 flex flex-wrap gap-2">
-          {PROFILES.map((p) => (
-            <IconLink href={p.href} icon={p.icon as any} label={p.label} external={!p.href.startsWith('mailto:')} />
-          ))}
+        <div class="mt-3">
+          <ProfileLinkBar variant="footer" />
         </div>
+
         {SITE.buttondownUsername && (
           <div class="mt-6">
             <p class="eyebrow">newsletter</p>
@@ -59,6 +82,10 @@ const year = new Date().getUTCFullYear();
             </p>
           </div>
         )}
+
+        <p class="mt-6 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+          <a href="/rss.xml" class="link-underline hover:text-accent">// rss feed</a>
+        </p>
       </div>
     </div>
 
@@ -66,6 +93,12 @@ const year = new Date().getUTCFullYear();
     <div class="mt-10 flex flex-col gap-2 border-t border-border pt-6 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted sm:flex-row sm:items-center sm:justify-between">
       <p>© {year} {SITE.name}. Built with Astro.</p>
       <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        {homeModified && (
+          <>
+            <span>last modified · <time datetime={homeModified}>{homeModified}</time></span>
+            <span aria-hidden="true">·</span>
+          </>
+        )}
         <span>last build · <time datetime={built}>{stamp}</time></span>
         <span aria-hidden="true">·</span>
         <a href="https://github.com/cyanmishra92/cyanmishra92.github.io" class="link-underline" rel="noopener noreferrer">view source</a>

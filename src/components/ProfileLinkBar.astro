@@ -1,0 +1,140 @@
+---
+/**
+ * ProfileLinkBar — single source of truth for "ways to reach me."
+ *
+ * Three variants, one component, one PROFILES list (in src/lib/site.ts).
+ * Adding a new channel (ORCID, Mastodon, etc.) is a one-line edit there.
+ *
+ *   variant="hero"     — typographic strip: [icon] label · separators · etc.
+ *                        Used under the home hero CTAs.
+ *   variant="compact"  — same shape as hero, smaller type. Used on /about
+ *                        and the contact page.
+ *   variant="footer"   — small icon-only square buttons, wraps cleanly in
+ *                        the footer's 3-col grid.
+ *
+ * All channels open in a new tab with rel="noopener noreferrer" except
+ * mailto:.
+ */
+
+import { PROFILES } from '@lib/site';
+import GithubIcon from './icons/GithubIcon.astro';
+import LinkedinIcon from './icons/LinkedinIcon.astro';
+import MailIcon from './icons/MailIcon.astro';
+import InstagramIcon from './icons/InstagramIcon.astro';
+import ScholarIcon from './icons/ScholarIcon.astro';
+import DblpIcon from './icons/DblpIcon.astro';
+
+interface Props {
+  variant?: 'hero' | 'footer' | 'compact';
+  /** Display order — defaults to spec order (email · scholar · github · linkedin · dblp · instagram). */
+  order?: string[];
+}
+
+const { variant = 'hero', order } = Astro.props;
+
+const ICONS = {
+  github: GithubIcon,
+  linkedin: LinkedinIcon,
+  mail: MailIcon,
+  instagram: InstagramIcon,
+  scholar: ScholarIcon,
+  dblp: DblpIcon,
+} as const;
+
+// Default order matches Phase 7.7 spec: email first (most actionable),
+// scholar / github / linkedin (professional channels), dblp / instagram (rest).
+const DEFAULT_ORDER = ['mail', 'scholar', 'github', 'linkedin', 'dblp', 'instagram'];
+const wantedOrder = order ?? DEFAULT_ORDER;
+
+// Resolve PROFILES into the requested order, dropping any unknown icons.
+const items = wantedOrder
+  .map((iconKey) => PROFILES.find((p) => p.icon === iconKey))
+  .filter((p): p is (typeof PROFILES)[number] => !!p);
+
+// Short labels for the typographic strip — overrides the verbose label
+// from PROFILES (e.g. "Google Scholar" → "scholar").
+const SHORT_LABELS: Record<string, string> = {
+  mail: 'email',
+  scholar: 'scholar',
+  github: 'github',
+  linkedin: 'linkedin',
+  dblp: 'dblp',
+  instagram: 'instagram',
+};
+---
+
+{variant === 'footer' ? (
+  /* footer: small icon-only square boxes, hairline border, wraps */
+  <ul class="flex flex-wrap gap-2" aria-label="Channels">
+    {items.map((p) => {
+      const Icon = ICONS[p.icon];
+      return (
+        <li>
+          <a
+            href={p.href}
+            aria-label={p.label}
+            title={p.label}
+            class="inline-flex h-9 w-9 items-center justify-center border border-border text-text-muted transition-colors hover:border-accent hover:text-accent"
+            {...(!p.href.startsWith('mailto:') ? { rel: 'noopener noreferrer', target: '_blank' } : {})}
+          ><Icon /></a>
+        </li>
+      );
+    })}
+  </ul>
+) : (
+  /* hero / compact: typographic strip, hairline `|` separators between items.
+     No boxes, no buttons — sits as a byline below the CTAs. */
+  <nav
+    class:list={[
+      'profile-link-bar flex flex-wrap items-center',
+      variant === 'hero' ? 'gap-x-3 gap-y-2 text-sm' : 'gap-x-2 gap-y-1.5 text-xs',
+    ]}
+    aria-label="Channels"
+  >
+    {items.map((p, i) => {
+      const Icon = ICONS[p.icon];
+      const label = SHORT_LABELS[p.icon] ?? p.label.toLowerCase();
+      const isMail = p.href.startsWith('mailto:');
+      return (
+        <>
+          {i > 0 && <span class="text-border" aria-hidden="true">|</span>}
+          <a
+            href={p.href}
+            class="profile-link group inline-flex items-center gap-1.5 font-mono uppercase tracking-eyebrow text-text-muted transition-colors hover:text-accent"
+            aria-label={p.label}
+            {...(!isMail ? { rel: 'noopener noreferrer', target: '_blank' } : {})}
+          >
+            <Icon />
+            <span class="profile-link-label">{label}</span>
+          </a>
+        </>
+      );
+    })}
+  </nav>
+)}
+
+<style>
+  /* Underline-from-left animation, 200ms ease-out — matches link-underline in global.css */
+  .profile-link {
+    position: relative;
+  }
+  .profile-link .profile-link-label {
+    position: relative;
+  }
+  .profile-link .profile-link-label::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 200ms ease-out;
+  }
+  .profile-link:hover .profile-link-label::after,
+  .profile-link:focus-visible .profile-link-label::after {
+    transform: scaleX(1);
+  }
+</style>

@@ -171,6 +171,33 @@ When the deploy lands and you've set the GSC + Bing tokens:
 
 ---
 
+## Day-after-deploy ritual (every meaningful release)
+
+After any release that changes more than a handful of pages — or
+after every `Phase 7.x` PR merge in particular — do this 24 hours
+later:
+
+1. **Search Console → Coverage / Pages.** Filter to "Last crawled in
+   the past 24 hours." Confirm the home and any newly-added route
+   appear with `Indexed` status.
+2. **Search Console → URL Inspection** for the home URL and one new
+   nested page. Confirm `URL is on Google` and the `Page changes`
+   stamp matches the deploy date.
+3. **StatCounter → Recent visitor activity.** A test visit you make
+   should appear within ~60 seconds. Hash should still be `d39bf83e`
+   in the network panel; project ID `13144757`. If StatCounter
+   stopped recording, see [`ANALYTICS.md`](./ANALYTICS.md) "Why
+   preserve the legacy hash?" for the recovery path.
+4. **Bing Webmaster → Site Explorer** for any new URL. `Allowed by
+   robots.txt`, `Indexable`, `Discovered via sitemap` should all be
+   green.
+
+If any of these check fails, open a `bot:seo-regression` issue with
+the URL and the failing report so it doesn't get lost in the next
+release cycle.
+
+---
+
 ## Future: Google Tag Manager / GA4
 
 Skipped for now. If/when you add GA4, drop a `dns-prefetch` for

@@ -14,14 +14,13 @@
   "type": "conference",
   "status": "published",
   "arxivId": "2410.05435",
+  "pdfUrl": "https://arxiv.org/pdf/2410.05435",
   "topics": [
     "Computational Storage",
     "Continuous Learning",
     "Edge",
     "FPGA"
   ],
-  "relatedPaperIds": [
-    "salient-store-arxiv"
-  ],
+  "relatedPaperIds": [],
   "bibtex": "@inproceedings{mishra2025salientstore,\n  title     = {Salient Store: Enabling Smart Storage for Continuous Learning Edge Servers},\n  author    = {Mishra, Cyan Subhra and Chaudhary, Deeksha and Kandemir, Mahmut Taylan and Das, Chita R.},\n  booktitle = {International Conference on Parallel Architectures and Compilation Techniques (PACT '25)},\n  year      = {2025},\n  publisher = {IEEE},\n}"
 }
