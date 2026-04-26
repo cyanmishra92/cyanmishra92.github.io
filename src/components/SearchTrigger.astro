@@ -40,29 +40,49 @@
 <script>
   // Wire the global Cmd-K shortcut so the keystroke also works without
   // clicking the button. The palette itself is not yet built — see
-  // BaseLayout.astro TODO. Dispatch a custom event the palette can
-  // listen for once it ships, and fall back to focusing /publications
-  // search if the palette isn't mounted.
+  // BaseLayout.astro TODO. We dispatch a custom event so a future
+  // palette can intercept; until then, the soft-fallback runs.
+  //
+  // Palette wiring contract: when mounted, the palette listens for
+  // `site:open-palette` and calls `preventDefault()` to mark the event
+  // consumed. We track that explicitly via a flag (rather than reading
+  // the return value of dispatchEvent, which is inverted from "was it
+  // handled" — it's `false` only when preventDefault was called).
   const fireOpen = () => {
-    const handled = window.dispatchEvent(
-      new CustomEvent('site:open-palette', { cancelable: true }),
-    );
-    if (!handled) {
-      // Palette not yet mounted; soft-fallback to the publications
-      // search input on the publications page, otherwise navigate.
-      const onPubs = location.pathname.startsWith('/publications');
-      if (onPubs) {
-        const input = document.querySelector<HTMLInputElement>(
-          '#pubs-search, [data-pubs-input]',
-        );
-        input?.focus();
-      } else {
-        location.href = '/publications/?q=';
+    let consumed = false;
+    const ev = new CustomEvent('site:open-palette', { cancelable: true });
+    const mark = () => {
+      if (ev.defaultPrevented) consumed = true;
+    };
+    window.addEventListener('site:open-palette', mark, { once: true });
+    window.dispatchEvent(ev);
+    window.removeEventListener('site:open-palette', mark);
+
+    if (consumed) return;
+
+    // Palette not mounted; soft-fallback to the publications search
+    // input on the publications page, otherwise navigate there.
+    const onPubs = location.pathname.startsWith('/publications');
+    if (onPubs) {
+      const input = document.querySelector<HTMLInputElement>(
+        '#pubs-search, [data-pubs-input]',
+      );
+      if (input) {
+        input.focus();
+        input.select?.();
+        return;
       }
     }
+    location.href = '/publications/?q=';
   };
 
-  document.querySelector('[data-search-trigger]')?.addEventListener('click', fireOpen);
+  document
+    .querySelector<HTMLButtonElement>('[data-search-trigger]')
+    ?.addEventListener('click', (e) => {
+      e.preventDefault();
+      fireOpen();
+    });
+
   document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
