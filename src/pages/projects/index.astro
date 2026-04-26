@@ -51,7 +51,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
             </p>
 
             {p.data.topics.length > 0 && (
-              <div class="mt-5 flex flex-wrap gap-1.5">
+              <div class="mt-5 flex flex-wrap gap-2">
                 {p.data.topics.slice(0, 4).map((t) => <span class="tag">{t}</span>)}
               </div>
             )}

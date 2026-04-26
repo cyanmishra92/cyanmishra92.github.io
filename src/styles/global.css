@@ -161,6 +161,20 @@
     background: rgb(var(--color-border));
   }
 
+  /* External-link indicator — appends a small ↗ glyph after links
+     that open in a new tab, but only inside body content. Excluded:
+     buttons, profile/icon links (which already carry a recognizable
+     icon), and links in the nav/footer landmarks. The cue tells
+     readers a click will leave the site without cluttering chrome. */
+  main a[target="_blank"]:not(.btn):not(.profile-link):not(.icon-link):not([aria-label])::after {
+    content: ' ↗';
+    display: inline;
+    font-size: 0.85em;
+    margin-left: 0.1em;
+    color: rgb(var(--color-accent));
+    opacity: 0.75;
+  }
+
   /* Animated underline link — grows from left on hover. */
   .link-underline {
     position: relative;

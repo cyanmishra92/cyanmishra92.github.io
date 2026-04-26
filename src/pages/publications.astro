@@ -200,13 +200,28 @@ const scholarlyLd = all.map((p) => {
       ))}
     </div>
 
-    {/* empty state */}
-    <p
-      class="hidden py-16 text-center font-mono text-sm uppercase tracking-eyebrow text-text-muted"
-      data-pubs-empty
-    >
-      // no papers match the current filters
-    </p>
+    {/* empty state — friendly message + a one-click way back to the
+        full list. The script unhides this when the filter result is
+        empty. */}
+    <div class="hidden py-16 text-center" data-pubs-empty>
+      <p class="font-mono text-xs uppercase tracking-eyebrow text-accent">
+        // no matches
+      </p>
+      <p class="mt-4 font-display text-2xl text-ink">
+        Nothing here for those filters.
+      </p>
+      <p class="mx-auto mt-3 max-w-prose text-sm text-text-muted">
+        Try a broader query, drop a venue, or clear everything to see all {total} papers.
+      </p>
+      <button
+        type="button"
+        class="btn mt-6"
+        data-pubs-empty-clear
+      >
+        <span aria-hidden="true">×</span>
+        <span>Clear all filters</span>
+      </button>
+    </div>
   </div>
 
   <BibtexModal papers={bibtexEntries} />
@@ -260,6 +275,7 @@ const scholarlyLd = all.map((p) => {
   const empty = document.querySelector<HTMLElement>('[data-pubs-empty]');
   const _input = document.querySelector<HTMLInputElement>('[data-pubs-input]');
   const clear = document.querySelector<HTMLButtonElement>('[data-pubs-clear]');
+  const emptyClear = document.querySelector<HTMLButtonElement>('[data-pubs-empty-clear]');
 
   if (_root && _list && _counter && _input) {
     const root = _root;
@@ -368,7 +384,7 @@ const scholarlyLd = all.map((p) => {
       apply();
     });
 
-    clear?.addEventListener('click', () => {
+    function resetAll() {
       filters.q = '';
       filters.year.clear();
       filters.type.clear();
@@ -379,7 +395,10 @@ const scholarlyLd = all.map((p) => {
         .querySelectorAll<HTMLButtonElement>('.filter-chip[aria-pressed="true"]')
         .forEach((b) => b.setAttribute('aria-pressed', 'false'));
       apply();
-    });
+      input.focus();
+    }
+    clear?.addEventListener('click', resetAll);
+    emptyClear?.addEventListener('click', resetAll);
 
     apply();
   }
