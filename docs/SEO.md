@@ -39,7 +39,11 @@ isn't emitted yet. Until it is, GSC can't verify the property.
    a string like `<meta name="google-site-verification" content="ABCDEF...">`.
    Copy just the value of `content="..."`.
 4. In the GitHub repo: **Settings → Secrets and variables → Actions →
-   Variables → New repository variable**:
+   Variables → New repository variable** (the **Variables** tab — *not*
+   the Secrets tab; common misstep). The build reads the token via
+   `import.meta.env.PUBLIC_GSC_VERIFICATION`, which only resolves repo
+   Variables passed through the workflow's `env:` block. Secrets aren't
+   readable in that context.
    - Name: `PUBLIC_GSC_VERIFICATION`
    - Value: paste the token from step 3.
 5. Push any commit (or `workflow_dispatch` Deploy). The next deploy
@@ -72,8 +76,9 @@ skip the meta-tag dance.
 1. Sign in at https://www.bing.com/webmasters.
 2. **Add a site** → `https://cyanmishra92.github.io/`.
 3. Choose **Meta tag** verification. Copy the `content="..."` value.
-4. Repo **Settings → Variables → Actions** → new variable
-   `PUBLIC_BING_VERIFICATION` = the token.
+4. Repo **Settings → Secrets and variables → Actions → Variables**
+   tab (*not* Secrets — same caveat as `PUBLIC_GSC_VERIFICATION`
+   above) → new variable `PUBLIC_BING_VERIFICATION` = the token.
 5. Push, deploy, click **Verify** in Bing Webmaster.
 6. Submit the sitemap.
 

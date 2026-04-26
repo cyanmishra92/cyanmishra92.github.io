@@ -1,6 +1,76 @@
 # Changelog
 
+## v3.0.0 — public launch (2026-04-26)
+
+The launch tag. Everything in `Unreleased` since `v2.1.0` (or v2.0.0
+if no 2.1) ships under this tag. Below is the user-facing summary;
+the per-phase technical detail lives under `## Unreleased` and gets
+folded into v3.0 at tag time.
+
+### Headlines
+
+- Full v2 → v3 rebuild on Astro 4 with the Technical Editorial
+  aesthetic, deployed via GitHub Pages.
+- 23 publications audited against `assets/texsources/resume.tex`
+  (no hallucinated entries from v1).
+- Citation totals + per-paper "cited by N" sourced from Google
+  Scholar via a hand-edit JSON ([`docs/CITATIONS.md`](./docs/CITATIONS.md)) with a
+  weekly drift detector and on-push auto-stamp.
+- Per-page OG images via satori, full JSON-LD coverage (Person /
+  WebSite / ScholarlyArticle / BlogPosting / BreadcrumbList).
+- IndexNow + sitemap pinging on every deploy.
+- StatCounter project ID `13144757` / hash `d39bf83e` preserved
+  from the legacy Jekyll site for analytics continuity.
+- `/photos` with EXIF reveal, custom lightbox, image-optim bot.
+- `/press`, `/subscribe`, `/talks/[slug]/` deep dives.
+- Cmd-K search trigger in the header (palette implementation
+  itself is still TODO; the trigger soft-falls-back to the
+  publications filter).
+
+### Operations after tagging
+
+User-side tasks documented in
+[`docs/LAUNCH_CHECKLIST.md`](./docs/LAUNCH_CHECKLIST.md):
+- Set `PUBLIC_GSC_VERIFICATION` + `PUBLIC_BING_VERIFICATION` repo
+  Variables (not Secrets) for search-engine verification.
+- Submit sitemap in Search Console; Bing imports from GSC.
+- Run the backlink migration checklist in
+  [`docs/MIGRATION.md`](./docs/MIGRATION.md) (Scholar profile
+  homepage URL, LinkedIn, GitHub bio, email signature, etc.).
+- Flip `src/content/news/v3-launch.mdx` from `draft: true` →
+  `draft: false` once the tag is pushed.
+
+---
+
 ## Unreleased
+
+### docs(launch): SEO Variables-vs-Secrets clarity + launch checklist + v3 news stub
+*Phase 7.9 / pre-tag — 2026-04-26*
+
+Lean launch-prep PR. No new code: the audit findings reported on
+the live site at the time of writing reflect a stale browser cache
+— Phases 7.7 and 7.8 are already on `main` (verified via WebFetch
+against the deployed site: h1 reads `Cyan Subhra Mishra` without
+the middle dot, header uses primary-nav + MORE dropdown, footer
+shows all 6 channels, theme toggle is the moon/sun icon).
+
+This PR ships only the documentation needed to support the
+upcoming `v3.0.0` tag:
+
+- `docs/SEO.md` — explicit emphasis that `PUBLIC_GSC_VERIFICATION`
+  and `PUBLIC_BING_VERIFICATION` go on the **Variables** tab, not
+  Secrets. `import.meta.env.PUBLIC_*` only resolves Variables; this
+  is the most common misstep when wiring up Search Console for the
+  first time.
+- `docs/LAUNCH_CHECKLIST.md` — single tracker for the launch-
+  readiness checks. Distinguishes items that are already passing in
+  code (ticked) from items that need manual verification with a
+  real browser (unticked).
+- `src/content/news/v3-launch.mdx` — launch announcement entry,
+  shipped as `draft: true` so it doesn't appear until the user
+  flips it post-tag.
+- `CHANGELOG.md` — v3.0.0 launch headline at the top of the file
+  for the tag annotation to reference.
 
 ### fix(layout): compress header, align hero, fluid responsive
 *Phase 7.8 — 2026-04-26*
