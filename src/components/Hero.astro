@@ -24,12 +24,11 @@ const coord = `${SITE.coords.label} // ${SITE.location} // ${stamp}`;
     <div class="col-span-12 lg:col-span-8 lg:row-start-2">
       <p class="stage stage-2 eyebrow">currently in San Diego</p>
 
-      <h1 class="stage stage-2 mt-4 font-display text-display-1 leading-[1.02] text-ink">
-        Cyan
-        <span class="text-text-muted/80">·</span>
-        Subhra
-        <br class="hidden sm:block" />
-        Mishra
+      <h1
+        class="stage stage-2 mt-4 font-display leading-[1.02] text-ink"
+        style="font-size: clamp(2rem, 5vw, 4.25rem); text-wrap: balance;"
+      >
+        <span class="whitespace-nowrap">Cyan Subhra Mishra</span>
         <span aria-hidden="true" class="ml-2 inline-block h-3 w-3 -translate-y-3 bg-accent"></span>
       </h1>
 
@@ -39,6 +38,8 @@ const coord = `${SITE.coords.label} // ${SITE.location} // ${stamp}`;
         computational storage, intermittent and continuous learning at the edge.
       </p>
 
+      {/* primary CTAs — view publications + get in touch. CV moves into the
+          channel strip below per Phase 7.8 spec — feels like one block. */}
       <div class="stage stage-6 mt-10 flex flex-wrap items-center gap-3">
         <a class="btn btn-primary stage stage-6" href="/publications/">
           <span>View publications</span>
@@ -47,20 +48,18 @@ const coord = `${SITE.coords.label} // ${SITE.location} // ${stamp}`;
         <a class="btn stage stage-7" href="/contact/">
           <span>Get in touch</span>
         </a>
-        <a class="btn stage stage-7" href="/cv/">
-          <span>CV</span>
-          <span class="font-mono text-[0.625rem] text-text-muted">[ pdf ]</span>
-        </a>
       </div>
 
-      {/* channels link strip — sits under the CTA row, same horizontal axis,
-          tight vertical rhythm. One unified action block. */}
-      <div class="stage stage-7 mt-3">
-        <ProfileLinkBar variant="hero" />
+      {/* channels + CV link strip — sits 6px below the CTA row, same
+          horizontal axis, single unified action block. */}
+      <div class="stage stage-7 mt-1.5">
+        <ProfileLinkBar variant="hero" includeCv />
       </div>
     </div>
 
-    {/* avatar + currently block — right, cols 9-12, offset down */}
+    {/* avatar + currently block — right, cols 9-12, offset down on lg+.
+        At md (768-1023): smaller avatar (~140px) but still right-column.
+        At sm (<768): full-width row below the name+CTAs. */}
     <aside class="stage stage-4 col-span-12 lg:col-span-4 lg:row-start-2 lg:mt-32 lg:pl-4">
       <figure class="relative">
         <img
@@ -68,7 +67,7 @@ const coord = `${SITE.coords.label} // ${SITE.location} // ${stamp}`;
           alt="Cyan Subhra Mishra, head and shoulders portrait"
           width="320"
           height="322"
-          class="block w-40 border border-accent sm:w-48 lg:w-full lg:max-w-[260px]"
+          class="block w-32 border border-accent sm:w-40 md:w-[140px] lg:w-full lg:max-w-[260px]"
           style="border-radius: 4px;"
           decoding="async"
           fetchpriority="high"

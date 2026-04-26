@@ -1,56 +1,137 @@
 ---
-import { NAV, SITE } from '@lib/site';
+import { NAV } from '@lib/site';
+import SiteLogo from './SiteLogo.astro';
 import ThemeToggle from './ThemeToggle.astro';
+import SearchTrigger from './SearchTrigger.astro';
+import IconLink from './IconLink.astro';
+import { PROFILES } from '@lib/site';
 
 const path = Astro.url.pathname;
-
 function isActive(href: string): boolean {
   if (href === '/') return path === '/';
   return path === href || path.startsWith(href);
 }
+
+// Primary nav per Phase 7.8 spec — five highest-traffic destinations.
+// Numbered prefixes deliberately dropped from primary; only overflow
+// items keep them.
+const PRIMARY = ['/about/', '/publications/', '/projects/', '/blog/', '/contact/'];
+const primaryItems = NAV.filter((n) => PRIMARY.includes(n.href));
+const overflowItems = NAV.filter((n) => !PRIMARY.includes(n.href));
+
+// Original NAV ordering for the numbered prefix on overflow items —
+// matches the user's mental model of "01 About / 02 Research / ..."
+// across the whole site.
+const navIndex = new Map(NAV.map((n, i) => [n.href, i + 1]));
+
+// Two highest-traffic icon links surfaced in the header (xl only).
+// The full ProfileLinkBar lives in the hero; this is a discoverability
+// hint at the top of every page.
+const HEADER_ICONS = ['mail', 'github'] as const;
+const headerIconProfiles = HEADER_ICONS
+  .map((k) => PROFILES.find((p) => p.icon === k))
+  .filter((p): p is (typeof PROFILES)[number] => !!p);
 ---
 
 <header class="nav-blur sticky top-0 z-50 border-b border-border">
-  <div class="mx-auto flex max-w-page items-center justify-between gap-6 px-6 py-4 lg:px-8">
-    {/* wordmark */}
-    <a href="/" class="group flex items-center gap-2 font-mono text-sm" aria-label={SITE.name}>
-      <span class="inline-block h-2.5 w-2.5 border border-accent bg-accent transition-colors group-hover:bg-bg" aria-hidden="true"></span>
-      <span class="font-medium text-text">{SITE.shortName}</span>
-      <span class="hidden text-text-muted sm:inline">/ csm</span>
-    </a>
+  <div
+    class="mx-auto flex max-w-page items-center gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:gap-4 lg:px-8"
+  >
+    <SiteLogo />
 
-    {/* desktop nav — numbered chip variant. Each item carries a §NN
-        prefix in subordinate type so the nav reads as a typographic
-        index rather than a list of labels. */}
-    <nav class="hidden items-center gap-x-1 gap-y-0 lg:flex" aria-label="Primary">
-      {NAV.map(({ href, label }, i) => (
+    {/* desktop primary nav (lg ≥1024px). Five items, no numbered prefix. */}
+    <nav class="ml-2 hidden items-center gap-x-0.5 lg:flex" aria-label="Primary">
+      {primaryItems.map(({ href, label }) => (
         <a
           href={href}
           class:list={[
-            'nav-chip group relative inline-flex items-baseline gap-1 px-2.5 py-1.5 font-mono text-[0.75rem] uppercase tracking-eyebrow transition-colors',
+            'group relative inline-flex items-baseline px-2.5 py-1.5 font-mono text-[0.75rem] uppercase tracking-eyebrow transition-colors',
             isActive(href) ? 'text-accent' : 'text-text-muted hover:text-text',
           ]}
           aria-current={isActive(href) ? 'page' : undefined}
         >
-          <span class="nav-chip-num text-[0.5625rem] opacity-60">{String(i + 1).padStart(2, '0')}</span>
-          <span class="nav-chip-label">{label}</span>
-          {isActive(href) && <span class="nav-chip-mark text-accent" aria-hidden="true">·</span>}
+          <span>{label}</span>
+          {isActive(href) && <span class="ml-1 text-accent" aria-hidden="true">·</span>}
         </a>
       ))}
+
+      {/* overflow MORE button — opens dropdown panel */}
+      {overflowItems.length > 0 && (
+        <div class="relative">
+          <button
+            type="button"
+            class="more-btn group inline-flex items-center gap-1 px-2.5 py-1.5 font-mono text-[0.75rem] uppercase tracking-eyebrow text-text-muted transition-colors hover:text-text"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="nav-more-panel"
+            data-more-toggle
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="4" y1="12" x2="20" y2="12" />
+              <line x1="4" y1="18" x2="20" y2="18" />
+            </svg>
+            <span>more</span>
+          </button>
+          <div
+            id="nav-more-panel"
+            class="absolute right-0 top-full z-40 mt-1 hidden min-w-[14rem] border-2 border-accent bg-bg p-2 shadow-none"
+            data-more-panel
+            role="menu"
+          >
+            <ul class="grid gap-px">
+              {overflowItems.map(({ href, label }) => (
+                <li>
+                  <a
+                    href={href}
+                    role="menuitem"
+                    class:list={[
+                      'group flex items-baseline justify-between gap-3 px-3 py-2 font-mono text-[0.75rem] uppercase tracking-eyebrow transition-colors',
+                      isActive(href)
+                        ? 'text-accent'
+                        : 'text-text-muted hover:bg-surface hover:text-accent',
+                    ]}
+                  >
+                    <span class="opacity-60">{String(navIndex.get(href) ?? 0).padStart(2, '0')}</span>
+                    <span class="flex-1">{label}</span>
+                    {isActive(href) && <span class="text-accent" aria-hidden="true">·</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
     </nav>
 
-    <div class="flex items-center gap-2">
-      <ThemeToggle />
-      {/* mobile menu trigger */}
+    {/* right-aligned utility cluster */}
+    <div class="ml-auto flex items-center gap-1">
+      <span class="hidden lg:inline-flex"><SearchTrigger /></span>
+
+      {/* header icon row — top 2 channels, xl only to keep the header tight */}
+      <span class="hidden xl:inline-flex items-center gap-1">
+        {headerIconProfiles.map((p) => (
+          <IconLink
+            href={p.href}
+            icon={p.icon as any}
+            label={p.label}
+            external={!p.href.startsWith('mailto:')}
+          />
+        ))}
+      </span>
+
+      <span class="hidden lg:inline-flex"><ThemeToggle /></span>
+
+      {/* mobile menu trigger — replaces nav + utilities below lg */}
       <button
         type="button"
         id="mobile-nav-toggle"
-        class="inline-flex h-9 w-9 items-center justify-center border border-border text-text-muted transition-colors hover:border-accent hover:text-accent lg:hidden"
+        class="inline-flex h-9 w-9 items-center justify-center text-text-muted transition-colors hover:text-accent lg:hidden"
         aria-label="Open navigation"
         aria-controls="mobile-nav"
         aria-expanded="false"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
           <line x1="4" y1="7" x2="20" y2="7" />
           <line x1="4" y1="12" x2="20" y2="12" />
           <line x1="4" y1="17" x2="20" y2="17" />
@@ -59,70 +140,127 @@ function isActive(href: string): boolean {
     </div>
   </div>
 
-  {/* mobile slide-in panel */}
+  {/* mobile slide-in panel from the right */}
   <div
     id="mobile-nav"
     class="fixed inset-0 z-40 hidden bg-bg/95 backdrop-blur-md lg:hidden"
     aria-hidden="true"
   >
-    <div class="flex h-full flex-col px-6 pb-12 pt-20">
-      <div class="absolute right-6 top-4">
+    <div class="ml-auto flex h-full w-full max-w-[20rem] flex-col gap-4 border-l border-border bg-bg px-6 pb-6 pt-5">
+      <div class="flex items-center justify-between">
+        <span class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">// menu</span>
         <button
           type="button"
           id="mobile-nav-close"
-          class="inline-flex h-9 w-9 items-center justify-center border border-border text-text-muted hover:border-accent hover:text-accent"
+          class="inline-flex h-9 w-9 items-center justify-center text-text-muted hover:text-accent"
           aria-label="Close navigation"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
             <line x1="6" y1="6" x2="18" y2="18" />
             <line x1="6" y1="18" x2="18" y2="6" />
           </svg>
         </button>
       </div>
-      <nav class="flex flex-col gap-1" aria-label="Mobile">
-        {NAV.map(({ href, label }, i) => (
-          <a
-            href={href}
-            class:list={[
-              'group flex items-baseline justify-between border-b border-border py-4 font-display text-2xl tracking-tight',
-              isActive(href) ? 'text-accent' : 'text-text',
-            ]}
-          >
-            <span>{label}</span>
-            <span class="font-mono text-xs text-text-muted">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-          </a>
-        ))}
+
+      {/* full nav list with numbered prefixes, original ordering */}
+      <nav class="flex-1 overflow-y-auto" aria-label="Mobile">
+        <ul class="flex flex-col">
+          {NAV.map(({ href, label }, i) => (
+            <li>
+              <a
+                href={href}
+                class:list={[
+                  'flex items-baseline justify-between gap-3 border-b border-border py-3.5 font-display text-2xl tracking-tight',
+                  isActive(href) ? 'text-accent' : 'text-text',
+                ]}
+              >
+                <span>{label}</span>
+                <span class="font-mono text-xs text-text-muted">{String(i + 1).padStart(2, '0')}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </nav>
+
+      {/* utilities row — search, channels, theme */}
+      <div class="border-t border-border pt-4">
+        <div class="flex items-center justify-between gap-3">
+          <SearchTrigger />
+          <ThemeToggle />
+        </div>
+        <div class="mt-3 flex flex-wrap gap-2">
+          {PROFILES.map((p) => (
+            <IconLink
+              href={p.href}
+              icon={p.icon as any}
+              label={p.label}
+              external={!p.href.startsWith('mailto:')}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   </div>
 </header>
 
 <script>
+  // Mobile slide-in.
   const toggle = document.getElementById('mobile-nav-toggle');
   const panel = document.getElementById('mobile-nav');
-  const close = document.getElementById('mobile-nav-close');
+  const closeBtn = document.getElementById('mobile-nav-close');
 
-  function open() {
+  function openMobile() {
     if (!panel || !toggle) return;
     panel.classList.remove('hidden');
     panel.setAttribute('aria-hidden', 'false');
     toggle.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
   }
-  function shut() {
+  function shutMobile() {
     if (!panel || !toggle) return;
     panel.classList.add('hidden');
     panel.setAttribute('aria-hidden', 'true');
     toggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
   }
+  toggle?.addEventListener('click', openMobile);
+  closeBtn?.addEventListener('click', shutMobile);
+  panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', shutMobile));
 
-  toggle?.addEventListener('click', open);
-  close?.addEventListener('click', shut);
-  panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', shut));
+  // Desktop "more" overflow dropdown.
+  const moreToggle = document.querySelector<HTMLButtonElement>('[data-more-toggle]');
+  const morePanel = document.querySelector<HTMLElement>('[data-more-panel]');
+
+  function openMore() {
+    if (!moreToggle || !morePanel) return;
+    morePanel.classList.remove('hidden');
+    moreToggle.setAttribute('aria-expanded', 'true');
+  }
+  function shutMore() {
+    if (!moreToggle || !morePanel) return;
+    morePanel.classList.add('hidden');
+    moreToggle.setAttribute('aria-expanded', 'false');
+  }
+  moreToggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (moreToggle.getAttribute('aria-expanded') === 'true') shutMore();
+    else openMore();
+  });
+  // Click anywhere outside the dropdown closes it.
+  document.addEventListener('click', (e) => {
+    if (
+      morePanel &&
+      !morePanel.classList.contains('hidden') &&
+      !morePanel.contains(e.target as Node) &&
+      !moreToggle?.contains(e.target as Node)
+    ) {
+      shutMore();
+    }
+  });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') shut();
+    if (e.key === 'Escape') {
+      shutMore();
+      shutMobile();
+    }
   });
 </script>
