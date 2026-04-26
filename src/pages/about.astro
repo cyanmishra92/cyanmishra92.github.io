@@ -4,6 +4,7 @@ import PageHeader from '@components/PageHeader.astro';
 import SectionHeader from '@components/SectionHeader.astro';
 import Timeline from '@components/Timeline.astro';
 import Tag from '@components/Tag.astro';
+import ProfileLinkBar from '@components/ProfileLinkBar.astro';
 import { SITE } from '@lib/site';
 
 const education = [
@@ -172,6 +173,10 @@ const interests = [
           posts, and build tools for SoC performance work in my spare time.
           Based in {SITE.location}.
         </p>
+
+        {/* compact link strip — quick-jump channels right under the bio.
+            The full handle-bearing card grid is at §05 below. */}
+        <ProfileLinkBar variant="compact" />
       </div>
     </div>
   </section>

@@ -9,8 +9,11 @@ export const SITE = {
   shortName: 'Cyan S. Mishra',
   tagline:
     'Performance and Power Engineer at Arm. Hardware/software co-design for ML systems.',
+  // Used as <meta name="description"> + OG description + RSS channel.
+  // Kept under ~190 chars so Google's snippet doesn't truncate the
+  // important "intermittent and continuous learning at the edge" tail.
   description:
-    'Personal site of Cyan Subhra Mishra — Performance and Power Engineer at Arm in San Diego. Ph.D. from Penn State (2025) in hardware/software co-design for ML systems, with publications at ISCA, MICRO, HPCA, ICLR, NSDI, and PACT.',
+    'Performance and Power Engineer at Arm. Hardware/software co-design for ML systems — energy-harvesting sensors, computational storage, intermittent and continuous learning at the edge.',
   email: 'cyanmishra92@gmail.com',
   location: 'San Diego, CA',
   // San Diego coordinates for the hero label.

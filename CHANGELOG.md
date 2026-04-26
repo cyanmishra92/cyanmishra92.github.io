@@ -2,6 +2,109 @@
 
 ## Unreleased
 
+### feat(home): tighten + channels above the fold
+*Phase 7.7 — 2026-04-25*
+
+Five-issue tighten + above-the-fold channels pass.
+
+**Issue 1 — channels link bar in the hero.**
+- New `<ProfileLinkBar variant="hero|footer|compact" />` reading from
+  the single `PROFILES` source in `src/lib/site.ts`. Adding ORCID /
+  Mastodon later is a one-line edit there.
+- Hero now carries the strip directly under the existing CTA row
+  (`stage stage-7 mt-3` keeps it as part of the page-load
+  orchestration). Order: email · scholar · github · linkedin · dblp ·
+  instagram. Hairline `|` separators, `text-muted` → accent on hover
+  with the underline-from-left animation matching the rest of the
+  site. No boxes.
+- `compact` variant placed under the bio paragraphs on `/about`. The
+  full-handle card grid at §05 stays as the richer affordance.
+- Contact page already pulled from `PROFILES`; left as-is — its rich
+  cards beat a thin link bar there.
+
+**Issue 2 — footer rewrite.**
+- 3-col grid: about / sitemap / channels. Mobile collapses to a
+  stack as before.
+- Sitemap grouped per spec into `// research`, `// writing`, `//
+  personal` so the 13-link list reads as three short columns instead
+  of one long one.
+- Channels block now uses `<ProfileLinkBar variant="footer" />` —
+  single source of truth; the previously-broken filtered render is
+  gone.
+- Meta strip extended with `last modified · YYYY-MM-DD` from
+  `git log` on `src/pages/index.astro`, alongside the existing
+  `last build` stamp.
+
+**Issue 3 — density tighten.**
+- *3a* — Numbered chip nav. Each item now reads `01 About / 02
+  Research / ...` with the number prefix in subordinate type and a
+  `·` accent marker on the active page. Single nav row; the spec's
+  reference to "two rows" was the request to upgrade to the chip
+  variant.
+- *3b* — Removed standalone `§ 02 currently` section. The hero
+  right-column "Currently" card already carries the same paragraph;
+  long-form bio + experience timeline live on `/about`. Section
+  numbers shifted: `§02 stats / §03 featured / §04 news / §05
+  publications / §06 elsewhere`. Saves ~120px above the fold.
+- *3c* — Featured projects now render in a 3×2 grid (six cards
+  filtered by `!ongoing`), with the Arm SoC-perf card surfaced as a
+  single horizontal "ongoing" strip below. Six cards: NExUME,
+  Salient Store, Usás, Seeker, Origin (with ★ Best Paper Nominee
+  badge), Prophet. The hero card-index numbering is now `01 / 06`
+  through `06 / 06` plus `07 / 06+` on the ongoing strip.
+- *3d* — Deduped arxiv ↔ conference twins. The standalone
+  `nexume-arxiv` and `salient-store-arxiv` entries are deleted; the
+  conference entries (`nexume-iclr-2025`, `salient-store-pact-2025`)
+  carry the `arxivId` + `pdfUrl` + cleared `relatedPaperIds`.
+  PaperItem renders `[ pdf ] [ arxiv ]` action buttons from those
+  fields, so no information is lost from the merge. Dropped the
+  twin entries from `citations-source.json`.
+- *3e* — News section is now year-grouped on desktop. Year as a
+  big Fraunces display number on the left (col-span-2), entries flow
+  right beside it. Bumped from 4 to 6 entries to fill the timeline.
+  Mobile retains the simple stacked list.
+- *3f* — Code & writing section grew to 3 cards: GitHub stats /
+  Blog teaser / **Talks card** (deep-dive count + latest talk title +
+  view-all link). New `talksAll` query in the home frontmatter.
+
+**Issue 4 — citation render audit.**
+- `PaperItem` already suppresses the `cited by N` badge when
+  `citations === 0` and `withCitations()` already skips merging
+  counts for `under-review`/`to-appear` papers. Verified intact.
+- The "cited by 1" pattern on three recent papers reflects the
+  actual Scholar values from the last manual sync — not a bug, just
+  three young papers all currently sitting at 1 cite. Documented
+  the explanation + refresh path in `docs/CITATIONS.md` under "Why
+  a paper might show 'cited by 1' or 'cited by 0'".
+
+**Issue 5 — polish.**
+- *5a* — Hero CTA row + channels strip share a single action block
+  (`mt-3` between them, no extra heading or separator).
+- *5b* — Avatar caption dropped the `· 2024` year. Now just
+  `Fig. 0 — author photo`, treats the photo as durable identity.
+- *5c* — `last modified YYYY-MM-DD` for the home page added to
+  the footer meta strip (read via `lastModified()` against
+  `src/pages/index.astro`).
+- *5d* — Cmd-K palette not yet shipped. TODO comment placed in
+  `BaseLayout.astro` so the next implementer mounts it at the right
+  level.
+- *5e* — Day-after-deploy SEO verification ritual added to
+  `docs/SEO.md` covering Search Console Coverage, URL Inspection,
+  StatCounter recent activity, and Bing Webmaster Site Explorer.
+- *5f* — `SITE.description` rewritten as the focused bio sentence
+  ("Performance and Power Engineer at Arm. Hardware/software
+  co-design for ML systems — energy-harvesting sensors,
+  computational storage, intermittent and continuous learning at
+  the edge."). 183 chars; flows into `<meta name="description">`,
+  OG description, and RSS channel description.
+
+Verified against acceptance criteria: 6 channels in hero, 6 channels
+in footer, single header nav with numbered chips, no duplicate
+"currently" section, 6 featured cards + 1 ongoing strip, 5 distinct
+selected publications (no arxiv-vs-conference dups), year-grouped
+news (2026/2025/2024), 3 cards in Code & writing, no "cited by 0"
+anywhere, meta description present.
+
 ### feat(polish): last-modified + newsletter + press + talks deep dives + migration checklist
 *Phase 7.6.5 — 2026-04-25*
 

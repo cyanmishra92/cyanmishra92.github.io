@@ -158,6 +158,12 @@ const bingToken = import.meta.env.PUBLIC_BING_VERIFICATION;
 
     <Nav />
 
+    {/* TODO(cyan): Cmd-K / Ctrl-K command palette per Phase 7.7 spec
+        item 5d. Not shipped — when implemented, mount it here so it
+        listens at the layout level. Search index = pages + publications
+        + projects + blog posts + news entries. Add a `Cmd-K` hint to
+        the right edge of the header chip-nav once the palette is live. */}
+
     <main id="main">
       <slot />
     </main>

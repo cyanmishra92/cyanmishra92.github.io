@@ -19,19 +19,22 @@ function isActive(href: string): boolean {
       <span class="hidden text-text-muted sm:inline">/ csm</span>
     </a>
 
-    {/* desktop nav */}
-    <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary">
-      {NAV.map(({ href, label }) => (
+    {/* desktop nav — numbered chip variant. Each item carries a §NN
+        prefix in subordinate type so the nav reads as a typographic
+        index rather than a list of labels. */}
+    <nav class="hidden items-center gap-x-1 gap-y-0 lg:flex" aria-label="Primary">
+      {NAV.map(({ href, label }, i) => (
         <a
           href={href}
           class:list={[
-            'group relative px-3 py-1.5 font-mono text-[0.75rem] uppercase tracking-eyebrow transition-colors',
+            'nav-chip group relative inline-flex items-baseline gap-1 px-2.5 py-1.5 font-mono text-[0.75rem] uppercase tracking-eyebrow transition-colors',
             isActive(href) ? 'text-accent' : 'text-text-muted hover:text-text',
           ]}
           aria-current={isActive(href) ? 'page' : undefined}
         >
-          {isActive(href) && <span class="mr-1 text-accent">▸</span>}
-          {label}
+          <span class="nav-chip-num text-[0.5625rem] opacity-60">{String(i + 1).padStart(2, '0')}</span>
+          <span class="nav-chip-label">{label}</span>
+          {isActive(href) && <span class="nav-chip-mark text-accent" aria-hidden="true">·</span>}
         </a>
       ))}
     </nav>
