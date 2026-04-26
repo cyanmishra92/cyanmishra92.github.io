@@ -31,7 +31,9 @@ export default {
       },
       maxWidth: {
         prose: '72ch',
-        page: '1200px',
+        // Phase 7.8 bumped from 1200 to 1280 to give the chip-nav + icon
+        // row more breathing room at xl widths.
+        page: '1280px',
       },
       letterSpacing: {
         eyebrow: '0.15em',

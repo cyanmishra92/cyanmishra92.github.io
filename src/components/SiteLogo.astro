@@ -1,0 +1,45 @@
+---
+/**
+ * Single-line wordmark. Switches between full name and `csm` monogram
+ * via CSS only (no JS), so the swap is instant and SSR-correct.
+ *
+ *   ≥1024px:  [accent-square] Cyan S. Mishra  /csm
+ *   <1024px:  csm [accent-square]
+ *
+ * Font-size uses clamp() so the name scales smoothly inside the lg/xl
+ * range without breakpoint-specific CSS.
+ */
+
+import { SITE } from '@lib/site';
+---
+
+<a
+  href="/"
+  class="site-logo group flex items-center gap-2 transition-colors"
+  aria-label={SITE.name}
+>
+  {/* desktop wordmark — accent square first, then full short-name */}
+  <span class="hidden lg:inline-flex items-center gap-2 whitespace-nowrap">
+    <span
+      class="inline-block h-2.5 w-2.5 shrink-0 border border-accent bg-accent transition-colors group-hover:bg-bg"
+      aria-hidden="true"
+    />
+    <span class="font-mono font-medium text-text" style="font-size: clamp(0.78rem, 0.9vw, 0.875rem); letter-spacing: -0.005em;">
+      {SITE.shortName}
+    </span>
+    <span class="font-mono text-text-muted" style="font-size: clamp(0.7rem, 0.8vw, 0.8125rem);">
+      / csm
+    </span>
+  </span>
+
+  {/* mobile/tablet wordmark — `csm` monogram, accent square AFTER per spec */}
+  <span class="inline-flex items-center gap-1.5 whitespace-nowrap lg:hidden">
+    <span class="font-mono text-[0.875rem] font-semibold uppercase tracking-[0.08em] text-accent">
+      csm
+    </span>
+    <span
+      class="inline-block h-2 w-2 shrink-0 border border-accent bg-accent transition-colors group-hover:bg-bg"
+      aria-hidden="true"
+    />
+  </span>
+</a>

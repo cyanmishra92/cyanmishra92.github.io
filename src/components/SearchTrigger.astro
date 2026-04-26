@@ -1,0 +1,72 @@
+---
+/**
+ * Search button + Cmd-K hint. Opens the command palette when wired
+ * (TODO — see BaseLayout.astro). For now, dispatches a custom event
+ * that the palette will listen for once it ships.
+ *
+ * The keyboard hint is hidden below the lg breakpoint to keep the
+ * mobile header compact.
+ */
+---
+
+<button
+  type="button"
+  id="search-trigger"
+  class="search-trigger group inline-flex h-9 items-center gap-1.5 rounded-none border border-transparent px-2 text-text-muted transition-colors hover:text-accent"
+  aria-label="Open search (Cmd+K)"
+  data-search-trigger
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="11" cy="11" r="7" />
+    <path d="m21 21-4.3-4.3" />
+  </svg>
+  {/* Cmd-K hint — desktop only, hidden when narrow */}
+  <kbd class="hidden font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted group-hover:text-accent xl:inline-block">
+    ⌘K
+  </kbd>
+</button>
+
+<script>
+  // Wire the global Cmd-K shortcut so the keystroke also works without
+  // clicking the button. The palette itself is not yet built — see
+  // BaseLayout.astro TODO. Dispatch a custom event the palette can
+  // listen for once it ships, and fall back to focusing /publications
+  // search if the palette isn't mounted.
+  const fireOpen = () => {
+    const handled = window.dispatchEvent(
+      new CustomEvent('site:open-palette', { cancelable: true }),
+    );
+    if (!handled) {
+      // Palette not yet mounted; soft-fallback to the publications
+      // search input on the publications page, otherwise navigate.
+      const onPubs = location.pathname.startsWith('/publications');
+      if (onPubs) {
+        const input = document.querySelector<HTMLInputElement>(
+          '#pubs-search, [data-pubs-input]',
+        );
+        input?.focus();
+      } else {
+        location.href = '/publications/?q=';
+      }
+    }
+  };
+
+  document.querySelector('[data-search-trigger]')?.addEventListener('click', fireOpen);
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      fireOpen();
+    }
+  });
+</script>

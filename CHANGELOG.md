@@ -2,6 +2,105 @@
 
 ## Unreleased
 
+### fix(layout): compress header, align hero, fluid responsive
+*Phase 7.8 — 2026-04-26*
+
+Eight-issue header compression + hero alignment + responsive sweep.
+
+**Issue 1 — SiteLogo, single line.**
+- New `<SiteLogo />` component. Desktop (≥1024px): accent-square +
+  `Cyan S. Mishra` + `/ csm` in mono. Mobile/tablet: just `csm` in
+  accent + accent-square after, both in mono uppercase. CSS-only
+  swap (no JS), `clamp()` font-size for smooth scaling. The
+  multi-line wrap reported on the live site is gone — `whitespace-
+  nowrap` + small font with clamp keeps it on one line at every
+  width.
+
+**Issue 2 — primary nav (5) + overflow MORE dropdown.**
+- Primary: About / Publications / Projects / Blog / Contact. No
+  numbered prefixes (the typographic noise wasn't earning its place
+  at five items).
+- Overflow `☰ MORE` dropdown carries the rest with their numbered
+  prefixes preserved: Research / News / Talks / Photos / Press /
+  Subscribe / CV / etc. Dropdown panel: paper-bg, sharp 2px accent
+  border, click-outside or Esc to close, focus trapped while open.
+- Mobile (<lg): hamburger panel from the right, full nav list with
+  numbered prefixes restored, theme + search at the bottom, full
+  channel icon strip below that.
+
+**Issue 3 — theme toggle as moon/sun icon.**
+- Replaced the `[ DARK ]` / `[ LIGHT ]` text button with a 36×36
+  borderless icon button. Lucide moon visible in light mode → click
+  to dark; lucide sun visible in dark → click to light. Hover:
+  `rotate(30deg)` 200ms ease-out + accent color. Same localStorage
+  persistence, same anti-flash blocking head script.
+- `aria-label` updated dynamically to read "Toggle theme (currently
+  X, switch to Y)" for screen readers.
+
+**Issue 4 — hero h1 single line.**
+- Dropped the middle-dot separator between "Cyan" and "Subhra".
+  The h1 now reads `Cyan Subhra Mishra` with the trailing accent
+  square.
+- Tuned `clamp(2rem, 5vw, 4.25rem)` so the name fits on one line
+  at the lg breakpoint and above. `text-wrap: balance` lets the
+  browser pick clean breaks if it does need to wrap below sm.
+- The name itself is wrapped in `whitespace-nowrap` to prevent the
+  "Cyan / Subhra" intra-name break that the live site showed.
+
+**Issue 5 — unified CTA + channel block, CV joins the strip.**
+- Hero CTA row: just `View publications →` (filled accent) + `Get
+  in touch` (outline). The CV button is gone from this row.
+- Channel strip below (now 6px below the CTA row, `mt-1.5`) carries
+  email · scholar · github · linkedin · dblp · instagram with a
+  hairline `|` separator and CV at the very end with the same
+  typographic treatment (file-text icon → `/cv/`, mono uppercase
+  label, hover-to-accent). Treats CV as a channel, not a primary
+  action.
+- `<ProfileLinkBar>` got an `includeCv` prop to opt the hero into
+  this; footer/about/etc. don't render CV in the strip — they have
+  their own placements.
+
+**Issue 6 — single nav row.**
+- Verified only one `<nav aria-label="Primary">` block in the
+  rendered header. Mobile nav is hidden behind the hamburger; the
+  desktop chip nav from Phase 7.7 is now the primary 5 items only,
+  with the overflow consolidated into MORE.
+
+**Issue 7 — fluid responsive across all viewports.**
+- `max-w-page` bumped from 1200px → 1280px to give the chip-nav +
+  utility cluster more breathing room at xl.
+- Hero avatar shrinks across breakpoints: `w-32` (mobile) → `w-40`
+  (sm) → `w-[140px]` (md, smaller than the full-column avatar) →
+  `w-full max-w-[260px]` (lg+).
+- Featured projects: `1×6` mobile · `2×3` sm-lg · `3×2` lg+ via
+  `sm:grid-cols-2 lg:grid-cols-3` — fluid auto-collapse.
+- Code & writing: same `1/2/3` breakpoint pattern.
+- Footer 3-col grid stacks on mobile.
+- Stats strip: `2×2` <lg, `1×4` lg+.
+
+**Issue 8 — Cmd-K search trigger in the header.**
+- New `<SearchTrigger />` component: lucide `search` icon button +
+  `⌘K` kbd hint (xl only). Click and Cmd/Ctrl-K both fire a
+  `site:open-palette` custom event for the future palette to listen
+  to. Soft-fallback for now: focuses the publications page filter
+  input when on `/publications/`, navigates to `/publications/?q=`
+  otherwise. The palette implementation itself is still TODO per
+  the BaseLayout comment.
+
+Anti-slop check: no Inter, no purple, no rounded-2xl-with-shadow,
+no centered-on-white hero. The `text-wrap: balance` is the only new
+typographic CSS feature; everything else is established design
+language.
+
+Verified:
+- npm run check: 0 errors / 0 warnings / 0 hints (72 files).
+- npm run build: 25 pages + sitemap + RSS, 0 errors.
+- HTTP sweep: all 13 public routes return 200.
+- Rendered HTML: 1 Primary nav (5 items), MORE button + dropdown,
+  ⌘K search trigger present, theme moon+sun SVGs (no text label),
+  middle-dot dropped from h1, CV in ProfileLinkBar (not as btn),
+  SiteLogo renders both desktop and mobile token forms.
+
 ### feat(home): tighten + channels above the fold
 *Phase 7.7 — 2026-04-25*
 
