@@ -37,6 +37,12 @@ import { preprocessForTTS, PREPROCESSOR_VERSION } from './preprocess';
 const ROOT = process.cwd();
 const BLOG_DIR = path.join(ROOT, 'src', 'content', 'blog');
 const DATA_FILE = path.join(ROOT, 'src', 'data', 'blog-audio.json');
+// Audio MP3s are committed into the repo at public/audio/<hash>.mp3 so
+// they ship to /audio/<hash>.mp3 on the deployed site. Same-origin
+// playback is the only thing that survives every corporate firewall;
+// R2 stays as a best-effort mirror for podcast clients + manual fallback.
+const PUBLIC_AUDIO_DIR = path.join(ROOT, 'public', 'audio');
+const PUBLIC_AUDIO_URL_PREFIX = '/audio';
 const MODEL = 'tts-1-hd';
 const DEFAULT_VOICE = 'echo';
 const CHUNK_MAX_CHARS = 4000;
@@ -45,7 +51,11 @@ const COST_PER_MILLION_CHARS = 30; // USD, OpenAI tts-1-hd as of Apr 2026
 type Voice = 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer';
 
 interface AudioEntry {
+  /** Same-origin path served from public/audio/. The player tries this first. */
   url: string;
+  /** Optional R2 absolute URL — used as a fallback when the same-origin
+   *  load fails (rare; e.g., user is offline mid-deploy or local quirks). */
+  mirror?: string;
   duration: number;
   voice: Voice;
   model: string;
@@ -194,6 +204,19 @@ async function uploadToR2(s3: S3Client, key: string, body: Buffer): Promise<void
   );
 }
 
+function pruneLocal(cache: AudioCache): number {
+  if (!fs.existsSync(PUBLIC_AUDIO_DIR)) return 0;
+  const keep = new Set(Object.values(cache).map((e) => `${e.scriptHash}.mp3`));
+  let removed = 0;
+  for (const name of fs.readdirSync(PUBLIC_AUDIO_DIR)) {
+    if (!name.endsWith('.mp3')) continue;
+    if (keep.has(name)) continue;
+    fs.unlinkSync(path.join(PUBLIC_AUDIO_DIR, name));
+    removed += 1;
+  }
+  return removed;
+}
+
 async function pruneOrphans(s3: S3Client, cache: AudioCache): Promise<number> {
   const bucket = process.env.R2_BUCKET;
   if (!bucket) return 0;
@@ -222,7 +245,7 @@ async function processPost(
   filePath: string,
   cache: AudioCache,
   openai: OpenAI,
-  s3: S3Client,
+  s3: S3Client | null,
   r2PublicUrl: string,
   forceRegen: boolean,
 ): Promise<Result> {
@@ -243,7 +266,14 @@ async function processPost(
   const scriptHash = shaHex(hashInput);
 
   const existing = cache[slug];
-  if (!forceRegen && existing && existing.scriptHash === scriptHash) {
+  // Cache hit requires BOTH the hash to match AND the same-origin MP3
+  // to exist on disk. Without the file check we'd skip regeneration
+  // when an old cache entry points at a URL that's no longer reachable
+  // (e.g. when this script's storage strategy changes).
+  const localFileExists = existing
+    ? fs.existsSync(path.join(PUBLIC_AUDIO_DIR, `${existing.scriptHash}.mp3`))
+    : false;
+  if (!forceRegen && existing && existing.scriptHash === scriptHash && localFileExists) {
     return { slug, status: 'cached' };
   }
 
@@ -265,17 +295,33 @@ async function processPost(
   const mp3 = Buffer.concat(buffers);
   const duration = await durationFromMp3(mp3);
 
-  // Upload.
+  // Write the same-origin copy first. This is what the player loads;
+  // failing to write it here means there's no audio to render, so it's
+  // a hard error for this post. R2 follows as best-effort.
   try {
-    await uploadToR2(s3, `audio/${scriptHash}.mp3`, mp3);
+    fs.mkdirSync(PUBLIC_AUDIO_DIR, { recursive: true });
+    fs.writeFileSync(path.join(PUBLIC_AUDIO_DIR, `${scriptHash}.mp3`), mp3);
   } catch (err) {
     const msg = (err as Error).message;
-    console.warn(`[audio] ${slug}: upload failed: ${msg}`);
+    console.warn(`[audio] ${slug}: local write failed: ${msg}`);
     return { slug, status: 'error', error: msg };
   }
 
+  // R2 mirror — best effort. If it fails, log and move on; the
+  // GitHub Pages copy keeps the player working.
+  let mirror: string | undefined;
+  if (s3 && r2PublicUrl) {
+    try {
+      await uploadToR2(s3, `audio/${scriptHash}.mp3`, mp3);
+      mirror = `${r2PublicUrl.replace(/\/$/, '')}/audio/${scriptHash}.mp3`;
+    } catch (err) {
+      console.warn(`[audio] ${slug}: R2 mirror upload failed (non-fatal): ${(err as Error).message}`);
+    }
+  }
+
   cache[slug] = {
-    url: `${r2PublicUrl.replace(/\/$/, '')}/audio/${scriptHash}.mp3`,
+    url: `${PUBLIC_AUDIO_URL_PREFIX}/${scriptHash}.mp3`,
+    ...(mirror ? { mirror } : {}),
     duration,
     voice,
     model: MODEL,
@@ -304,15 +350,14 @@ async function main() {
     console.warn('[audio] OPENAI_API_KEY not set; skipping audio generation entirely.');
     return;
   }
+
+  // R2 is now optional — same-origin GitHub Pages serving is the
+  // primary path. If R2 secrets are present, we mirror to it as a
+  // best-effort backup; otherwise the script proceeds without a mirror.
   const r2PublicUrl = (process.env.R2_PUBLIC_URL || '').trim();
-  if (!r2PublicUrl) {
-    console.warn('[audio] R2_PUBLIC_URL not set; skipping audio generation.');
-    return;
-  }
   const s3 = makeS3();
-  if (!s3) {
-    console.warn('[audio] R2 credentials incomplete; skipping audio generation.');
-    return;
+  if (!s3 || !r2PublicUrl) {
+    console.warn('[audio] R2 credentials incomplete; mirror upload disabled (still generating same-origin MP3s).');
   }
 
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -344,13 +389,23 @@ async function main() {
   // resumes from the latest committed state.
   writeCache(cache);
 
-  // Optional orphan cleanup.
-  if (cleanup) {
+  // Local prune — drop any MP3 in public/audio/ that isn't referenced
+  // by the current cache. Keeps the repo clean as voice/content
+  // changes evolve and old hashes go stale. Always runs; cheap.
+  try {
+    const localRemoved = pruneLocal(cache);
+    if (localRemoved > 0) console.log(`[audio] local prune removed ${localRemoved} orphan file(s) from public/audio/.`);
+  } catch (err) {
+    console.warn(`[audio] local prune failed: ${(err as Error).message}`);
+  }
+
+  // Optional R2 orphan cleanup (--cleanup flag).
+  if (cleanup && s3) {
     try {
       const removed = await pruneOrphans(s3, cache);
-      console.log(`[audio] cleanup removed ${removed} orphan object(s).`);
+      console.log(`[audio] R2 cleanup removed ${removed} orphan object(s).`);
     } catch (err) {
-      console.warn(`[audio] cleanup failed: ${(err as Error).message}`);
+      console.warn(`[audio] R2 cleanup failed: ${(err as Error).message}`);
     }
   }
 

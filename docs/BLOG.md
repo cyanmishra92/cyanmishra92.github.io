@@ -210,7 +210,12 @@ Every published post carries a `// found a typo? edit on github →` link in the
 
 ## Audio narration
 
-Every published post is narrated by OpenAI's `tts-1-hd` model in the `echo` voice and served via a sharp-bordered audio player at the top of the post. Generation runs at build time, the MP3 lives on Cloudflare R2, and the slug → metadata map lives in `src/data/blog-audio.json`.
+Every published post is narrated by OpenAI's `tts-1-hd` model in the `echo` voice and served via a sharp-bordered audio player at the top of the post. Generation runs at build time. The MP3 ships **two ways**:
+
+1. **Primary:** committed into the repo at `public/audio/<hash>.mp3` and served same-origin from `https://cyanmishra92.github.io/audio/<hash>.mp3`. Always reachable for anyone who can reach the blog at all — survives corporate firewalls that block third-party CDNs.
+2. **Mirror (best-effort):** uploaded to Cloudflare R2 at `audio/<hash>.mp3`. Used as a fallback for the rare cases the same-origin path misbehaves. RSS uses the GitHub Pages URL (always absolute) so podcast clients always get the canonical copy.
+
+The slug → metadata map lives in `src/data/blog-audio.json`.
 
 ### Per-post controls
 
@@ -231,8 +236,9 @@ When you push a blog post with `status: published`, the `Blog audio — generate
 2. **Hash** `(script + voice + model + preprocessor_version)`. Skip if the slug already has that hash in `src/data/blog-audio.json`.
 3. **Chunk** at sentence boundaries into ≤4000-char slices.
 4. **Call** OpenAI `tts-1-hd` per chunk; concatenate the resulting MP3 buffers (binary concat works for MP3 frames).
-5. **Upload** to R2 at `audio/<hash>.mp3` with `Content-Type: audio/mpeg` and `Cache-Control: immutable`. The filename is content-hashed, so old cached responses can't be wrong.
-6. **Commit** `src/data/blog-audio.json` back to main with `[skip ci]` so the auto-commit doesn't trigger another deploy.
+5. **Write** the MP3 to `public/audio/<hash>.mp3` (the same-origin primary).
+6. **Mirror** to R2 at `audio/<hash>.mp3` (best-effort; if the upload fails the post still works via the same-origin path).
+7. **Commit** `src/data/blog-audio.json` and `public/audio/` back to main. The deploy workflow fires automatically on the auto-commit; the audio workflow's `paths:` filter prevents recursion (it only watches `src/content/blog/**` and `scripts/blog-audio/**`).
 
 The next deploy serves the audio. End-to-end is ~2 min per post.
 
@@ -280,9 +286,15 @@ Override per-post with `audioVoice:` in frontmatter.
 
 ### Failure modes
 
-The pipeline is fail-soft. If the OpenAI call rate-limits, the upload fails, or any Secret is missing, the workflow logs a warning and skips that post — the deploy still goes through, the post just renders without an audio player. Run the workflow manually later (`slug: <slug>`) to retry.
+The pipeline is fail-soft. If the OpenAI call rate-limits, the local write fails, or any Secret is missing, the workflow logs a warning and skips that post — the deploy still goes through, the post just renders without an audio player. Run the workflow manually later (`slug: <slug>`) to retry.
+
+R2 uploads are best-effort. A failed mirror upload only logs a warning; the post still serves audio via the same-origin GitHub Pages copy.
 
 If a specific post's auto-narration sounds off, set `audioReadAs: |` in its frontmatter with a hand-tuned script. The preprocessor returns that string verbatim and TTS sees nothing else.
+
+### When the player can't reach the primary
+
+Some corporate networks block Cloudflare R2's public dev URLs (`pub-*.r2.dev`) as generic CDN content. If a reader's network does the same to the same-origin path (extremely rare — same origin as the page they're already reading), the player auto-falls-back to the R2 mirror once on the first real `MediaError`. A small `// primary blocked? play from mirror ↗` link sits beneath the player so the reader can also opt in manually.
 
 ### Podcast feed
 
@@ -295,11 +307,18 @@ content/blog/*.mdx  →  preprocess.ts  →  OpenAI TTS  →  MP3 chunks
                                                             ↓
                                                        Buffer.concat
                                                             ↓
-                                                  Cloudflare R2 (immutable)
-                                                            ↓
-                                                  src/data/blog-audio.json
-                                                            ↓
+                                  ┌─────────────────────────┴─────────────────────────┐
+                                  ↓                                                   ↓
+                       public/audio/<hash>.mp3                         Cloudflare R2 (mirror, best-effort)
+                       (committed → GitHub Pages, same-origin)         (immutable, public dev URL)
+                                  │                                                   │
+                                  └────────────────────┬──────────────────────────────┘
+                                                       ↓
+                                              src/data/blog-audio.json
+                                              (url + optional mirror)
+                                                       ↓
                                               <AudioPlayer /> in BlogPost.astro
+                                              (primary first, mirror fallback on error)
 ```
 
 ### Files

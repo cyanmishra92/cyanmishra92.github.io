@@ -7,11 +7,20 @@ import audioCache from '@/data/blog-audio.json';
 
 interface AudioEntry {
   url: string;
+  mirror?: string;
   duration: number;
   voice: string;
   bytes?: number;
 }
 const audioMap = audioCache as Record<string, AudioEntry>;
+
+/** Podcast clients need an absolute URL. Root-relative paths (the new
+ *  GitHub Pages primary) get expanded against SITE.url; absolute URLs
+ *  (R2 mirror) pass through unchanged. */
+function absUrl(url: string): string {
+  if (/^https?:\/\//.test(url)) return url;
+  return `${SITE.url.replace(/\/$/, '')}${url.startsWith('/') ? url : `/${url}`}`;
+}
 
 export async function GET(context: APIContext) {
   const news = (await getCollection('news', ({ data }) => !data.draft)).sort(compareNews);
@@ -51,7 +60,7 @@ export async function GET(context: APIContext) {
     const audio = audioMap[entry.slug];
     const enclosure =
       audio && audio.url && audio.bytes
-        ? { url: audio.url, type: 'audio/mpeg', length: audio.bytes }
+        ? { url: absUrl(audio.url), type: 'audio/mpeg', length: audio.bytes }
         : undefined;
     return {
       title: entry.data.title,

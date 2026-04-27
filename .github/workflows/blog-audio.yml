@@ -69,14 +69,20 @@ jobs:
           ONLY_SLUG:             ${{ github.event.inputs.slug }}
           FORCE_REGEN:           ${{ github.event.inputs.force }}
 
-      - name: Commit blog-audio.json if changed
+      - name: Commit audio artifacts if changed
+        # The auto-commit covers both the metadata JSON and the
+        # public/audio/ MP3s that GitHub Pages serves same-origin.
+        # No `[skip ci]` here: we WANT this commit to deploy.
+        # Recursion is prevented by this workflow's `paths:` filter
+        # which only listens to src/content/blog/** and
+        # scripts/blog-audio/** — not src/data/ or public/audio/.
         run: |
-          if [[ -z "$(git status --porcelain src/data/blog-audio.json)" ]]; then
-            echo "no audio metadata changes to commit"
+          if [[ -z "$(git status --porcelain src/data/blog-audio.json public/audio/)" ]]; then
+            echo "no audio artifacts to commit"
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/data/blog-audio.json
-          git commit -m "chore(audio): update blog-audio.json [skip ci]"
+          git add src/data/blog-audio.json public/audio/
+          git commit -m "chore(audio): refresh blog-audio.json + public/audio/"
           git push
