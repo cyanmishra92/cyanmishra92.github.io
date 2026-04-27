@@ -21,7 +21,10 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 interface Props {
   slug: string;
+  /** Primary same-origin URL (served from public/audio/). */
   url: string;
+  /** Optional R2 mirror used as a fallback when the primary load fails. */
+  mirror?: string;
   duration: number;
   voice: string;
 }
@@ -36,13 +39,18 @@ function formatTime(seconds: number): string {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-export default function AudioPlayer({ slug, url, duration, voice }: Props) {
+export default function AudioPlayer({ slug, url, mirror, duration, voice }: Props) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(duration);
   const [rate, setRate] = useState(1);
   const [error, setError] = useState(false);
+  // Once we've fallen back to the mirror, we stick with it for this
+  // session; flipping back and forth would just make a new failure
+  // loop. The user can refresh to retry the primary.
+  const [usingMirror, setUsingMirror] = useState(false);
+  const activeUrl = usingMirror && mirror ? mirror : url;
 
   const positionKey = useMemo(() => `audio:${slug}`, [slug]);
 
@@ -112,7 +120,14 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
         if (name === 'AbortError') return;
         // eslint-disable-next-line no-console
         console.error('[AudioPlayer] play() rejected:', err);
-        setError(true);
+        // First failure with a mirror available: silently switch and
+        // let the user click again. Second failure: surface the error.
+        if (!usingMirror && mirror) {
+          setUsingMirror(true);
+          setError(false);
+        } else {
+          setError(true);
+        }
       });
     } else {
       el.pause();
@@ -248,7 +263,7 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
         </div>
 
         <a
-          href={url}
+          href={activeUrl}
           download
           aria-label="Download MP3"
           class="inline-flex h-8 w-8 shrink-0 items-center justify-center text-text-muted transition-colors hover:text-accent"
@@ -261,9 +276,21 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
         </a>
       </div>
 
+      {mirror && (
+        <p class="border-t border-border px-4 py-2 font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+          {usingMirror ? (
+            <>// playing from cloudflare mirror</>
+          ) : (
+            <>
+              // primary blocked? <a class="link-underline text-accent" href={mirror} rel="noopener noreferrer" target="_blank">play from mirror ↗</a>
+            </>
+          )}
+        </p>
+      )}
+
       <audio
         ref={audioRef}
-        src={url}
+        src={activeUrl}
         preload="none"
         onLoadedMetadata={() => {
           const el = audioRef.current;
@@ -296,6 +323,16 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
           if (!mediaError || mediaError.code === 0) return;
           // eslint-disable-next-line no-console
           console.error('[AudioPlayer] media error', mediaError.code, mediaError.message);
+          // Auto-fall-back to the mirror once. If we already failed
+          // on the mirror, surface the error.
+          if (!usingMirror && mirror) {
+            setUsingMirror(true);
+            // Re-issue load on the swapped src.
+            queueMicrotask(() => {
+              try { audioRef.current?.load(); } catch { /* ignore */ }
+            });
+            return;
+          }
           setError(true);
         }}
       />
