@@ -1,0 +1,50 @@
+---
+/**
+ * <Figure> — sharp-bordered image with auto-numbered Commit Mono
+ * caption. Uses CSS counters scoped to `.prose-content` so the
+ * "Fig. N" prefix increments per post without any JS.
+ *
+ * Width modes:
+ *   default — stays in the prose column (max-w-prose)
+ *   wide    — extends ~30% past the prose column on desktop
+ *   full    — extends to the page-container edges
+ *
+ * Image source can be a string (public/img/... or absolute URL) or
+ * an Astro asset import. When a string is given we render a plain
+ * <img>; the page is responsible for any optimization. When given a
+ * resolvable asset path you should pass it via Astro's image()
+ * helper from frontmatter — but for MDX simplicity, strings are the
+ * primary path here.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  width?: 'default' | 'wide' | 'full';
+}
+
+const { src, alt, caption, width = 'default' } = Astro.props;
+
+const widthClasses: Record<NonNullable<Props['width']>, string> = {
+  default: 'max-w-prose',
+  wide: 'mx-auto w-full max-w-[110ch] xl:-mx-12',
+  full: '-mx-6 lg:-mx-8 max-w-none',
+};
+---
+
+<figure class={`my-8 ${widthClasses[width]}`}>
+  <div class="border-2 border-border bg-surface">
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      class="block w-full"
+    />
+  </div>
+  {(caption || alt) && (
+    <figcaption class="mt-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted prose-figure-caption">
+      {caption ?? alt}
+    </figcaption>
+  )}
+</figure>

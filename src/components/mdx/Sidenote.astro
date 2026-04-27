@@ -1,0 +1,24 @@
+---
+/**
+ * Sidenote — at desktop ≥1280px, renders in the right margin as a
+ * floated note. On narrower viewports, behaves as a footnote
+ * (collected in the //notes section at the bottom).
+ *
+ * Implementation: server-render both the inline marker (for footnote
+ * fallback at <xl) and the margin block (for ≥xl). CSS handles which
+ * one is visible. The init script reads markers like Footnote does.
+ */
+const html = await Astro.slots.render('default');
+---
+
+<sup
+  data-footnote-marker
+  data-footnote-content={html}
+  class="sidenote-marker font-mono text-[0.7em] text-accent xl:hidden"
+>[*]</sup>
+
+<aside
+  class="sidenote-margin hidden xl:float-right xl:clear-right xl:-mr-[18rem] xl:block xl:w-[15rem] xl:pl-4 xl:font-mono xl:text-xs xl:leading-relaxed xl:text-text-muted"
+>
+  <Fragment set:html={html} />
+</aside>

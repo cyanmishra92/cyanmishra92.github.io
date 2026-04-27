@@ -89,6 +89,15 @@ const news = defineCollection({
 
 /**
  * Blog collection — MDX posts under src/content/blog/.
+ *
+ * `status` drives the lifecycle:
+ *   idea       → /blog/ideas/<slug>      noindex,  excluded from /blog/, RSS, sitemap
+ *   draft      → /blog/drafts/<slug>     noindex,  excluded from /blog/, RSS, sitemap
+ *   published  → /blog/<slug>            indexed,  included in /blog/, RSS, sitemap
+ *   archived   → /blog/<slug>            indexed,  included in sitemap, hidden from /blog/
+ *
+ * Series frontmatter carries the multi-part metadata for posts that
+ * belong to a sequence (renders Part N of M cards + prev/next).
  */
 const blog = defineCollection({
   type: 'content',
@@ -98,7 +107,21 @@ const blog = defineCollection({
     date: z.coerce.date(),
     updated: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
-    draft: z.boolean().default(false),
+    /** Lifecycle state. Default 'draft' so a new file is private until promoted. */
+    status: z.enum(['idea', 'draft', 'published', 'archived']).default('draft'),
+    /** Multi-part series. The slug is derived from the post; `name` is the display title. */
+    series: z
+      .object({
+        name: z.string(),
+        slug: z.string(),
+        part: z.number().int().min(1),
+        total: z.number().int().min(1),
+      })
+      .optional(),
+    /** Set false to suppress the auto-rendered table of contents. */
+    toc: z.boolean().default(true),
+    /** Forward reference for Phase 8.2 — narration audio file URL. */
+    audio: z.string().optional(),
   }),
 });
 

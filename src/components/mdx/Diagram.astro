@@ -1,0 +1,120 @@
+---
+/**
+ * <Diagram> — Mermaid diagram with an auto-numbered Commit Mono caption.
+ * The diagram source goes in the slot; the client-side mermaid runtime
+ * is lazy-loaded only if at least one <Diagram> exists on the page.
+ *
+ * Theme: we match the Technical Editorial palette via Mermaid's theme
+ * variables rather than its built-in themes. Colors come from the CSS
+ * tokens (--color-accent, --color-bg, --color-text, etc.) at runtime.
+ *
+ * Numbering shares the figure counter so figures and diagrams flow
+ * naturally as "Fig. 1, Fig. 2, ..." through the post.
+ */
+interface Props {
+  caption?: string;
+}
+
+const { caption } = Astro.props;
+
+// Stash the raw Mermaid source as data; the runtime reads it,
+// renders SVG, and replaces the placeholder. The slot's text content
+// is passed through verbatim.
+const source = await Astro.slots.render('default');
+// Strip wrapping <p>...</p> that MDX may have added around plain text.
+const stripped = source.trim().replace(/^<p[^>]*>([\s\S]*?)<\/p>$/i, '$1').trim();
+---
+
+<figure class="prose-figure my-8" data-diagram>
+  <div class="border-2 border-border bg-surface p-4">
+    <pre class="diagram-source overflow-x-auto font-mono text-xs text-text-muted" data-mermaid-source>{stripped}</pre>
+    <div class="diagram-rendered hidden"></div>
+  </div>
+  {caption && (
+    <figcaption class="mt-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted prose-figure-caption">
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<script>
+  // Lazy-load Mermaid only when at least one <Diagram> is on the page.
+  const diagrams = document.querySelectorAll<HTMLElement>('[data-diagram]');
+  if (diagrams.length > 0) {
+    const mod = await import('mermaid');
+    const mermaid = (mod as { default: typeof import('mermaid').default }).default ?? mod;
+
+    const isDark = () => document.documentElement.classList.contains('dark');
+
+    function tokens() {
+      const root = getComputedStyle(document.documentElement);
+      const rgb = (k: string) => `rgb(${root.getPropertyValue(k).trim()})`;
+      return {
+        bg: rgb('--color-bg'),
+        surface: rgb('--color-surface'),
+        text: rgb('--color-text'),
+        textMuted: rgb('--color-text-muted'),
+        border: rgb('--color-border'),
+        accent: rgb('--color-accent'),
+      };
+    }
+
+    function init() {
+      const t = tokens();
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'strict',
+        theme: 'base',
+        themeVariables: {
+          background: t.bg,
+          primaryColor: t.surface,
+          primaryTextColor: t.text,
+          primaryBorderColor: t.accent,
+          secondaryColor: t.bg,
+          secondaryBorderColor: t.border,
+          tertiaryColor: t.surface,
+          tertiaryBorderColor: t.border,
+          lineColor: t.textMuted,
+          textColor: t.text,
+          mainBkg: t.surface,
+          edgeLabelBackground: t.bg,
+          fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+          darkMode: isDark(),
+        },
+        flowchart: { curve: 'linear', htmlLabels: true },
+      });
+    }
+
+    async function renderAll() {
+      init();
+      let i = 0;
+      for (const fig of Array.from(diagrams)) {
+        const src = fig.querySelector<HTMLElement>('[data-mermaid-source]');
+        const target = fig.querySelector<HTMLElement>('.diagram-rendered');
+        if (!src || !target) continue;
+        try {
+          const code = (src.textContent ?? '').trim();
+          if (!code) continue;
+          const id = `mermaid-${Date.now()}-${i++}`;
+          const { svg } = await mermaid.render(id, code);
+          target.innerHTML = svg;
+          target.classList.remove('hidden');
+          src.classList.add('hidden');
+        } catch (err) {
+          // Leave the source visible if rendering fails — debuggable.
+          // eslint-disable-next-line no-console
+          console.error('mermaid render failed', err);
+        }
+      }
+    }
+
+    renderAll();
+    // Re-render on theme change so colors stay in sync.
+    const observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.attributeName === 'class') renderAll();
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true });
+  }
+</script>

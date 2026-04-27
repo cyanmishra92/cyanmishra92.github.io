@@ -4,7 +4,11 @@ import { renderOg } from '@lib/og-image';
 import { prettyDate } from '@lib/news';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  // OG cards are generated for any post that has a canonical URL
+  // (published or archived) AND for drafts/ideas — drafts and ideas
+  // share the URL with the post template, so the OG image needs to
+  // exist when previewing them too.
+  const posts = await getCollection('blog');
   return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
 }
 

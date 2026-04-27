@@ -1,0 +1,33 @@
+---
+import { isoDate, prettyDate } from '@lib/news';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section aria-labelledby="related-heading">
+  <h2 id="related-heading" class="mb-4 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+    // related posts
+  </h2>
+  <ol class="grid gap-3 sm:grid-cols-3">
+    {posts.map((p) => (
+      <li>
+        <a
+          href={`/blog/${p.slug}/`}
+          class="card-sharp block h-full p-4"
+        >
+          <p class="font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+            <time datetime={isoDate(p.data.date)}>{prettyDate(p.data.date)}</time>
+          </p>
+          <p class="mt-2 font-display text-base leading-snug text-text">
+            {p.data.title}
+          </p>
+        </a>
+      </li>
+    ))}
+  </ol>
+</section>

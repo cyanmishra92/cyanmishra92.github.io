@@ -1,0 +1,75 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import { seriesGroups } from '@lib/blog';
+import { isoDate, prettyDate } from '@lib/news';
+
+export async function getStaticPaths() {
+  const groups = await seriesGroups();
+  // Generate series index pages only when every part of the series is
+  // public. Series whose parts are still draft / idea don't get a
+  // public index — sibling cards on the post pages still link parts
+  // together, but no aggregator URL leaks.
+  return groups
+    .filter((g) => g.allPublic)
+    .map((g) => ({
+      params: { slug: g.slug },
+      props: { group: g },
+    }));
+}
+
+interface Props {
+  group: Awaited<ReturnType<typeof seriesGroups>>[number];
+}
+
+const { group } = Astro.props;
+---
+
+<BaseLayout
+  title={group.name}
+  description={`Series: ${group.name} — ${group.parts.length} of ${group.total} parts published.`}
+  noindex={!group.allPublic}
+  breadcrumbs={[
+    { name: 'Blog', href: '/blog/' },
+    { name: 'Series', href: '/blog/' },
+    { name: group.name, href: `/blog/series/${group.slug}/` },
+  ]}
+>
+  <PageHeader
+    number="08·S"
+    eyebrow="series"
+    title={group.name}
+    intro={`${group.parts.length} of ${group.total} parts ${group.parts.length === group.total ? 'published' : 'so far'}.`}
+  />
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    <ol class="grid gap-px border-y border-border bg-border">
+      {group.parts.map((p) => (
+        <li>
+          <a
+            href={`/blog/${p.slug}/`}
+            class="grid grid-cols-12 gap-x-4 bg-bg p-6 transition-colors hover:bg-surface sm:gap-x-6 sm:p-8"
+          >
+            <div class="col-span-12 sm:col-span-3 lg:col-span-2">
+              <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+                <span class="text-accent">part {p.data.series?.part}</span>
+                <span class="mx-1.5">/</span>
+                <span>{group.total}</span>
+              </p>
+              <time
+                datetime={isoDate(p.data.date)}
+                class="mt-2 block font-mono text-[0.75rem] uppercase tracking-eyebrow text-text"
+              >
+                {prettyDate(p.data.date)}
+              </time>
+            </div>
+            <div class="col-span-12 mt-3 sm:col-span-9 sm:mt-0 lg:col-span-10">
+              <h2 class="font-display text-2xl leading-snug text-text">{p.data.title}</h2>
+              <p class="mt-2 max-w-prose text-base text-text-muted">{p.data.description}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</BaseLayout>

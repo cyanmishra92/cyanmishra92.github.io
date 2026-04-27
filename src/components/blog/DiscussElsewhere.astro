@@ -1,0 +1,91 @@
+---
+/**
+ * "Discuss this post on" — typographic byline strip that points to
+ * the platforms my readers actually congregate on. Each link
+ * pre-fills a share/submit URL with the post title and canonical URL.
+ *
+ * Mastodon needs the user's instance domain; we open a small inline
+ * prompt + redirect. If the user cancels or types nothing, we copy
+ * the post URL as a graceful fallback so the click does *something*.
+ */
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+
+const enc = (s: string) => encodeURIComponent(s);
+
+interface DiscussLink {
+  label: string;
+  href: string;
+  mastodon?: boolean;
+}
+
+const links: DiscussLink[] = [
+  { label: 'x · twitter', href: `https://x.com/intent/tweet?text=${enc(title)}&url=${enc(url)}` },
+  { label: 'hacker news', href: `https://news.ycombinator.com/submitlink?u=${enc(url)}&t=${enc(title)}` },
+  { label: 'lobste.rs', href: `https://lobste.rs/stories/new?url=${enc(url)}&title=${enc(title)}` },
+  { label: 'linkedin', href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}` },
+  { label: 'mastodon', href: '#', mastodon: true },
+  { label: 'bluesky', href: `https://bsky.app/intent/compose?text=${enc(`${title} ${url}`)}` },
+];
+---
+
+<section data-discuss data-discuss-title={title} data-discuss-url={url}>
+  <p class="mb-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+    // discuss this post on
+  </p>
+  <p class="flex flex-wrap items-baseline gap-x-2 gap-y-1.5 font-mono text-xs lowercase text-text-muted">
+    {links.map((l, i) => (
+      <>
+        {i > 0 && <span class="text-border" aria-hidden="true">·</span>}
+        <a
+          href={l.href}
+          class="link-underline whitespace-nowrap hover:text-accent"
+          rel={l.mastodon ? undefined : 'noopener noreferrer'}
+          target={l.mastodon ? undefined : '_blank'}
+          data-mastodon={l.mastodon ? '' : undefined}
+        >
+          [ {l.label} ]
+        </a>
+      </>
+    ))}
+  </p>
+</section>
+
+<script>
+  // Mastodon helper — instance varies per user, so we prompt for one
+  // and redirect to the standard /share intent. Falls back to copying
+  // the URL if the user dismisses or leaves the field empty.
+  const root = document.querySelector<HTMLElement>('[data-discuss]');
+  if (root) {
+    const title = root.dataset.discussTitle ?? '';
+    const url = root.dataset.discussUrl ?? '';
+    const link = root.querySelector<HTMLAnchorElement>('[data-mastodon]');
+    link?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const stored = localStorage.getItem('mastodon-instance') ?? '';
+      const instance = window.prompt(
+        'Which Mastodon instance? (e.g. mastodon.social, fosstodon.org)',
+        stored,
+      );
+      if (instance && instance.trim()) {
+        const clean = instance.trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
+        try { localStorage.setItem('mastodon-instance', clean); } catch (_) {}
+        const text = encodeURIComponent(`${title} ${url}`);
+        window.open(`https://${clean}/share?text=${text}`, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      // Fallback — copy the URL so the click wasn't wasted.
+      try {
+        await navigator.clipboard.writeText(url);
+        link.textContent = '[ copied ]';
+        setTimeout(() => (link.textContent = '[ mastodon ]'), 1500);
+      } catch (_) {
+        // ignore — clipboard API may be unavailable
+      }
+    });
+  }
+</script>

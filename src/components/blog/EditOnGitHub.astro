@@ -1,0 +1,26 @@
+---
+/**
+ * "Found a typo? edit on github" link — opens the GitHub web editor
+ * for the source MDX file. For non-collaborators, GitHub auto-forks
+ * and opens a PR. Standard low-friction contribution flow.
+ */
+interface Props {
+  /** Entry ID, e.g. "hello-world.mdx" */
+  slug: string;
+}
+
+const { slug } = Astro.props;
+
+const url = `https://github.com/cyanmishra92/cyanmishra92.github.io/edit/main/src/content/blog/${slug}`;
+---
+
+<p>
+  <a
+    href={url}
+    rel="noopener noreferrer"
+    target="_blank"
+    class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted hover:text-accent"
+  >
+    // found a typo? edit on github →
+  </a>
+</p>

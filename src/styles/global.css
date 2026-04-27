@@ -8,6 +8,7 @@
 @import '@fontsource/jetbrains-mono/400.css';
 @import '@fontsource/jetbrains-mono/500.css';
 @import '@fontsource/jetbrains-mono/600.css';
+@import 'katex/dist/katex.min.css';
 
 @tailwind base;
 @tailwind components;
@@ -350,4 +351,194 @@
   transform: scaleX(var(--scroll, 0));
   z-index: 60;
   pointer-events: none;
+}
+
+/* ─── Blog post body typography ─────────────────────────────────────────────
+   `.prose-content` is the wrapper around <Content /> in BlogPost.astro.
+   Sets the rhythm for long-form: heading sizes, paragraph spacing,
+   inline-code styling, list bullets, blockquotes. Tailwind utilities
+   already cover most of this when authors hand-write JSX, but MDX
+   markdown comes through unstyled — these rules give it the same
+   look as Tailwind classes would.
+
+   Per-post counters reset on `.prose-content` so figure / equation /
+   diagram numbering starts at 1 each time. The captions read the
+   counter via `::before`. */
+.prose-content {
+  counter-reset: figure equation;
+}
+.prose-content h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-size: 1.875rem;
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+}
+.prose-content h3 {
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.375rem;
+  line-height: 1.3;
+}
+.prose-content h4 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+.prose-content p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.prose-content ul {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+.prose-content ol {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.25rem;
+  list-style: decimal;
+}
+.prose-content li {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.prose-content li > p {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.prose-content :where(p, li) > a {
+  color: rgb(var(--color-accent));
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 180ms ease-out;
+}
+.prose-content :where(p, li) > a:hover {
+  color: rgb(var(--color-text));
+}
+.prose-content :where(p, li) > code,
+.prose-content h1 code,
+.prose-content h2 code,
+.prose-content h3 code,
+.prose-content h4 code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.85em;
+  padding: 0.05em 0.35em;
+  border: 1px solid rgb(var(--color-border));
+  background: rgb(var(--color-surface));
+}
+.prose-content blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 2px solid rgb(var(--color-border));
+  color: rgb(var(--color-text-muted));
+  font-style: italic;
+}
+.prose-content hr {
+  margin: 2.5rem 0;
+  border: none;
+  border-top: 1px solid rgb(var(--color-border));
+}
+
+/* Figure / Equation / Diagram captions — auto-numbered via CSS counters
+   so the post body never has to spell out "Fig. 3" by hand. The
+   counter-increment happens in the caption itself, which means a
+   <Figure> without a caption still doesn't bump the counter. */
+.prose-content .prose-figure-caption::before {
+  counter-increment: figure;
+  content: 'Fig. ' counter(figure) ' — ';
+  color: rgb(var(--color-accent));
+}
+.prose-content .prose-equation-caption::before {
+  counter-increment: equation;
+  content: 'Eq. ' counter(equation) ' — ';
+  color: rgb(var(--color-accent));
+}
+
+/* Footnote markers — the JS init script rewrites the sup content to
+   a numbered link; we just style it. */
+.prose-content .footnote-ref {
+  color: rgb(var(--color-accent));
+  text-decoration: none;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 500;
+}
+.prose-content .footnote-ref:hover {
+  text-decoration: underline;
+}
+.prose-content .footnote-back {
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: rgb(var(--color-accent));
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  text-decoration: none;
+}
+.prose-content .footnote-back:hover {
+  text-decoration: underline;
+}
+
+/* KaTeX display math — center, allow horizontal scroll on overflow */
+.prose-content .katex-display {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+.prose-content .katex {
+  font-size: 1.05em;
+}
+
+/* Expressive Code frame polish — square corners, paper bg integration */
+.prose-content .expressive-code,
+.expressive-code {
+  margin: 1.5rem 0;
+}
+.expressive-code .frame {
+  border-radius: 0 !important;
+}
+.expressive-code .frame .header {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-size: 0.6875rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Print stylesheet — used by [save .pdf] which calls window.print().
+   Strip site chrome, expand to width, hide interactive bits. Anyone
+   who actually saves a post to PDF wants the prose, not the header
+   nav or the discuss-elsewhere strip. */
+@media print {
+  .nav-blur,
+  header.nav-blur,
+  .read-progress,
+  [data-share],
+  [data-discuss],
+  footer section[aria-labelledby="webmentions-heading"],
+  footer section[aria-labelledby="related-heading"],
+  footer section[aria-labelledby="series-heading"],
+  .toc {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .prose-content {
+    max-width: none !important;
+  }
+  a {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+  a[href^="http"]::after {
+    content: ' (' attr(href) ')' !important;
+    font-size: 0.85em !important;
+    color: #555 !important;
+  }
+  .expressive-code {
+    page-break-inside: avoid;
+  }
 }

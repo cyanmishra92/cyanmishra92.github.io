@@ -1,0 +1,89 @@
+---
+/**
+ * Auto-generated ToC — sticky right-rail at desktop ≥1280px,
+ * collapsible accordion at the top of the post on narrower viewports.
+ *
+ * Reads `headings` from the MDX render and emits H2 + H3. Highlights
+ * the current section via Intersection Observer.
+ */
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+---
+
+<nav aria-label="On this page" class="toc xl:sticky xl:top-24 xl:max-h-[calc(100vh-7rem)] xl:overflow-y-auto">
+  {/* mobile/tablet: collapsible accordion */}
+  <details class="xl:hidden border border-border">
+    <summary class="cursor-pointer px-4 py-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+      // on this page
+    </summary>
+    <ol class="border-t border-border px-4 py-3 text-sm">
+      {headings.map((h) => (
+        <li class={h.depth === 3 ? 'pl-4' : ''}>
+          <a class="link-underline block py-1 text-text-muted hover:text-accent" href={`#${h.slug}`}>
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </details>
+
+  {/* desktop: sticky list, no chrome */}
+  <div class="hidden xl:block">
+    <p class="mb-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+      // on this page
+    </p>
+    <ol class="space-y-1 text-sm" data-toc-list>
+      {headings.map((h) => (
+        <li class={h.depth === 3 ? 'pl-4' : ''}>
+          <a class="link-underline block py-0.5 text-text-muted transition-colors hover:text-accent" href={`#${h.slug}`} data-toc-link={h.slug}>
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</nav>
+
+<script>
+  // Highlight the current section via Intersection Observer. Picks the
+  // last heading whose top has crossed the upper third of the viewport.
+  const list = document.querySelector<HTMLOListElement>('[data-toc-list]');
+  if (list) {
+    const links = new Map<string, HTMLAnchorElement>();
+    list.querySelectorAll<HTMLAnchorElement>('[data-toc-link]').forEach((a) => {
+      const slug = a.dataset.tocLink;
+      if (slug) links.set(slug, a);
+    });
+    const headings = Array.from(
+      document.querySelectorAll<HTMLElement>('.prose-content :is(h2, h3)[id]'),
+    );
+    if (headings.length > 0) {
+      let current: HTMLAnchorElement | null = null;
+      const setActive = (slug: string | undefined) => {
+        if (current) current.classList.remove('text-accent', 'font-medium');
+        const next = slug ? links.get(slug) ?? null : null;
+        if (next) {
+          next.classList.add('text-accent', 'font-medium');
+          next.classList.remove('text-text-muted');
+        }
+        current = next;
+      };
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          if (visible[0]) setActive(visible[0].target.id);
+        },
+        { rootMargin: '0px 0px -66% 0px', threshold: 0 },
+      );
+      headings.forEach((h) => io.observe(h));
+    }
+  }
+</script>
