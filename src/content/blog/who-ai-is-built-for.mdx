@@ -1,0 +1,133 @@
+---
+title: Who AI is built for
+date: 2026-04-27
+description: Modern AI rests on assumptions about price, capability, bandwidth, trust, and energy that exclude most of the world by construction.
+tags: [ml-systems, infrastructure, accessibility, essay]
+draft: false
+---
+
+Most of the people who would benefit most from a working AI assistant are not in the room where the assistant is built. This is not an accusation. It is an observation about how the field is structured, and the consequences of that structure are not visible from inside it.
+
+Modern frontier AI is a real resource. It is also delivered to the world through a specific architecture: a small number of laboratories in a small number of cities, serving everyone through metered APIs over reliable bandwidth, billed in dollars at the standard rate. That architecture has unstated assumptions baked into it. Each assumption excludes a different population. Together they exclude most of the planet by construction.
+
+I write from a chip company in San Diego, and I grew up in a small town in Odisha. I know the people the architecture works least well for, because they are the people I grew up around. I am not writing about them as case studies. I am writing because the field has interesting unfinished engineering work to do here, and because the people best positioned to know what AI should do for a given population are people from that population.
+
+This post is not a call for regulation, foreign aid, or government intervention. It is a description of an architecture, and of the population it leaves out, in the hope that someone reads it and decides to build something.
+
+## The numbers
+
+A single LLM query is cheap to serve, and getting cheaper. Peer-reviewed measurement across 32,500 inference runs places a Llama 3.3 70B query at roughly 0.39 J per total token at high batch on H100 hardware [1]. Independent estimators put a typical short GPT-4o-class exchange at about 0.3 to 0.43 Wh [2, 3]. Reasoning models cost more, sometimes 30 to 50 times more per query, because they emit thousands of internal tokens before producing the visible answer [3]. Training a frontier model is a separate matter, and is expensive in the billions, but training is amortised across all users [4]. The cost that gets passed through is inference, and inference is no longer the limiting factor.
+
+The retail price of a consumer subscription has converged. ChatGPT Plus, Claude Pro, Google AI Pro, and Perplexity Pro all sit at twenty dollars a month [5, 6, 7]. Premium tiers cluster between one hundred and two hundred and fifty dollars: Claude Max, ChatGPT Pro, Google AI Ultra. OpenAI launched ChatGPT Go at eight dollars a month in January 2026, originally piloted in India and now rolled out globally with local payment rails on UPI, GoPay, and Pix [8].
+
+Now place that against income.
+
+| Country | Median monthly individual income | ChatGPT Plus list price | Plus as % of median income | Source |
+|---|---|---|---|---|
+| United States | ~$5,000 | $20 | ~0.4% | BLS Q4 2024 |
+| Germany | ~€3,300 (~$3,500) | ~€24 incl. VAT | ~0.7% | UNECE / Destatis |
+| Brazil | R$1,900 (~$368) | ~R$100 | ~5.3% | IBGE PNAD 2024 |
+| India | ₹12,500 (~$134) | ₹1,999 (~$13)\* | ~16% face / ~50%+ at PPP | PLFS 2024 |
+| Indonesia | ~Rp 3.04M (~$200)† | $20 | ~10% | BPS 2024 |
+| Nigeria (Lagos median) | ~₦60,000 (~$35) | $6.40-$20‡ | 18-57% | NBS / Forbes |
+
+\* India price via the Apple iOS track. Web list price defaults closer to $20. † Indonesia figure is average net wage; other rows are medians. ‡ Nigerian Apple-billing reportedly resolves to roughly $6.40 due to regional pricing; web-default is closer to $20.
+
+The Lagos number is the one that lingers. The median Lagos worker earns less per month than the federal minimum wage [9, 10]. On the standard web price, ChatGPT Plus is more than half of that. The Indian face-price gap looks smaller until you adjust for purchasing power, at which point a thirteen-dollar subscription represents the equivalent of seventy or eighty US dollars in local terms.
+
+The architecture has noticed. ChatGPT Go at eight dollars lowers the floor and runs on local rails. Google's AI Plus launched in India at ₹399 a month with an introductory price of ₹199 for the first six months [11]. These are real moves, and bounded ones. A thirteen-dollar face price is still around ten percent of Indian median monthly income, and the strongest reasoning models, the longest contexts, and the heaviest tool use remain on the hundred-and-two-hundred-dollar plans.
+
+There is one more piece of data that belongs here, which is the unit economics. Heavy users on flat-rate plans cost more than they pay. Anthropic introduced weekly rate limits on its two-hundred-dollar Max-20 tier in 2025 [12]. The standard twenty-dollar plan exists because the platform expects most subscribers to barely use it. If the median user in a tier-2 Indian town actually used it the way a Bay Area developer does, the math at the current price would not hold.
+
+A reasonable reply at this point: consumption is distributing fast, and faster than this section suggests. The World Bank reports that more than forty percent of global ChatGPT traffic in mid-2025 originated in middle-income countries, led by Brazil, India, Indonesia, and Vietnam [13]. Microsoft's AI Economy Institute estimates global generative-AI adoption at sixteen percent of world population by late 2025 [14]. The technology is reaching those users. The argument of this post is not that it is not. The argument is that what it reaches them as, at the price they can pay, in the languages they speak, on the networks they have, with the trustworthiness their work demands, on infrastructure their grids can carry, is a categorically different product from the one a Bay Area engineer is using to write code. Consumption distributes. Definitional power does not.
+
+Price, in any case, is the easiest of the exclusions to fix. The harder ones are technical.
+
+## Five exclusions
+
+Suppose you fix price. Make it free, no rate limit, the highest tier for everyone. The next problem is capability, and the gap is not the one most readers expect. Free-tier base models are reasonably strong in 2026: Anthropic serves Sonnet 4.6 to free users, OpenAI's free tier runs on GPT-5.3 [5, 6]. The free-versus-paid gap is now mostly about reasoning depth, usage caps, tool access, and longest-context handling. The gap that matters more for the populations this post is about is multilingual. On MMLU-ProX, the best-performing model scored 70.3 percent on English and 40.1 percent on Swahili, a thirty-point gap on a single benchmark for a single model [15]. AfroBench, covering sixty-four African languages across fifteen tasks, characterises the gap between English and African languages as "large" across most tasks even on GPT-4o and Gemini 1.5 Pro [16]. On IrokoBench, the best open-weight model scored only fifty-eight to sixty-three percent of the closed-model score on African-language tasks [17]. On IndicGenBench, across twenty-nine Indic languages, PaLM-2-L scored 83.7 in English and 41.1 in certain Indic generations [18]. The gap is twenty to forty points on the things that matter most for low-resource speakers.
+
+Suppose capability is also fixed. Assume the model speaks Hindi as well as English. Bandwidth and latency are the next wall. Median mobile download speed is roughly 29 to 43 Mbps in Indonesia and 43 Mbps in Nigeria, both numbers concealing very wide rural-urban gaps inside each country [19, 20]. Rural broadband penetration in India is 29.3 percent against 93 percent urban [21]. The ITU's mobile-broadband basket cost 2.74 percent of GNI per capita in Nigeria in 2025 against 0.68 percent in the US, an order-of-magnitude affordability difference for being connected at all [22]. And LLM streaming over weak networks degrades disproportionately. An academic study showed that under unstable network conditions, ChatGPT's TCP-based token streaming exhibited stall ratios that a custom protocol could reduce by 71 percent, because a single lost packet blocks all subsequent token rendering even when newer-token packets have already arrived [23]. Industry rule of thumb: every additional second of delay raises chatbot abandonment by seven to ten percent [24]. The product over 2G in rural Bihar is not a slower version of the product over fibre in San Francisco. It is a different product.
+
+Suppose bandwidth is also fixed. Trust is the next wall, and it is more dangerous than the others, because it fails silently. A small-town lawyer in Lucknow drafting bail petitions in Hindi will get a confident answer about Indian inheritance law that sounds correct and is wrong. Hemrajani (2025), evaluating GPT-4 and Claude on Indian legal practice from the National Law School of India, found the models match or exceed junior lawyers at drafting and issue-spotting but produce frequent fabrications on specialised Indian legal research [25]. Stanford RegLab's hallucination work puts hallucination rates at sixty-nine to eighty-eight percent on specific US legal queries, with subsequent work finding the rates worsen for queries about Sub-Saharan African or Indic legal contexts [26, 27]. The RegLab paper's own warning is that legal hallucinations may "have the opposite effect on the justice gap by systematically disadvantaging those who need the most help" [26]. The lawyer in Lucknow is exactly the user the warning is about. So is the community health worker in rural Sulawesi answering questions about post-natal care, and the municipal clerk in Lagos digitising decades of land records. None of them has a way to know that a confidently-stated answer is wrong. Rest of World tested GPT-3.5 in Tigrinya and Amharic in 2023 and got back gibberish; their February 2026 retrospective confirms Bengali, Swahili, Urdu, and Thai are still where the model breaks [28, 29].
+
+Suppose all four are fixed. Energy is the last wall, and it is where the architecture itself fails, not just the user-side experience. A hyperscale data centre campus draws hundreds of megawatts. The US hosts roughly 5,427 data centres, more than ten times any other country, and accounts for about half of all hyperscale capacity worldwide [30, 31]. The McKinsey 2030 outlook projects 156 to 219 GW of global data-centre capacity, against roughly 47 GW today, with about seventy percent of new demand AI-driven [32]. In Virginia, data centres already consume twenty-six percent of state electricity. In Ireland, more than twenty percent of national grid output [33, 34]. Hyperscalers go where there is cheap reliable power, abundant water for cooling, and stable politics: Northern Virginia, Iowa, the Nordics, now Riyadh. They do not go to Lagos, where the national grid collapsed nine times in 2024, where the average household gets four hours of power a day, and where ninety-six percent of industrial electricity is from private generators [35, 36, 37]. The Lagos clerk is not waiting for ChatGPT to be cheaper. He is waiting for the lights. Independent monitoring puts average power outages in rural Uttar Pradesh at nine hours per day [38]. As long as inference happens on a Virginia campus, the user in Sulawesi pays for the geography in latency, in reliability, in trust they should have but cannot.
+
+By the time you reach the last wall, no patch on the existing architecture solves the underlying problem.
+
+## The view from inside
+
+I started a PhD in 2018, before GPT-2. The lab I joined did energy-harvesting sensors, intermittent computing, and computational storage: the systems engineering of doing useful machine work at the edge of the network, on devices that may or may not be powered, on memories that lose state when the battery runs out. The questions we worked on were small and pragmatic. How do you train a neural network on a microcontroller that goes dark every twelve seconds? How do you do continuous learning on a solar-powered server in a field, with intermittent connectivity, without losing weeks of data on a power outage? The papers I am most proud of (NExUME on intermittency-aware DNN training, Salient Store on computational storage for continuous learning, Usás on battery-free continuous learning on solar-powered edge servers) all live inside this set of constraints.
+
+Over the seven years of the PhD, the field's centre of gravity moved. The interesting question stopped being "how do we make ML fit on tiny devices" and became "how do we spend a hundred million dollars on a training run." This is not a complaint. The scaling bet was a real bet, and it paid off; the resulting models do things small models do not. But the field also made a choice about where to put its attention. The systems work that would have mattered most for accessibility (energy harvesting, intermittent and federated learning, on-device inference, computational storage, the entire toolkit for doing useful work without a data centre behind you) got proportionally less attention as the rest of the field scaled. Not zero. The work continued and continues. But the talent and the funding and the prestige flowed elsewhere.
+
+The consequence is that the delivery architecture of modern AI was built on an assumption of abundance: abundant electricity, abundant cooling water, abundant bandwidth, abundant compute, abundant English text, abundant capital. None of those assumptions hold in most of the places where this technology would matter most. Most of the world does not live in that architecture, and the architecture was not designed for it.
+
+This is a real resource. The question is how we get it to more people, and the answer is not just cheaper subscriptions.
+
+I do not think this is anyone's fault. The frontier labs built something real, in the constraints they had. But the labs are not best positioned to fix the distribution. The work that needs to happen next is closer to the constraints than to the frontier, it is systems work, and most of it is uncashed.
+
+## What the room does not know
+
+An engineer in San Francisco cannot have ground-truth on what AI should do for the lawyer in Lucknow drafting bail petitions in Hindi. She cannot know what the failure modes look like for the health worker in rural Sulawesi answering questions about post-natal care from a phone with two bars of signal, or for the clerk in Lagos digitising decades of land records under a four-hour power schedule. This is not a moral failing of the engineer. It is a property of geography and life experience. The knowledge required to build for these users does not exist in the room where the model is trained, and it cannot be acquired by querying a focus group.
+
+The implication is uncomfortable but not radical: the work of figuring out what AI should do for a given population is local work. It belongs to people who live in the places they are building for. AI4Bharat at IIT Madras is doing it for twenty-two Indian languages, with a dataset of twelve thousand hours of speech from over twenty thousand speakers across more than two hundred districts [39]. Masakhane is doing it across the African continent through a network of more than two thousand researchers [40]. Lelapa AI in Johannesburg has shipped a 0.4-billion-parameter model called InkubaLM for five major African languages, on the explicit reasoning that more than seventy percent of African smartphone users are on entry-level devices and heavy compute-intensive models will not run there [41]. SEA-LION at AI Singapore covers eleven Southeast Asian languages [42]. Karya in Bengaluru has built a data-collection model that pays workers around five dollars an hour and routes royalties on resale back to them [43]. Cohere For AI's Aya covers a hundred and one languages [44]. These are not adjacent to the frontier-AI story. They are the part of the story the frontier cannot do.
+
+## Close
+
+The argument of this post is only worth making if there is work to do. There is.
+
+The next post asks what a solar-powered local AI appliance would actually look like in numbers: power budget, storage budget, model sizes that fit, workload, what the device can and cannot honestly do. After that come small models for specific tasks, build logs of things I try, and paper reads through a systems lens, the corner of the literature where the real work is happening, mostly without much attention.
+
+I do not have a thesis for this blog beyond the one I have already given. This is a real resource. The architecture by which it reaches the world is mismatched to most of its users. The engineering work to fix that is interesting and largely undone.
+
+The rest of the blog is the work.
+
+---
+
+## Bibliography
+
+1. Castro, R. et al. (2025). *From Prompts to Power: Measuring the Energy Footprint of LLM Inference.* arXiv:2511.05597.
+2. Lin, L. H. (2025). *Power Usage and Energy Efficiency.* llm-tracker.info.
+3. Per-query energy consumption of LLMs (Feb 2026). muxup.com.
+4. Epoch AI (June 2024). "How much does it cost to train frontier AI models?" epoch.ai/blog.
+5. Anthropic (Feb 2026). "Introducing Claude Sonnet 4.6"; Anthropic pricing page (April 2026).
+6. OpenAI Pricing Page (April 2026). chatgpt.com/pricing.
+7. FindSkill.ai (April 2026). "AI Pricing Compared 2026."
+8. OpenAI (Jan 2026). "Introducing ChatGPT Go, now available worldwide"; OpenAI multi-currency billing help page (April 2026).
+9. Wage.is (Feb 2026), citing National Bureau of Statistics Nigeria 2024; Forbes / Time Doctor reporting on Lagos median income.
+10. Turisvpn (Feb 2026). "Where to Find the Cheapest ChatGPT Plus Country."
+11. Times of India (Nov 2025). "Google launches AI Plus subscription in India at introductory price of Rs 199 per month."
+12. Adewale, A. (March 2026). "The Anthropic Irony." Medium, citing The Information (Jan 22, 2026). [UNOFFICIAL.]
+13. World Bank (Nov 2025). *Digital Progress and Trends Report 2025.*
+14. Microsoft AI Economy Institute (Jan 2026). *Global AI Adoption in 2025.*
+15. Xuan, W. et al. (2025). "MMLU-ProX: A Multilingual Benchmark for Advanced LLM Evaluation." arXiv:2503.10497.
+16. Ojo, J. et al. (2025). "AfroBench: How Good are Large Language Models on African Languages?" arXiv:2311.07978v5 (ACL Findings 2025).
+17. Adelani, D. et al. (2024). "IrokoBench: A New Benchmark for African Languages in the Age of Large Language Models." arXiv:2406.03368; NAACL 2025 follow-up.
+18. Singh, S. et al. (2024). "IndicGenBench: A Multilingual Benchmark to Evaluate Generation Capabilities of LLMs on Indic Languages." ACL 2024 (arXiv:2404.16816).
+19. Speedtest / Ookla via Statista (Oct 2024). Indonesia mobile-network speed.
+20. Speedtest / Ookla (Q4 2025). Mobile Internet speed by country.
+21. Shruthi K.A. et al. (2021/2024). "A Survey on Rural Internet Connectivity in India." arXiv:2111.10219, citing TRAI.
+22. ITU DataHub (2025). "Mobile broadband data and voice low-consumption basket total."
+23. *Robust Transport for LLM Token Streaming under Unstable Network.* arXiv:2401.12961 (2024).
+24. AIonX (2026). "AI chatbot response time benchmarks."
+25. Hemrajani, R. (2025). "Evaluating the Role of Large Language Models in Legal Practice in India." arXiv:2508.09713 (National Law School of India).
+26. Dahl, M. et al. (2024). "Hallucinating Law: Legal Mistakes with Large Language Models are Pervasive." Stanford HAI/RegLab.
+27. *Place Matters: Comparing LLM Hallucination Rates for Place-Based Legal Queries.* arXiv:2511.06700 (2025).
+28. Rest of World (2023). Andrew Deck investigation on ChatGPT in Tigrinya and Amharic.
+29. Rest of World (Feb 2026 retrospective). Persistence of low-resource language gaps.
+30. Stanford HAI (2026). *2026 AI Index Report.*
+31. Network Installers (2025). "AI Data Center Statistics & Trends," summarising Synergy Research.
+32. McKinsey & Company (2025). *AI Data Center Capital Expenditures Outlook 2025-2030.* [PROJECTION.]
+33. Pew Research Center (Oct 2025). "US data centers' energy use amid the AI boom," citing IEA 2024.
+34. GMInsights (2025). "Data Center Market 2025."
+35. BusinessDay NG (Jan 2026). "Blackout as Nigeria's power grid collapses for first time in 2026"; reports on 2024 collapses.
+36. Wikipedia, "Nigerian energy supply crisis," summarising primary sources.
+37. Georgetown Journal of International Affairs (Aug 2024). "Illuminating Nigeria: Grid and Off-Grid Electricity."
+38. The Leap Blog (Sept 2025). "A Review of Outage Reporting by Indian DISCOMs," citing Prayas Energy Group monitoring data.
+39. AI4Bharat. ai4bharat.iitm.ac.in. IIT Madras / Microsoft Research India.
+40. Masakhane. masakhane.io; Carnegie Endowment (Dec 2025) on Masakhane network scale.
+41. Lelapa AI (Aug 2025). "Locked Out by Design"; InkubaLM model card and arXiv release. [Note: the "more than seventy percent of African smartphone users on entry-level devices" framing should be confirmed against Lelapa's primary source before publication.]
+42. Susanto, Y. et al. (2025). "SEA-LION: Southeast Asian Languages in One Network." arXiv:2504.05747 (AI Singapore).
+43. Microsoft Asia (2024). "Village by village..."; *Time* (2023). "The Indian Startup Making AI Fairer."
+44. Aryabumi, V. et al. (2024). "Aya 23: Open Weight Releases to Further Multilingual Progress." arXiv:2405.15032 (Cohere For AI).
