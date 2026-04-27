@@ -135,6 +135,12 @@ const bingToken = import.meta.env.PUBLIC_BING_VERIFICATION;
     {/* RSS */}
     <link rel="alternate" type="application/rss+xml" title={`${SITE.shortName} — News & Blog`} href="/rss.xml" />
 
+    {/* IndieAuth — two-way rel=me link to the GitHub profile so
+        webmention.io / IndieAuth can verify domain ownership. The
+        GitHub profile lists this site as its homepage; this link
+        closes the loop. Required for Phase 8.1 webmentions. */}
+    <link rel="me" href="https://github.com/cyanmishra92" />
+
     {/* Favicons */}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
