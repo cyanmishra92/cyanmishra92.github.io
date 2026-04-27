@@ -2,6 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import LastModified from '@components/LastModified.astro';
 import NewsletterSubscribe from '@components/NewsletterSubscribe.astro';
+import AudioPlayer from '@components/blog/AudioPlayer';
 import DiscussElsewhere from '@components/blog/DiscussElsewhere.astro';
 import ShareButtons from '@components/blog/ShareButtons.astro';
 import EditOnGitHub from '@components/blog/EditOnGitHub.astro';
@@ -14,6 +15,7 @@ import { mdxComponents } from '@lib/mdx-components';
 import { isNoindex, postsByCanonicalUrl, postUrl, relatedPosts, seriesGroups, seriesSibling } from '@lib/blog';
 import { isoDate, prettyDate } from '@lib/news';
 import { SITE } from '@lib/site';
+import audioCache from '@/data/blog-audio.json';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -56,6 +58,21 @@ const statusCaption: Record<typeof status, string | null> = {
   draft: '// draft — noindex, but anyone with the link can read',
   idea: '// idea — scratchpad, not yet a draft',
 };
+
+// Audio narration metadata — populated by scripts/blog-audio/generate.ts
+// at build time, read here from src/data/blog-audio.json. We render
+// based on whether real metadata exists, not on `frontmatter.audio`,
+// so a post with `audio: enabled` but no generated MP3 yet still
+// deploys cleanly without a broken player.
+type AudioEntry = {
+  url: string;
+  duration: number;
+  voice: string;
+  bytes?: number;
+};
+const audioEntry = (audioCache as Record<string, AudioEntry>)[entry.slug];
+const hasAudio = !!(audioEntry && audioEntry.url);
+const audioMinutes = hasAudio && audioEntry.duration > 0 ? Math.max(1, Math.round(audioEntry.duration / 60)) : 0;
 ---
 
 <BaseLayout
@@ -83,6 +100,18 @@ const statusCaption: Record<typeof status, string | null> = {
 
   <header class="border-b border-border">
     <div class="mx-auto max-w-prose px-6 py-16 lg:px-8 lg:py-24">
+      {hasAudio && (
+        <p class="mb-4 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          <a href="#audio" class="link-underline text-accent">// listen</a>
+          {audioMinutes > 0 && (
+            <>
+              <span class="mx-2">•</span>
+              <span>{audioMinutes} min audio</span>
+            </>
+          )}
+        </p>
+      )}
+
       {entry.data.series && (
         <p class="mb-4 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
           <a href={`/blog/series/${entry.data.series.slug}/`} class="link-underline text-accent">
@@ -146,6 +175,18 @@ const statusCaption: Record<typeof status, string | null> = {
 
   <div class="mx-auto grid max-w-page grid-cols-12 gap-x-8 px-6 py-16 lg:px-8 lg:py-20">
     <article class="prose-content col-span-12 max-w-prose text-base leading-relaxed text-text xl:col-span-8 xl:col-start-2">
+      {hasAudio && (
+        <div id="audio" class="scroll-mt-24">
+          <AudioPlayer
+            client:load
+            slug={entry.slug}
+            url={audioEntry.url}
+            duration={audioEntry.duration}
+            voice={audioEntry.voice}
+          />
+        </div>
+      )}
+
       <Content components={mdxComponents} />
 
       {/* Footnotes — JS-populated from <Footnote> markers in the body.
