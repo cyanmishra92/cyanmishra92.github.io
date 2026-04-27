@@ -83,6 +83,14 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
   function toggle() {
     const el = audioRef.current;
     if (!el) return;
+    // A click is the user's intent to play — clear any prior error so
+    // they can retry. Ditto for an explicit `audio.load()` to reset
+    // the media element's network state when it has been poisoned by
+    // a previous transient failure.
+    if (error) {
+      setError(false);
+      try { el.load(); } catch { /* ignore */ }
+    }
     if (el.paused) {
       // Resume from last position on first play of this slug.
       if (el.currentTime < 1) {
@@ -95,7 +103,17 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
           // ignore
         }
       }
-      void el.play().catch(() => setError(true));
+      void el.play().catch((err) => {
+        // AbortError fires when a user-initiated pause races with a
+        // pending play; that's not a real failure. NotAllowedError
+        // would only fire on autoplay-blocked code paths, which this
+        // isn't — but treat anything else as a real error.
+        const name = (err as DOMException | Error).name;
+        if (name === 'AbortError') return;
+        // eslint-disable-next-line no-console
+        console.error('[AudioPlayer] play() rejected:', err);
+        setError(true);
+      });
     } else {
       el.pause();
     }
@@ -148,14 +166,6 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
     }
   }
 
-  if (error) {
-    return (
-      <p class="my-6 border border-border bg-surface px-4 py-3 font-mono text-xs uppercase tracking-eyebrow text-text-muted">
-        // audio unavailable — view post in text
-      </p>
-    );
-  }
-
   const progress = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
 
   return (
@@ -170,6 +180,14 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
       >
         // listen — narrated by openai tts-1-hd, voice: {voice}
       </p>
+      {error && (
+        <p
+          role="alert"
+          class="border-b border-border px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent"
+        >
+          // playback failed — click play to retry, or open the .mp3 directly
+        </p>
+      )}
       <div class="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3">
         <button
           type="button"
@@ -252,9 +270,15 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
           if (!el) return;
           if (Number.isFinite(el.duration) && el.duration > 0) setTotalDuration(el.duration);
           el.playbackRate = rate;
+          // Reaching loadedmetadata means the request worked — clear
+          // any error sticking around from a previous transient hiccup.
+          if (error) setError(false);
         }}
         onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime ?? 0)}
-        onPlay={() => setIsPlaying(true)}
+        onPlay={() => {
+          setIsPlaying(true);
+          if (error) setError(false);
+        }}
         onPause={() => setIsPlaying(false)}
         onEnded={() => {
           setIsPlaying(false);
@@ -264,7 +288,16 @@ export default function AudioPlayer({ slug, url, duration, voice }: Props) {
             // ignore
           }
         }}
-        onError={() => setError(true)}
+        onError={(e) => {
+          // Browsers fire bare `error` events for benign transitions
+          // (e.g., during preload="none" state churn). Only treat as a
+          // real failure when MediaError carries a non-zero code.
+          const mediaError = (e.currentTarget as HTMLAudioElement).error;
+          if (!mediaError || mediaError.code === 0) return;
+          // eslint-disable-next-line no-console
+          console.error('[AudioPlayer] media error', mediaError.code, mediaError.message);
+          setError(true);
+        }}
       />
     </section>
   );
