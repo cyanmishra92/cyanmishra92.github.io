@@ -1,1 +1,13 @@
-{}
+{
+  "hello-world": {
+    "url": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/fb35c4eae0ff3adb4ce4ffaacb905d3277f114f548e84087c8d828a04d43bf03.mp3",
+    "duration": 88,
+    "voice": "echo",
+    "model": "tts-1-hd",
+    "preprocessorVersion": 1,
+    "scriptHash": "fb35c4eae0ff3adb4ce4ffaacb905d3277f114f548e84087c8d828a04d43bf03",
+    "scriptLength": 1453,
+    "bytes": 1757760,
+    "generatedAt": "2026-04-27T18:59:42.771Z"
+  }
+}
