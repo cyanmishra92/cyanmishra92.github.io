@@ -1,0 +1,16 @@
+---
+/**
+ * Inline equation. Use for symbol-only inserts like \(x^2\) where the
+ * surrounding markdown's `$x^2$` syntax is fine — this exists to
+ * provide an explicit JSX path for cases where the markdown parser
+ * gets in the way.
+ *
+ * Defers actual rendering to KaTeX (rehype-katex when wired up). For
+ * now this is a thin styling wrapper that respects the body type
+ * size and family.
+ */
+---
+
+<span class="prose-equation">
+  <slot />
+</span>

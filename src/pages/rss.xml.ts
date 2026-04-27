@@ -6,7 +6,9 @@ import { compareNews, compareBlog } from '@lib/news';
 
 export async function GET(context: APIContext) {
   const news = (await getCollection('news', ({ data }) => !data.draft)).sort(compareNews);
-  const blog = (await getCollection('blog', ({ data }) => !data.draft)).sort(compareBlog);
+  // RSS only carries `published` posts. Drafts and ideas live on
+  // noindex paths and never broadcast.
+  const blog = (await getCollection('blog', ({ data }) => data.status === 'published')).sort(compareBlog);
 
   const cleanBody = (s: string) =>
     s

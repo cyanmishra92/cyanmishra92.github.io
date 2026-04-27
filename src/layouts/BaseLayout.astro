@@ -141,6 +141,11 @@ const bingToken = import.meta.env.PUBLIC_BING_VERIFICATION;
         closes the loop. Required for Phase 8.1 webmentions. */}
     <link rel="me" href="https://github.com/cyanmishra92" />
 
+    {/* Webmention endpoint — webmention.io receives mentions for this
+        domain. Pingback is intentionally NOT declared (legacy XML-RPC,
+        spam vector). See docs/BLOG.md. */}
+    <link rel="webmention" href="https://webmention.io/cyanmishra92.github.io/webmention" />
+
     {/* Favicons */}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />

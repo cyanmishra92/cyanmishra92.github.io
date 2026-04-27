@@ -1,0 +1,71 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import { archivePosts, groupByYear } from '@lib/blog';
+import { isoDate, prettyDate } from '@lib/news';
+
+const posts = await archivePosts();
+const grouped = groupByYear(posts);
+const total = posts.length;
+---
+
+<BaseLayout
+  title="Blog archive"
+  description="Full archive — every published or archived post, grouped by year."
+  breadcrumbs={[
+    { name: 'Blog', href: '/blog/' },
+    { name: 'Archive', href: '/blog/archive/' },
+  ]}
+>
+  <PageHeader
+    number="08·A"
+    eyebrow="archive"
+    title="Archive"
+    intro={`Every post that lives at /blog/<slug>/. ${total} ${total === 1 ? 'entry' : 'entries'}, newest first.`}
+  />
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    {grouped.map((g) => (
+      <section class="mb-12">
+        <h2 class="section-rule mb-6">
+          <span>§ {g.year}</span>
+          <span class="text-accent">{g.posts.length} {g.posts.length === 1 ? 'post' : 'posts'}</span>
+        </h2>
+        <ol class="grid gap-px border-y border-border bg-border">
+          {g.posts.map((p) => (
+            <li>
+              <a
+                href={`/blog/${p.slug}/`}
+                class="grid grid-cols-12 gap-x-4 bg-bg p-5 transition-colors hover:bg-surface sm:gap-x-6"
+              >
+                <time
+                  datetime={isoDate(p.data.date)}
+                  class="col-span-12 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted sm:col-span-3"
+                >
+                  {prettyDate(p.data.date)}
+                </time>
+                <div class="col-span-12 sm:col-span-9">
+                  <p class="font-display text-lg leading-snug text-text">
+                    {p.data.title}
+                    {p.data.status === 'archived' && (
+                      <span class="ml-2 inline-flex items-center border border-text-muted px-1.5 py-px font-mono text-[0.625rem] uppercase tracking-eyebrow text-text-muted">
+                        archived
+                      </span>
+                    )}
+                  </p>
+                  <p class="mt-1 text-sm text-text-muted">{p.data.description}</p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+
+    {grouped.length === 0 && (
+      <p class="border border-border bg-surface px-6 py-12 text-center font-mono text-sm uppercase tracking-eyebrow text-text-muted">
+        // no posts in the archive yet
+      </p>
+    )}
+  </div>
+</BaseLayout>

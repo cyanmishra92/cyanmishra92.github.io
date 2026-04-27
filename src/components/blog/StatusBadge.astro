@@ -1,0 +1,32 @@
+---
+/**
+ * Tiny mono caption flag for the post header — shown on draft / idea /
+ * archived. Hidden on published (no badge needed when state is the
+ * default).
+ */
+interface Props {
+  status: 'idea' | 'draft' | 'published' | 'archived';
+}
+
+const { status } = Astro.props;
+
+const labels: Record<Props['status'], string> = {
+  idea: 'idea',
+  draft: 'draft',
+  published: '',
+  archived: 'archived',
+};
+
+const tone: Record<Props['status'], string> = {
+  idea: 'border-text-muted text-text-muted',
+  draft: 'border-accent text-accent',
+  published: '',
+  archived: 'border-text-muted text-text-muted',
+};
+---
+
+{labels[status] && (
+  <span class={`inline-flex items-center border px-1.5 py-px font-mono text-[0.6875rem] uppercase tracking-eyebrow ${tone[status]}`}>
+    {labels[status]}
+  </span>
+)}

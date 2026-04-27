@@ -1,0 +1,20 @@
+---
+/**
+ * Footnote marker — renders as a `<sup>` placeholder in the body
+ * carrying the footnote content as a `data-footnote-content`
+ * attribute. The init script in BlogPost.astro walks these markers
+ * after DOM-ready, assigns sequential numbers, and lifts the content
+ * into the //notes section at the bottom of the post.
+ *
+ * Placing numbering and lifting at runtime (rather than via a remark
+ * plugin) keeps the build pipeline simple and lets the same component
+ * support arbitrary HTML inside `<Footnote>`.
+ */
+const html = await Astro.slots.render('default');
+---
+
+<sup
+  data-footnote-marker
+  data-footnote-content={html}
+  class="footnote-marker font-mono text-[0.7em] text-accent"
+>[*]</sup>

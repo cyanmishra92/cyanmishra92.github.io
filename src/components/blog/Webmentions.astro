@@ -1,0 +1,230 @@
+---
+/**
+ * Per-post webmentions section. Reads the build-time cache populated
+ * by `scripts/fetch-webmentions.ts`, filters to mentions targeting
+ * this post URL, groups by wm-property, and renders likes / reposts /
+ * replies.
+ *
+ * If the cache is missing (token unset, fetch failed, or first run)
+ * we render nothing — fail-soft. Same when a post has no mentions.
+ *
+ * Pingback is intentionally not implemented — spam vector. We only
+ * receive webmentions, never pingbacks. See docs/BLOG.md.
+ */
+
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  /** Canonical URL of the post (matches `wm-target`). */
+  targetUrl: string;
+}
+
+const { targetUrl } = Astro.props;
+
+interface Mention {
+  type: 'entry';
+  author?: { name?: string; url?: string; photo?: string };
+  url: string;
+  published?: string;
+  'wm-id': number;
+  'wm-source': string;
+  'wm-target': string;
+  'wm-property': 'like-of' | 'repost-of' | 'in-reply-to' | 'mention-of' | 'bookmark-of';
+  'wm-received'?: string;
+  content?: { text?: string; html?: string };
+}
+
+const cachePath = path.join(process.cwd(), '.astro', 'webmentions-cache', 'all.json');
+
+let mentions: Mention[] = [];
+try {
+  if (fs.existsSync(cachePath)) {
+    const raw = JSON.parse(fs.readFileSync(cachePath, 'utf-8'));
+    const all: Mention[] = Array.isArray(raw?.children) ? raw.children : [];
+    // Match either with or without trailing slash, http/https, and case-insensitively.
+    const norm = (u: string) => u.toLowerCase().replace(/\/?$/, '').replace(/^https?:/, '');
+    const want = norm(targetUrl);
+    mentions = all.filter((m) => norm(m['wm-target'] ?? '') === want);
+  }
+} catch (_err) {
+  mentions = [];
+}
+
+// Group by visual category.
+const likes = mentions.filter((m) => m['wm-property'] === 'like-of' || m['wm-property'] === 'bookmark-of');
+const reposts = mentions.filter((m) => m['wm-property'] === 'repost-of');
+const replies = mentions.filter(
+  (m) => m['wm-property'] === 'in-reply-to' || m['wm-property'] === 'mention-of',
+);
+
+const totalCount = likes.length + reposts.length + replies.length;
+const hasMentions = totalCount > 0;
+
+const countParts: string[] = [];
+if (likes.length) countParts.push(`${likes.length} ${likes.length === 1 ? 'like' : 'likes'}`);
+if (reposts.length) countParts.push(`${reposts.length} ${reposts.length === 1 ? 'repost' : 'reposts'}`);
+if (replies.length) countParts.push(`${replies.length} ${replies.length === 1 ? 'reply' : 'replies'}`);
+
+function excerpt(html: string | undefined, text: string | undefined, max = 200): string {
+  const src = (text ?? html ?? '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+  if (src.length <= max) return src;
+  return src.slice(0, max).trimEnd() + '…';
+}
+
+function authorName(m: Mention): string {
+  return m.author?.name ?? new URL(m['wm-source']).hostname;
+}
+
+function authorUrl(m: Mention): string | undefined {
+  return m.author?.url ?? m['wm-source'];
+}
+---
+
+{hasMentions && (
+  <section aria-labelledby="webmentions-heading">
+    <h2 id="webmentions-heading" class="mb-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+      // webmentions
+    </h2>
+    <p class="mb-6 font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+      {countParts.join(' · ')}
+    </p>
+
+    {(likes.length > 0 || reposts.length > 0) && (
+      <div class="mb-6 space-y-3">
+        {likes.length > 0 && (
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+              likes →
+            </span>
+            <ul class="flex flex-wrap items-center gap-1.5">
+              {likes.map((m) => (
+                <li>
+                  <a
+                    href={authorUrl(m)}
+                    rel="noopener noreferrer ugc"
+                    target="_blank"
+                    class="inline-block"
+                    title={authorName(m)}
+                  >
+                    {m.author?.photo ? (
+                      <img
+                        src={m.author.photo}
+                        alt={authorName(m)}
+                        width="24"
+                        height="24"
+                        loading="lazy"
+                        decoding="async"
+                        class="block h-6 w-6 border border-border object-cover"
+                      />
+                    ) : (
+                      <span class="inline-flex h-6 w-6 items-center justify-center border border-border font-mono text-[0.625rem] uppercase text-text-muted">
+                        {authorName(m).slice(0, 2)}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {reposts.length > 0 && (
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+              reposts →
+            </span>
+            <ul class="flex flex-wrap items-center gap-1.5">
+              {reposts.map((m) => (
+                <li>
+                  <a
+                    href={authorUrl(m)}
+                    rel="noopener noreferrer ugc"
+                    target="_blank"
+                    class="inline-block"
+                    title={authorName(m)}
+                  >
+                    {m.author?.photo ? (
+                      <img
+                        src={m.author.photo}
+                        alt={authorName(m)}
+                        width="24"
+                        height="24"
+                        loading="lazy"
+                        decoding="async"
+                        class="block h-6 w-6 border border-accent object-cover"
+                      />
+                    ) : (
+                      <span class="inline-flex h-6 w-6 items-center justify-center border border-accent font-mono text-[0.625rem] uppercase text-accent">
+                        {authorName(m).slice(0, 2)}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    )}
+
+    {replies.length > 0 && (
+      <div>
+        <p class="mb-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          replies →
+        </p>
+        <ul class="space-y-3">
+          {replies.map((m) => (
+            <li class="border border-border bg-surface p-4">
+              <div class="flex items-start gap-3">
+                {m.author?.photo ? (
+                  <img
+                    src={m.author.photo}
+                    alt={authorName(m)}
+                    width="24"
+                    height="24"
+                    loading="lazy"
+                    decoding="async"
+                    class="mt-0.5 block h-6 w-6 shrink-0 border border-border object-cover"
+                  />
+                ) : (
+                  <span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center border border-border font-mono text-[0.625rem] uppercase text-text-muted">
+                    {authorName(m).slice(0, 2)}
+                  </span>
+                )}
+                <div class="min-w-0 flex-1">
+                  <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+                    <a class="link-underline text-accent" href={authorUrl(m)} rel="noopener noreferrer ugc" target="_blank">
+                      {authorName(m)}
+                    </a>
+                    {(m.published || m['wm-received']) && (
+                      <>
+                        <span class="mx-2">·</span>
+                        <time datetime={m.published ?? m['wm-received']}>
+                          {(m.published ?? m['wm-received'] ?? '').slice(0, 10)}
+                        </time>
+                      </>
+                    )}
+                  </p>
+                  <p class="mt-2 text-sm leading-relaxed text-text">
+                    {excerpt(m.content?.html, m.content?.text)}
+                  </p>
+                  <p class="mt-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow">
+                    <a
+                      class="link-underline text-text-muted hover:text-accent"
+                      href={m['wm-source']}
+                      rel="noopener noreferrer ugc"
+                      target="_blank"
+                    >
+                      [ view source ↗ ]
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </section>
+)}

@@ -1,0 +1,23 @@
+---
+/**
+ * Display equation with auto-numbered Commit Mono caption. Use for
+ * KaTeX-rendered display-mode math (`$$ ... $$` block inside).
+ * Numbering is per post via a CSS counter shared with <Figure> et al.
+ */
+interface Props {
+  caption?: string;
+}
+
+const { caption } = Astro.props;
+---
+
+<figure class="prose-equation-block my-10 text-center">
+  <div class="overflow-x-auto py-4">
+    <slot />
+  </div>
+  {caption && (
+    <figcaption class="mt-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted prose-equation-caption">
+      {caption}
+    </figcaption>
+  )}
+</figure>

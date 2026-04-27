@@ -1,0 +1,255 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LastModified from '@components/LastModified.astro';
+import NewsletterSubscribe from '@components/NewsletterSubscribe.astro';
+import DiscussElsewhere from '@components/blog/DiscussElsewhere.astro';
+import ShareButtons from '@components/blog/ShareButtons.astro';
+import EditOnGitHub from '@components/blog/EditOnGitHub.astro';
+import Webmentions from '@components/blog/Webmentions.astro';
+import StatusBadge from '@components/blog/StatusBadge.astro';
+import RelatedPosts from '@components/blog/RelatedPosts.astro';
+import SeriesSiblings from '@components/blog/SeriesSiblings.astro';
+import TableOfContents from '@components/mdx/TableOfContents.astro';
+import { mdxComponents } from '@lib/mdx-components';
+import { isNoindex, postsByCanonicalUrl, postUrl, relatedPosts, seriesGroups, seriesSibling } from '@lib/blog';
+import { isoDate, prettyDate } from '@lib/news';
+import { SITE } from '@lib/site';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+const { Content, headings, remarkPluginFrontmatter } = await entry.render();
+
+const status = entry.data.status;
+const noindex = isNoindex(entry);
+const canonicalUrl = new URL(postUrl(entry), SITE.url).toString();
+const sourceFile = `src/content/blog/${entry.id}`;
+const minutesRead: string | undefined = remarkPluginFrontmatter?.minutesRead;
+const wordCount: number | undefined = remarkPluginFrontmatter?.wordCount;
+
+// ToC: render only when at least three H2s exist and the post hasn't
+// opted out via `toc: false`.
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = entry.data.toc !== false && tocHeadings.filter((h) => h.depth === 2).length >= 3;
+
+// Series sibling cards — only when this post belongs to a series.
+const allSeries = await seriesGroups();
+const ownGroup = entry.data.series
+  ? allSeries.find((g) => g.slug === entry.data.series!.slug)
+  : undefined;
+const prevInSeries = ownGroup ? seriesSibling(ownGroup, entry, -1) : undefined;
+const nextInSeries = ownGroup ? seriesSibling(ownGroup, entry, +1) : undefined;
+
+// Related posts — only on canonical (published / archived) URLs. Drop
+// for drafts/ideas where the corpus context isn't relevant.
+const isCanonical = status === 'published' || status === 'archived';
+const related = isCanonical ? relatedPosts(entry, await postsByCanonicalUrl()) : [];
+
+// Page-status caption shown above the title — gives draft/idea posts
+// an unambiguous visual cue + a sentence about what the URL means.
+const statusCaption: Record<typeof status, string | null> = {
+  published: null,
+  archived: '// archived — kept for permalink stability, removed from the main feed',
+  draft: '// draft — noindex, but anyone with the link can read',
+  idea: '// idea — scratchpad, not yet a draft',
+};
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  image={`/og/blog/${entry.slug}.png`}
+  noindex={noindex}
+  breadcrumbs={[
+    { name: 'Blog', href: '/blog/' },
+    { name: entry.data.title, href: postUrl(entry) },
+  ]}
+  jsonLd={isCanonical ? {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: entry.data.title,
+    description: entry.data.description,
+    datePublished: entry.data.date.toISOString(),
+    dateModified: (entry.data.updated ?? entry.data.date).toISOString(),
+    author: { '@type': 'Person', name: 'Cyan Subhra Mishra' },
+    keywords: entry.data.tags.join(', '),
+    image: `${SITE.url}og/blog/${entry.slug}.png`,
+  } : undefined}
+>
+  <div class="read-progress" aria-hidden="true" id="read-progress"></div>
+
+  <header class="border-b border-border">
+    <div class="mx-auto max-w-prose px-6 py-16 lg:px-8 lg:py-24">
+      {entry.data.series && (
+        <p class="mb-4 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          <a href={`/blog/series/${entry.data.series.slug}/`} class="link-underline text-accent">
+            {entry.data.series.name}
+          </a>
+          <span class="mx-2">·</span>
+          <span>part {entry.data.series.part} of {entry.data.series.total}</span>
+        </p>
+      )}
+
+      <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+        <a href="/blog/" class="link-underline text-accent">/blog</a>
+        <span class="mx-2">·</span>
+        <time datetime={isoDate(entry.data.date)}>{prettyDate(entry.data.date)}</time>
+        {entry.data.updated && (
+          <>
+            <span class="mx-2">·</span>
+            <span>updated {prettyDate(entry.data.updated)}</span>
+          </>
+        )}
+        {minutesRead && (
+          <>
+            <span class="mx-2">·</span>
+            <span>{minutesRead}</span>
+          </>
+        )}
+        {typeof wordCount === 'number' && wordCount > 0 && (
+          <>
+            <span class="mx-2">·</span>
+            <span>{wordCount.toLocaleString()} words</span>
+          </>
+        )}
+        {status !== 'published' && (
+          <>
+            <span class="mx-2">·</span>
+            <StatusBadge status={status} />
+          </>
+        )}
+      </p>
+
+      <h1 class="mt-3 font-display text-display-1 leading-[1.05] text-ink">
+        {entry.data.title}
+      </h1>
+      <p class="mt-5 text-lg leading-relaxed text-text-muted">
+        {entry.data.description}
+      </p>
+
+      {entry.data.tags.length > 0 && (
+        <div class="mt-6 flex flex-wrap gap-2">
+          {entry.data.tags.map((t) => <span class="tag">{t}</span>)}
+        </div>
+      )}
+
+      {statusCaption[status] && (
+        <p class="mt-6 border-l-2 border-accent bg-surface px-4 py-3 font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+          {statusCaption[status]}
+        </p>
+      )}
+    </div>
+  </header>
+
+  <div class="mx-auto grid max-w-page grid-cols-12 gap-x-8 px-6 py-16 lg:px-8 lg:py-20">
+    <article class="prose-content col-span-12 max-w-prose text-base leading-relaxed text-text xl:col-span-8 xl:col-start-2">
+      <Content components={mdxComponents} />
+
+      {/* Footnotes — JS-populated from <Footnote> markers in the body.
+          Hidden when no footnotes exist; the footnote-init script
+          unhides + populates this section if any markers were found. */}
+      <section
+        id="footnotes"
+        data-footnotes-section
+        class="mt-16 hidden border-t-2 border-border pt-8"
+      >
+        <h2 class="mb-4 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+          // notes
+        </h2>
+        <ol class="list-decimal space-y-3 pl-5 text-sm leading-relaxed text-text" data-footnotes-list></ol>
+      </section>
+
+      <footer class="mt-16 space-y-12 border-t border-border pt-10">
+        {isCanonical && (
+          <>
+            <DiscussElsewhere title={entry.data.title} url={canonicalUrl} />
+            <ShareButtons title={entry.data.title} url={canonicalUrl} description={entry.data.description} />
+            <Webmentions targetUrl={canonicalUrl} />
+          </>
+        )}
+
+        <EditOnGitHub slug={entry.id} />
+
+        {SITE.buttondownUsername && (
+          <section>
+            <p class="mb-4 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+              // liked this? subscribe via <a class="link-underline text-accent" href="/rss.xml">RSS</a> or email →
+            </p>
+            <NewsletterSubscribe
+              heading="get the next post"
+              intro="One plain-text email per published post. Unsubscribe anytime."
+            />
+          </section>
+        )}
+
+        {prevInSeries || nextInSeries ? (
+          <SeriesSiblings prev={prevInSeries} next={nextInSeries} />
+        ) : null}
+
+        {related.length > 0 && <RelatedPosts posts={related} />}
+
+        <div class="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <a href="/blog/" class="link-underline font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+            ← all posts
+          </a>
+          <LastModified file={sourceFile} />
+        </div>
+      </footer>
+    </article>
+
+    {showToc && (
+      <aside class="col-span-12 mb-8 xl:col-span-3 xl:col-start-10 xl:row-start-1 xl:mb-0">
+        <TableOfContents headings={tocHeadings} />
+      </aside>
+    )}
+  </div>
+</BaseLayout>
+
+<script>
+  // Reading-progress bar.
+  const bar = document.getElementById('read-progress');
+  if (bar) {
+    const onScroll = () => {
+      const h = document.documentElement;
+      const scrolled = h.scrollTop;
+      const max = h.scrollHeight - h.clientHeight;
+      const pct = max > 0 ? scrolled / max : 0;
+      bar.style.setProperty('--scroll', String(pct));
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+  }
+</script>
+
+<script>
+  // Footnote initialization — walks the body for <sup data-footnote-marker>
+  // elements, assigns sequential numbers, lifts each marker's content
+  // into the //notes section, and rewrites the marker into a numbered
+  // bidirectional link.
+  const article = document.querySelector('.prose-content');
+  if (article) {
+    const markers = article.querySelectorAll<HTMLElement>('[data-footnote-marker]');
+    const list = article.querySelector<HTMLOListElement>('[data-footnotes-list]');
+    const section = article.querySelector<HTMLElement>('[data-footnotes-section]');
+    if (markers.length && list && section) {
+      markers.forEach((m, i) => {
+        const num = i + 1;
+        const id = `fn-${num}`;
+        const refId = `fnref-${num}`;
+        const text = m.dataset.footnoteContent ?? m.innerHTML;
+        m.id = refId;
+        m.innerHTML = `<a href="#${id}" class="footnote-ref">[${num}]</a>`;
+
+        const li = document.createElement('li');
+        li.id = id;
+        li.innerHTML = `${text} <a href="#${refId}" class="footnote-back" aria-label="Back to footnote ${num} in body">↩</a>`;
+        list!.appendChild(li);
+      });
+      section.classList.remove('hidden');
+    }
+  }
+</script>

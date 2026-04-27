@@ -1,0 +1,76 @@
+---
+/**
+ * Three discrete actions — copy link, email this, save as PDF.
+ * Smaller than the discuss-elsewhere strip; functional rather than
+ * social. PDF triggers `window.print()`; the print stylesheet (in
+ * global.css) handles the layout.
+ */
+interface Props {
+  title: string;
+  url: string;
+  description: string;
+}
+
+const { title, url, description } = Astro.props;
+
+const enc = (s: string) => encodeURIComponent(s);
+const mailtoBody = `${description}\n\n${url}`;
+const mailHref = `mailto:?subject=${enc(title)}&body=${enc(mailtoBody)}`;
+---
+
+<section data-share data-share-url={url}>
+  <p class="mb-3 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+    // share
+  </p>
+  <div class="flex flex-wrap gap-2">
+    <button
+      type="button"
+      class="btn"
+      data-share-copy
+      aria-label="Copy link to clipboard"
+    >
+      <span aria-hidden="true">⎘</span>
+      <span data-copy-label>copy link</span>
+    </button>
+
+    <a class="btn" href={mailHref}>
+      <span aria-hidden="true">✉</span>
+      <span>email this</span>
+    </a>
+
+    <button
+      type="button"
+      class="btn"
+      data-share-print
+      aria-label="Save this post as PDF (opens the print dialog)"
+    >
+      <span aria-hidden="true">⬇</span>
+      <span>save .pdf</span>
+    </button>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-share]');
+  if (root) {
+    const url = root.dataset.shareUrl ?? location.href;
+    const copyBtn = root.querySelector<HTMLButtonElement>('[data-share-copy]');
+    const copyLabel = root.querySelector<HTMLElement>('[data-copy-label]');
+    const printBtn = root.querySelector<HTMLButtonElement>('[data-share-print]');
+
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        if (copyLabel) {
+          const orig = copyLabel.textContent ?? 'copy link';
+          copyLabel.textContent = 'copied';
+          setTimeout(() => (copyLabel.textContent = orig), 1500);
+        }
+      } catch (_) {
+        // ignore — older browsers / non-secure contexts
+      }
+    });
+
+    printBtn?.addEventListener('click', () => window.print());
+  }
+</script>

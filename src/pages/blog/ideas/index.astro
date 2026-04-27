@@ -1,0 +1,71 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import { ideaPosts } from '@lib/blog';
+import { isoDate, prettyDate } from '@lib/news';
+
+const posts = await ideaPosts();
+---
+
+<BaseLayout
+  title="Ideas"
+  description="Scratchpad of post ideas — noindex, not yet drafts."
+  noindex
+  breadcrumbs={[
+    { name: 'Blog', href: '/blog/' },
+    { name: 'Ideas', href: '/blog/ideas/' },
+  ]}
+>
+  <PageHeader
+    number="08·I"
+    eyebrow="ideas"
+    title="Ideas"
+    intro="Loose notes that haven't earned a draft URL yet. The scratchpad."
+  />
+
+  <div class="mx-auto max-w-page px-6 pb-24 lg:px-8">
+    <p class="mb-8 border-l-2 border-text-muted bg-surface px-4 py-3 font-mono text-xs uppercase tracking-eyebrow text-text-muted">
+      // ideas — noindex scratchpad. nothing here is committed to write
+    </p>
+
+    {posts.length === 0 ? (
+      <p class="border border-border bg-surface px-6 py-12 text-center font-mono text-sm uppercase tracking-eyebrow text-text-muted">
+        // no ideas captured yet
+      </p>
+    ) : (
+      <ol class="grid gap-px border-y border-border bg-border">
+        {posts.map((p, i) => (
+          <li>
+            <a href={`/blog/ideas/${p.slug}/`} class="grid grid-cols-12 gap-x-4 bg-bg p-6 transition-colors hover:bg-surface sm:gap-x-6 sm:p-8">
+              <div class="col-span-12 lg:col-span-3">
+                <p class="font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+                  <span class="text-accent">{String(i + 1).padStart(2, '0')}</span>
+                </p>
+                <time
+                  datetime={isoDate(p.data.date)}
+                  class="mt-2 block font-mono text-[0.75rem] uppercase tracking-eyebrow text-text"
+                >
+                  {prettyDate(p.data.date)}
+                </time>
+              </div>
+              <div class="col-span-12 mt-3 lg:col-span-9 lg:mt-0">
+                <h2 class="font-display text-2xl leading-snug text-text">
+                  {p.data.title}
+                </h2>
+                <p class="mt-2 max-w-prose text-base text-text-muted">{p.data.description}</p>
+                {p.data.tags.length > 0 && (
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    {p.data.tags.map((t) => <span class="tag">{t}</span>)}
+                  </div>
+                )}
+                <p class="mt-4 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-accent">
+                  read idea →
+                </p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ol>
+    )}
+  </div>
+</BaseLayout>

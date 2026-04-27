@@ -1,0 +1,43 @@
+---
+/**
+ * Callout box — note / warning / tip / todo. Sharp 2px left-border
+ * in accent color, paper-bg fill, mono variant label in caps. No
+ * icons; the typographic treatment carries it.
+ *
+ * `todo` is a special variant that only renders in dev / draft
+ * preview builds — `import.meta.env.PROD` filters it out so an
+ * in-progress thought never ships.
+ */
+interface Props {
+  variant?: 'note' | 'warning' | 'tip' | 'todo';
+}
+
+const { variant = 'note' } = Astro.props;
+
+const labels: Record<NonNullable<Props['variant']>, string> = {
+  note: 'note',
+  warning: 'warning',
+  tip: 'tip',
+  todo: 'todo',
+};
+
+const tones: Record<NonNullable<Props['variant']>, string> = {
+  note: 'border-accent',
+  warning: 'border-text',
+  tip: 'border-accent',
+  todo: 'border-text-muted',
+};
+
+const showInProd = variant !== 'todo' || !import.meta.env.PROD;
+---
+
+{showInProd && (
+  <aside class={`my-6 border-l-2 bg-surface px-5 py-4 ${tones[variant]}`}>
+    <p class="mb-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted">
+      {labels[variant]}
+    </p>
+    <div class="prose-aside-body text-text">
+      <slot />
+    </div>
+  </aside>
+)}
