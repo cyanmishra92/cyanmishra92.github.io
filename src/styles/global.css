@@ -339,6 +339,68 @@
   background: rgb(var(--color-bg) / 0.78);
 }
 
+/* ─── Audio player scrubber ──────────────────────────────────────────────
+   Native <input type="range"> styled to match the Technical Editorial
+   palette: 2px track in the border tone, accent fill up to the current
+   position, square 4px thumb. Pure CSS — `--audio-progress` is set
+   inline by the AudioPlayer component on each timeupdate. */
+.audio-scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+.audio-scrubber::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgb(var(--color-accent)) var(--audio-progress, 0%),
+    rgb(var(--color-border)) var(--audio-progress, 0%)
+  );
+}
+.audio-scrubber::-moz-range-track {
+  height: 2px;
+  background: rgb(var(--color-border));
+}
+.audio-scrubber::-moz-range-progress {
+  height: 2px;
+  background: rgb(var(--color-accent));
+}
+.audio-scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 4px;
+  height: 12px;
+  border-radius: 0;
+  background: rgb(var(--color-accent));
+  margin-top: -5px;
+  border: none;
+  cursor: grab;
+}
+.audio-scrubber::-moz-range-thumb {
+  width: 4px;
+  height: 12px;
+  border-radius: 0;
+  background: rgb(var(--color-accent));
+  border: none;
+  cursor: grab;
+}
+.audio-scrubber:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid rgb(var(--color-accent));
+  outline-offset: 2px;
+}
+
+/* Respect prefers-reduced-motion: turn off the play-icon transition
+   so the toggle swap is instant rather than cross-faded. */
+@media (prefers-reduced-motion: reduce) {
+  .audio-player button svg {
+    transition: none !important;
+  }
+}
+
 /* Reading progress bar (used on long-form pages later). */
 .read-progress {
   position: fixed;

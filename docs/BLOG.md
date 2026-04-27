@@ -210,9 +210,105 @@ Every published post carries a `// found a typo? edit on github →` link in the
 
 ## Audio narration
 
-Phase 8.2 will add author-narrated audio to selected posts. Frontmatter already supports `audio: /audio/<slug>.mp3`; the BlogPost layout will pick that up and render an inline player when wired.
+Every published post is narrated by OpenAI's `tts-1-hd` model in the `echo` voice and served via a sharp-bordered audio player at the top of the post. Generation runs at build time, the MP3 lives on Cloudflare R2, and the slug → metadata map lives in `src/data/blog-audio.json`.
 
-For now: leave the field unset. Don't pre-author audio metadata.
+### Per-post controls
+
+```yaml
+audio: enabled         # default. set to 'disabled' to skip generation.
+audioVoice: echo       # default. options: alloy | echo | fable | onyx | nova | shimmer.
+audioReadAs: |         # optional pre-recorded narration script.
+  When provided, this text is sent to TTS verbatim instead of the
+  auto-preprocessed post body. Use this for posts with heavy math,
+  dense code, or any narration that needs hand-tuning.
+```
+
+### How it works
+
+When you push a blog post with `status: published`, the `Blog audio — generate` workflow runs:
+
+1. **Preprocess** the MDX into prose-with-prosody-friendly punctuation (em-dashes for emphasis, real periods at headings, brief pauses inside list items).
+2. **Hash** `(script + voice + model + preprocessor_version)`. Skip if the slug already has that hash in `src/data/blog-audio.json`.
+3. **Chunk** at sentence boundaries into ≤4000-char slices.
+4. **Call** OpenAI `tts-1-hd` per chunk; concatenate the resulting MP3 buffers (binary concat works for MP3 frames).
+5. **Upload** to R2 at `audio/<hash>.mp3` with `Content-Type: audio/mpeg` and `Cache-Control: immutable`. The filename is content-hashed, so old cached responses can't be wrong.
+6. **Commit** `src/data/blog-audio.json` back to main with `[skip ci]` so the auto-commit doesn't trigger another deploy.
+
+The next deploy serves the audio. End-to-end is ~2 min per post.
+
+### Idempotency
+
+The script is keyed by `hash(script + voice + model + preprocessor_version)`. Re-running on unchanged posts is a no-op (`0 generated, N cached`). Audio only regenerates when:
+
+- the post's narrated content changes,
+- the post's `audioVoice` changes,
+- the OpenAI model version changes (rare),
+- `PREPROCESSOR_VERSION` is bumped in `scripts/blog-audio/preprocess.ts`.
+
+Bumping the preprocessor version intentionally regenerates every post on the next workflow run. Useful when you've improved the preprocessing rules and want every existing post re-narrated.
+
+### Cost
+
+OpenAI `tts-1-hd` is **$30 per 1M characters**. A typical 5,000-word post (~30K chars) costs about **$0.90** to generate once. Repeat builds are free (idempotent). The OpenAI account has a **$5/month hard cap** as a safety belt.
+
+The workflow logs cost per post and a total at the end:
+
+```
+[audio] hello-world: 8732 chars, 2 chunks, generated $0.26
+[audio] summary: 3 generated, 5 cached, 0 errors, estimated cost $0.78
+```
+
+If a single run shows >$2, investigate — likely a bug or an unintended preprocessor-version bump.
+
+### Manual regeneration
+
+`workflow_dispatch` on the `Blog audio — generate` action accepts:
+
+- `slug` — regenerate just one post
+- `force: true` — regenerate even when the hash matches (useful when sampling a different voice)
+
+### Voices (samples at https://platform.openai.com/docs/guides/text-to-speech)
+
+- `alloy` — neutral, calm, the OpenAI house voice
+- `echo` — deeper, measured, technical-feeling **(default)**
+- `fable` — warm, narrative
+- `onyx` — deep, authoritative, documentary
+- `nova` — warm, expressive
+- `shimmer` — calm, clear
+
+Override per-post with `audioVoice:` in frontmatter.
+
+### Failure modes
+
+The pipeline is fail-soft. If the OpenAI call rate-limits, the upload fails, or any Secret is missing, the workflow logs a warning and skips that post — the deploy still goes through, the post just renders without an audio player. Run the workflow manually later (`slug: <slug>`) to retry.
+
+If a specific post's auto-narration sounds off, set `audioReadAs: |` in its frontmatter with a hand-tuned script. The preprocessor returns that string verbatim and TTS sees nothing else.
+
+### Podcast feed
+
+The RSS feed includes an `<enclosure>` element on every post that has audio. That makes the blog also function as a podcast feed for free — anyone can subscribe in Overcast, Pocket Casts, or Apple Podcasts (via the RSS URL) and get the audio version automatically.
+
+### Architecture at a glance
+
+```
+content/blog/*.mdx  →  preprocess.ts  →  OpenAI TTS  →  MP3 chunks
+                                                            ↓
+                                                       Buffer.concat
+                                                            ↓
+                                                  Cloudflare R2 (immutable)
+                                                            ↓
+                                                  src/data/blog-audio.json
+                                                            ↓
+                                              <AudioPlayer /> in BlogPost.astro
+```
+
+### Files
+
+- `scripts/blog-audio/preprocess.ts` — MDX → narration prose. Bump `PREPROCESSOR_VERSION` to invalidate the cache.
+- `scripts/blog-audio/generate.ts` — TTS, chunking, R2 upload, JSON write.
+- `.github/workflows/blog-audio.yml` — triggers on push to `src/content/blog/**` and on `workflow_dispatch`. Auto-commits the JSON with `[skip ci]`.
+- `src/data/blog-audio.json` — slug → `{ url, duration, voice, scriptHash, ... }`. Don't edit by hand; the workflow owns it.
+- `src/components/blog/AudioPlayer.tsx` — Preact island, native `<audio>`, scrubber + speed pills + keyboard shortcuts (Space, ←/→, ↑/↓, M, 0).
 
 ## Cheatsheet
 
