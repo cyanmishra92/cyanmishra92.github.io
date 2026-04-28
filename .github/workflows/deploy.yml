@@ -1,7 +1,48 @@
 name: Deploy to GitHub Pages
 
+# Deploy ordering: this workflow waits behind the four generators
+# (blog-audio, citations-stamp, photo-exif, photo-optim) so the site
+# never ships ahead of their output. Two mechanisms working together:
+#
+#   1. `paths-ignore` on the push trigger lists every INPUT and OUTPUT
+#      path of those generators. When the user pushes a change that
+#      only touches those paths, deploy does NOT fire from the push —
+#      it lets the generator workflow run alone. When the generator
+#      auto-commits its output (which also lives in paths-ignore),
+#      that bot push is suppressed too. Deploy fires from the
+#      workflow_run trigger below instead.
+#
+#   2. `workflow_run` fires deploy when any of the generators
+#      completes (success or failure — the generators are fail-soft,
+#      so even a logged-warning run should publish whatever did
+#      generate). This covers the cache-hit case too, where the
+#      generator finishes without an auto-commit but the user still
+#      expects their content change to roll out.
+#
+# Pushes that DON'T match paths-ignore (CSS, components, layouts,
+# everything else) fire deploy directly via push as before.
 on:
   push:
+    branches: [main]
+    paths-ignore:
+      # blog-audio inputs + outputs
+      - 'src/content/blog/**'
+      - 'scripts/blog-audio/**'
+      - 'src/data/blog-audio.json'
+      - 'public/audio/**'
+      # citations-stamp input/output (same file)
+      - 'src/data/citations-source.json'
+      # photos generators — img/** is both input and output
+      - 'src/content/photos/img/**'
+      - 'scripts/extract-photo-exif.ts'
+      - 'scripts/optimize-photos.ts'
+  workflow_run:
+    workflows:
+      - 'Blog audio — generate'
+      - 'Citations — auto-stamp dates'
+      - 'Photos — extract EXIF'
+      - 'Photos — optimise sources'
+    types: [completed]
     branches: [main]
   # Daily rebuild at 06:30 UTC so the GitHub stats card stays current
   # (citation counts come from the manually-synced
