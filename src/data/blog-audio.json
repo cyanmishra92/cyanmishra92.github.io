@@ -1,26 +1,26 @@
 {
   "hello-world": {
-    "url": "/audio/2347441cdc34a3e3bb3cc78b36ae2234d62017040c6e0cbfcb17fd9e3a633e4c.mp3",
-    "mirror": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/2347441cdc34a3e3bb3cc78b36ae2234d62017040c6e0cbfcb17fd9e3a633e4c.mp3",
+    "url": "/audio/33af97638a7295eb5566a6d23b2664544938eb61194ac46ac54f66bea1aa3b90.mp3",
+    "mirror": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/33af97638a7295eb5566a6d23b2664544938eb61194ac46ac54f66bea1aa3b90.mp3",
     "duration": 88,
     "voice": "echo",
     "model": "tts-1-hd",
-    "preprocessorVersion": 2,
-    "scriptHash": "2347441cdc34a3e3bb3cc78b36ae2234d62017040c6e0cbfcb17fd9e3a633e4c",
+    "preprocessorVersion": 3,
+    "scriptHash": "33af97638a7295eb5566a6d23b2664544938eb61194ac46ac54f66bea1aa3b90",
     "scriptLength": 1444,
-    "bytes": 1761120,
-    "generatedAt": "2026-04-28T15:25:42.163Z"
+    "bytes": 1759680,
+    "generatedAt": "2026-04-28T19:31:14.479Z"
   },
   "who-ai-is-built-for": {
-    "url": "/audio/41a5a1665dfc7303f6e1b1da7c25296e4bd5c29c8e17af0986137c30c8ec6513.mp3",
-    "mirror": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/41a5a1665dfc7303f6e1b1da7c25296e4bd5c29c8e17af0986137c30c8ec6513.mp3",
-    "duration": 1601,
+    "url": "/audio/ca79bc28fd1a96fe09e11af6d9d42e7edf96ec01881be17b93824594519af72a.mp3",
+    "mirror": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/ca79bc28fd1a96fe09e11af6d9d42e7edf96ec01881be17b93824594519af72a.mp3",
+    "duration": 1128,
     "voice": "echo",
     "model": "tts-1-hd",
-    "preprocessorVersion": 2,
-    "scriptHash": "41a5a1665dfc7303f6e1b1da7c25296e4bd5c29c8e17af0986137c30c8ec6513",
-    "scriptLength": 23501,
-    "bytes": 32016000,
-    "generatedAt": "2026-04-28T15:32:21.691Z"
+    "preprocessorVersion": 3,
+    "scriptHash": "ca79bc28fd1a96fe09e11af6d9d42e7edf96ec01881be17b93824594519af72a",
+    "scriptLength": 17537,
+    "bytes": 22562880,
+    "generatedAt": "2026-04-28T19:35:46.150Z"
   }
 }
