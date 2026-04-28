@@ -23,7 +23,14 @@ import type { Node, Parent } from 'unist';
 // v2: citation-aware preprocessing — drops <Cite>, <NoAudio>, and
 //     uses <ReferencesList> as the audio EOF marker. Whitespace
 //     post-pass cleans up artifacts left around stripped citations.
-export const PREPROCESSOR_VERSION = 2;
+// v3: defensive fallbacks for posts authored in plain markdown that
+//     never migrated to <Cite>/<ReferencesList />. A heading whose
+//     text reads "References" / "Bibliography" / "Works Cited" /
+//     "Further Reading" / "Citations" / "Footnotes" sets the audio
+//     EOF (same effect as <ReferencesList />). Inline numeric markers
+//     like [1] and [3, 7] are stripped from text nodes so a post
+//     reads cleanly even before the author migrates it.
+export const PREPROCESSOR_VERSION = 3;
 
 interface MdxJsxAttribute {
   type: 'mdxJsxAttribute';
@@ -165,6 +172,21 @@ function renderNode(node: Node): string {
       const h = node as HeadingNode;
       const inner = renderChildren(h).trim();
       if (!inner) return '';
+      // Defensive EOF (v3): a heading like "## References" or
+      // "## Bibliography" in plain markdown is the same intent as
+      // <ReferencesList />. Treat it as the audio EOF marker so posts
+      // that haven't migrated to MDX components still skip the
+      // bibliography in narration. Match on normalized text only —
+      // any leading/trailing punctuation, slashes, mono prefixes are
+      // tolerated ("// references", "References:").
+      const normalized = inner
+        .toLowerCase()
+        .replace(/[^a-z\s]/g, '')
+        .trim();
+      if (/^(references|bibliography|works\s*cited|further\s*reading|citations|footnotes)$/.test(normalized)) {
+        walkerState.eofReached = true;
+        return '';
+      }
       // H1 → period + paragraph break
       // H2 → paragraph break before AND after (strongest pause)
       // H3+ → single line break
@@ -174,7 +196,12 @@ function renderNode(node: Node): string {
     }
 
     case 'text':
-      return (node as TextNode).value;
+      // v3: strip plain-markdown citation markers — `[1]`, `[3, 7]`,
+      // `[12-15]` — from text nodes. The standard finalizeWhitespace
+      // pass cleans up the surrounding spaces/punctuation that the
+      // <Cite> stripper already handles. This makes posts that didn't
+      // migrate to <Cite> still narrate cleanly.
+      return (node as TextNode).value.replace(/\[\d+(?:\s*[,–-]\s*\d+)*\]/g, '');
 
     case 'inlineCode':
       // Strip the backticks; read identifier as plain text.
