@@ -12,15 +12,15 @@
     "generatedAt": "2026-04-27T21:50:31.991Z"
   },
   "who-ai-is-built-for": {
-    "url": "/audio/713b88b91c22b48dcd9434d848be3d6035a4e92d94b43cc8d4f68a23e5667476.mp3",
-    "mirror": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/713b88b91c22b48dcd9434d848be3d6035a4e92d94b43cc8d4f68a23e5667476.mp3",
-    "duration": 1367,
+    "url": "/audio/189f5663598076a6533e84649c5c459f1b0a67c2bf33d2608efc7c4f501bf3ed.mp3",
+    "mirror": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/189f5663598076a6533e84649c5c459f1b0a67c2bf33d2608efc7c4f501bf3ed.mp3",
+    "duration": 1368,
     "voice": "echo",
     "model": "tts-1-hd",
     "preprocessorVersion": 1,
-    "scriptHash": "713b88b91c22b48dcd9434d848be3d6035a4e92d94b43cc8d4f68a23e5667476",
-    "scriptLength": 20174,
-    "bytes": 27331200,
-    "generatedAt": "2026-04-28T01:33:52.121Z"
+    "scriptHash": "189f5663598076a6533e84649c5c459f1b0a67c2bf33d2608efc7c4f501bf3ed",
+    "scriptLength": 20188,
+    "bytes": 27354720,
+    "generatedAt": "2026-04-28T03:44:35.318Z"
   }
 }
