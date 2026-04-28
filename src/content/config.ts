@@ -139,6 +139,34 @@ const blog = defineCollection({
       .enum(['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'])
       .default('echo'),
     audioReadAs: z.string().optional(),
+    /**
+     * Citation rendering style. `numeric` (default) numbers citations
+     * in order of first appearance per post. `author-year` is reserved
+     * for a future PR — schema-accepted but not yet wired into the
+     * remark plugin; falls back to numeric.
+     */
+    citationStyle: z.enum(['numeric', 'author-year']).default('numeric'),
+    /**
+     * Per-post bibliography. The key (e.g. `smith2023`) is what
+     * `<Cite key="...">` references. Only entries actually cited in
+     * the body get rendered in `<ReferencesList />`; unused entries
+     * are logged as build warnings and dropped from the output.
+     */
+    references: z
+      .record(
+        z.string(),
+        z.object({
+          authors: z.array(z.string()).default([]),
+          title: z.string().optional(),
+          venue: z.string().optional(),
+          year: z.number().int().optional(),
+          url: z.string().url().optional(),
+          doi: z.string().optional(),
+          arxivId: z.string().optional(),
+          pages: z.string().optional(),
+        }),
+      )
+      .optional(),
   }),
 });
 

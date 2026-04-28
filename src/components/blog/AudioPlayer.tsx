@@ -27,6 +27,9 @@ interface Props {
   mirror?: string;
   duration: number;
   voice: string;
+  /** True when the post body includes <Cite>; surfaces the
+   *  "citations omitted" honesty caption beneath the player. */
+  hasCitations?: boolean;
 }
 
 const SPEEDS = [0.75, 1, 1.25, 1.5];
@@ -39,7 +42,7 @@ function formatTime(seconds: number): string {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-export default function AudioPlayer({ slug, url, mirror, duration, voice }: Props) {
+export default function AudioPlayer({ slug, url, mirror, duration, voice, hasCitations = false }: Props) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -194,6 +197,12 @@ export default function AudioPlayer({ slug, url, mirror, duration, voice }: Prop
         class="border-b border-border px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-eyebrow text-text-muted"
       >
         // listen — narrated by openai tts-1-hd, voice: {voice}
+        {hasCitations && (
+          <>
+            <br />
+            citations omitted; see post for full references
+          </>
+        )}
       </p>
       {error && (
         <p

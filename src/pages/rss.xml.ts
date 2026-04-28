@@ -62,10 +62,18 @@ export async function GET(context: APIContext) {
       audio && audio.url && audio.bytes
         ? { url: absUrl(audio.url), type: 'audio/mpeg', length: audio.bytes }
         : undefined;
+    // Posts with citations: warn podcast subscribers in the RSS
+    // description that the audio version omits academic apparatus,
+    // and where to find it.
+    const hasCitations = /<Cite\b/.test(entry.body);
+    const description =
+      hasCitations && enclosure
+        ? `${entry.data.description}\n\n(Audio version omits citations; see web post for full references.)`
+        : entry.data.description;
     return {
       title: entry.data.title,
       pubDate: entry.data.date,
-      description: entry.data.description,
+      description,
       link: `${SITE.url}/blog/${entry.slug}/`,
       categories: ['blog', ...entry.data.tags],
       ...(enclosure ? { enclosure } : {}),

@@ -1,0 +1,16 @@
+---
+/**
+ * Defensive fallback for <ReferencesList />. The `remark-citations`
+ * plugin renders the actual bibliography by reading frontmatter at
+ * build time. This component just renders an empty placeholder so a
+ * stale render snapshot or MDX engine quirk doesn't drop the section
+ * silently — visible in dev but harmless if it ever sneaks through.
+ */
+---
+
+<section class="references-list" aria-labelledby="references-heading">
+  <h2 id="references-heading" class="references-heading">// references</h2>
+  <p class="font-mono text-xs text-text-muted">
+    // references unresolved at build time — rebuild the post to populate.
+  </p>
+</section>

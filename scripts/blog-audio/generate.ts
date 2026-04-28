@@ -258,8 +258,14 @@ async function processPost(
 
   const voice: Voice = (data.audioVoice as Voice | undefined) ?? DEFAULT_VOICE;
   const script = preprocessForTTS(source);
-  if (!script.trim()) {
-    console.warn(`[audio] ${slug}: empty narration script; skipping.`);
+  // 50-char floor catches the empty-after-stripping edge case
+  // (Phase 8.2.1): a post that's almost entirely <Cite> + <NoAudio> +
+  // <ReferencesList /> won't have enough narratable prose to bother
+  // sending to TTS. Picks up genuine empties too (`audioReadAs: ''`).
+  if (script.trim().length < 50) {
+    console.warn(
+      `[audio] ${slug}: post has no narratable content (${script.trim().length} chars after preprocessing). Skipping.`,
+    );
     return { slug, status: 'skipped' };
   }
   const hashInput = `${script}|${voice}|${MODEL}|v${PREPROCESSOR_VERSION}`;

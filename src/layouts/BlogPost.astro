@@ -31,6 +31,10 @@ const canonicalUrl = new URL(postUrl(entry), SITE.url).toString();
 const sourceFile = `src/content/blog/${entry.id}`;
 const minutesRead: string | undefined = remarkPluginFrontmatter?.minutesRead;
 const wordCount: number | undefined = remarkPluginFrontmatter?.wordCount;
+// remark-citations sets this when the post body contains any
+// <Cite key="..." />. Used to surface the "citations omitted" honesty
+// caption on the audio player + RSS enclosure description.
+const hasCitations: boolean = remarkPluginFrontmatter?.hasCitations === true;
 
 // ToC: render only when at least three H2s exist and the post hasn't
 // opted out via `toc: false`.
@@ -187,6 +191,7 @@ const audioMinutes = hasAudio && audioEntry.duration > 0 ? Math.max(1, Math.roun
             mirror={audioEntry.mirror}
             duration={audioEntry.duration}
             voice={audioEntry.voice}
+            hasCitations={hasCitations}
           />
         </div>
       )}

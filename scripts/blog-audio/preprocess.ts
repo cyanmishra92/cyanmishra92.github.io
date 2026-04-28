@@ -19,7 +19,11 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import type { Node, Parent } from 'unist';
 
-export const PREPROCESSOR_VERSION = 1;
+// v1: initial implementation (Phase 8.2)
+// v2: citation-aware preprocessing — drops <Cite>, <NoAudio>, and
+//     uses <ReferencesList> as the audio EOF marker. Whitespace
+//     post-pass cleans up artifacts left around stripped citations.
+export const PREPROCESSOR_VERSION = 2;
 
 interface MdxJsxAttribute {
   type: 'mdxJsxAttribute';
@@ -115,6 +119,24 @@ function wordCount(s: string): number {
 }
 
 /**
+ * Walker state — reset at the top of every `preprocessForTTS` call.
+ * `eofReached` flips when a <ReferencesList /> node is visited; from
+ * that point on every node returns '', truncating the audio script
+ * at the references boundary.
+ */
+const walkerState: { eofReached: boolean } = { eofReached: false };
+
+/** Map a list of children to text, stopping early when EOF is set. */
+function renderChildren(parent: Parent): string {
+  const out: string[] = [];
+  for (const child of parent.children) {
+    if (walkerState.eofReached) break;
+    out.push(renderNode(child));
+  }
+  return out.join('');
+}
+
+/**
  * Recursively render a node subtree to narration prose. The walker is
  * a single function with explicit handling for every node type we
  * care about, falling back to children-traversal for anything else
@@ -122,18 +144,17 @@ function wordCount(s: string): number {
  * inner text).
  */
 function renderNode(node: Node): string {
+  if (walkerState.eofReached) return '';
   switch (node.type) {
     case 'root':
-      return (node as Parent).children.map(renderNode).join('');
+      return renderChildren(node as Parent);
 
     case 'paragraph': {
       // Markdown soft-breaks (single \n inside a paragraph) become real
       // newlines in text nodes; TTS reads those as awkward micro-pauses.
       // Collapse internal whitespace, then append a clean paragraph
       // break that the walker uses as a real pause signal.
-      const inner = (node as Parent).children
-        .map(renderNode)
-        .join('')
+      const inner = renderChildren(node as Parent)
         .replace(/\s*\n\s*/g, ' ')
         .replace(/\s{2,}/g, ' ')
         .trim();
@@ -142,7 +163,7 @@ function renderNode(node: Node): string {
 
     case 'heading': {
       const h = node as HeadingNode;
-      const inner = h.children.map(renderNode).join('').trim();
+      const inner = renderChildren(h).trim();
       if (!inner) return '';
       // H1 → period + paragraph break
       // H2 → paragraph break before AND after (strongest pause)
@@ -165,20 +186,20 @@ function renderNode(node: Node): string {
 
     case 'emphasis': {
       // Italic → just strip markers.
-      return (node as Parent).children.map(renderNode).join('');
+      return renderChildren(node as Parent);
     }
 
     case 'strong': {
       // Bold → em-dash framing for emphasis when short; plain text
       // when long (dashes would feel stilted on long bold runs).
-      const inner = (node as Parent).children.map(renderNode).join('');
+      const inner = renderChildren(node as Parent);
       if (wordCount(inner) > 5) return inner;
       return ` — ${inner.trim()} — `;
     }
 
     case 'link': {
       const ln = node as LinkNode;
-      const inner = ln.children.map(renderNode).join('').trim();
+      const inner = renderChildren(ln).trim();
       // If the visible text is a bare URL, replace; otherwise speak text only.
       if (!inner || isUrlLike(inner)) return PLACEHOLDER_LINK;
       return inner;
@@ -196,10 +217,9 @@ function renderNode(node: Node): string {
       let i = 1;
       const parts: string[] = [];
       for (const child of list.children) {
+        if (walkerState.eofReached) break;
         if (child.type !== 'listItem') continue;
-        const inner = (child as Parent).children
-          .map(renderNode)
-          .join('')
+        const inner = renderChildren(child as Parent)
           .trim()
           // Tight list items often emit their own paragraph break — collapse.
           .replace(/\n+/g, ' ')
@@ -217,10 +237,10 @@ function renderNode(node: Node): string {
 
     case 'listItem':
       // Should be consumed by the list handler; fall through if seen at root.
-      return (node as Parent).children.map(renderNode).join('');
+      return renderChildren(node as Parent);
 
     case 'blockquote': {
-      const inner = (node as Parent).children.map(renderNode).join('').trim();
+      const inner = renderChildren(node as Parent).trim();
       return inner ? `${inner}\n\n` : '';
     }
 
@@ -258,7 +278,7 @@ function renderNode(node: Node): string {
     default:
       // Unknown / generic — recurse if possible, else drop.
       if ('children' in node && Array.isArray((node as Parent).children)) {
-        return (node as Parent).children.map(renderNode).join('');
+        return renderChildren(node as Parent);
       }
       return '';
   }
@@ -267,9 +287,24 @@ function renderNode(node: Node): string {
 /** Custom MDX components — each gets a tailored narration form. */
 function renderMdxComponent(el: MdxJsxElement): string {
   const name = el.name ?? '';
-  const innerChildren = () => el.children.map(renderNode).join('').trim();
+  const innerChildren = () => renderChildren(el).trim();
 
   switch (name) {
+    // Citation-aware preprocessing (Phase 8.2.1) — strip citations
+    // entirely from narration. The post-pass cleanup squeezes out
+    // any whitespace artifacts left around stripped Cite markers.
+    case 'Cite':
+    case 'NoAudio':
+      return '';
+
+    // <ReferencesList /> is the audio EOF marker. Anything past it is
+    // explicitly excluded from narration (references, appendices,
+    // further-reading lists). The walker checks `eofReached` at every
+    // child step and short-circuits.
+    case 'ReferencesList':
+      walkerState.eofReached = true;
+      return '';
+
     case 'Figure': {
       const caption = (attrValue(el, 'caption') ?? attrValue(el, 'alt') ?? '').trim();
       return caption ? `Figure: ${caption}. ` : '';
@@ -331,6 +366,26 @@ function finalizeWhitespace(s: string): string {
   // Strip stray brackets / angle brackets the walker may have missed
   // (e.g. JSX tag names quoted in inline code: `<Figure>` → "Figure").
   out = out.replace(/[\[\]<>]/g, '');
+
+  // Citation-removal artifacts (Phase 8.2.1): stripping a <Cite> from
+  // immediately before punctuation leaves "word , next" where we want
+  // "word, next". Order matters: empty parens get squeezed out FIRST
+  // (so "(<Cite />)" doesn't leave " , " around the empty pair), then
+  // remaining whitespace-before-punctuation gets normalized.
+  out = out
+    // Empty parens left behind when "(<Cite />)" gets stripped — drop
+    // them along with one surrounding space. Won't fire on legitimate
+    // empty-pair prose because nobody types " () " on purpose.
+    .replace(/ ?\(\s*\) ?/g, ' ')
+    .replace(/\s+,/g, ',')
+    .replace(/\s+\./g, '.')
+    .replace(/\s+;/g, ';')
+    .replace(/\s+:/g, ':')
+    .replace(/\s+\?/g, '?')
+    .replace(/\s+!/g, '!')
+    .replace(/\(\s+/g, '(')
+    .replace(/\s+\)/g, ')');
+
   // Collapse 3+ spaces to 1.
   out = out.replace(/[ \t]{3,}/g, ' ');
   // Collapse 3+ newlines to 2.
@@ -364,6 +419,11 @@ export function preprocessForTTS(mdxSource: string): string {
   if (typeof data.audioReadAs === 'string' && data.audioReadAs.trim()) {
     return data.audioReadAs.trim();
   }
+
+  // Reset walker state — eofReached is module-level so each call must
+  // start fresh, especially when the script processes many posts in a
+  // single Node process (the generator's batch loop).
+  walkerState.eofReached = false;
 
   const tree = unified()
     .use(remarkParse)

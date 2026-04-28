@@ -7,6 +7,7 @@ import expressiveCode from 'astro-expressive-code';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { remarkReadingTime } from './src/lib/remark-reading-time.mjs';
+import { remarkCitations } from './src/lib/remark-citations.mjs';
 
 export default defineConfig({
   site: 'https://cyanmishra92.github.io',
@@ -48,7 +49,7 @@ export default defineConfig({
     preact({ compat: false }),
   ],
   markdown: {
-    remarkPlugins: [remarkMath, remarkReadingTime],
+    remarkPlugins: [remarkMath, remarkReadingTime, remarkCitations],
     rehypePlugins: [[rehypeKatex, { throwOnError: false, output: 'html' }]],
   },
   prefetch: {
