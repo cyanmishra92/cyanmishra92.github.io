@@ -329,6 +329,70 @@ content/blog/*.mdx  →  preprocess.ts  →  OpenAI TTS  →  MP3 chunks
 - `src/data/blog-audio.json` — slug → `{ url, duration, voice, scriptHash, ... }`. Don't edit by hand; the workflow owns it.
 - `src/components/blog/AudioPlayer.tsx` — Preact island, native `<audio>`, scrubber + speed pills + keyboard shortcuts (Space, ←/→, ↑/↓, M, 0).
 
+### Citations and references
+
+Posts with academic-style citations use three MDX components to keep the web version cite-rich while the audio version stays flowing prose.
+
+#### Inline citations
+
+```mdx
+Latency was reduced by 40% <Cite key="smith2023" /> in their implementation.
+```
+
+The web renders a numbered superscript link with a tooltip drawn from the bibliography. The audio narration drops the citation entirely and cleans up surrounding whitespace, so the sentence reads as: *"Latency was reduced by 40 percent in their implementation."* The same key reused multiple times keeps the same number both times. Numbering is per-post, in order of first appearance.
+
+#### Bibliography
+
+Add a `references` block to frontmatter, keyed by the same `key` values used in `<Cite>`:
+
+```yaml
+references:
+  smith2023:
+    authors: [Smith, J. and Lee, K.]
+    title: A study of latency in foo systems
+    venue: Foo Conference 2023
+    year: 2023
+    url: https://example.com/paper
+    doi: 10.1234/foo.2023.42
+```
+
+Fields are all optional except `authors`, `title`, `year` (which you almost always want). `url`, `doi`, and `arxivId` are picked in that priority order to render the `[link]` next to each entry.
+
+#### References section
+
+Drop `<ReferencesList />` at the end of the post body. The remark plugin renders the bibliography section there, with anchor IDs (`id="ref-<key>"`) so each `<Cite>` superscript jumps to the right entry.
+
+Two important things about `<ReferencesList />`:
+
+1. It only renders entries that were actually cited via `<Cite>`. Unused entries in your frontmatter are logged as build warnings and dropped.
+2. **It is the audio EOF marker.** Anything after `<ReferencesList />` is excluded from narration — appendices, further-reading lists, addenda are safe to put there.
+
+#### `<NoAudio>` escape hatch
+
+For non-citation content you want visible on the web but skipped in audio (deeply technical sentences, register names, bit patterns), wrap it:
+
+```mdx
+The function takes three arguments. <NoAudio>The exact ABI signature is `void (*)(int*, char[16], uint64_t)` for those interested.</NoAudio> The implementation is straightforward.
+```
+
+Audio version: *"The function takes three arguments. The implementation is straightforward."*
+
+#### `audioReadAs` (the nuclear option)
+
+If a post is so dense that auto-stripping breaks flow, write a hand-narrated version in frontmatter:
+
+```yaml
+audioReadAs: |
+  Custom narration script. This bypasses the preprocessor
+  entirely and is sent to TTS as-is.
+```
+
+Use sparingly — only when the structural markers above don't produce good results.
+
+#### Audio player caption
+
+Posts with citations get an honest caption on the audio player: *"narrated by openai tts-1-hd, voice: echo — citations omitted; see post for full references."* The same disclaimer appends to the RSS enclosure description for podcast subscribers.
+
 ## Cheatsheet
 
 ```bash

@@ -499,6 +499,100 @@
   color: rgb(var(--color-text-muted));
   font-style: italic;
 }
+
+/* ─── Citations + references (Phase 8.2.1) ────────────────────────────────
+   <Cite key="..."> renders as a numbered superscript link with a 1px
+   accent-tone border around the digits. Hover surfaces the tooltip via
+   the native `title` attribute that the remark plugin sets. Clicking
+   anchor-jumps to the corresponding entry in the references list. */
+.prose-content .cite {
+  margin-left: 0.1em;
+  font-size: 0.7em;
+  line-height: 1;
+  vertical-align: super;
+}
+.prose-content .cite a {
+  display: inline-block;
+  padding: 0 0.2em;
+  border: 1px solid rgb(var(--color-accent) / 0.5);
+  color: rgb(var(--color-accent));
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: 0;
+}
+.prose-content .cite a:hover,
+.prose-content .cite a:focus-visible {
+  background: rgb(var(--color-accent) / 0.08);
+  border-color: rgb(var(--color-accent));
+}
+.prose-content .cite-unresolved a span {
+  color: rgb(var(--color-text-muted));
+}
+
+/* References section — sits at the end of a post, mono section
+   header, numbered ordered list with hanging indent for entries. */
+.prose-content .references-list {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgb(var(--color-border));
+}
+.prose-content .references-heading {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgb(var(--color-text-muted));
+  margin: 0 0 1rem 0;
+}
+.prose-content .references-ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  counter-reset: none;
+}
+.prose-content .references-ol li.reference-entry {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-top: 1px solid rgb(var(--color-border) / 0.5);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.prose-content .references-ol li.reference-entry:first-child {
+  border-top: none;
+}
+.prose-content .reference-num {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: rgb(var(--color-accent));
+}
+.prose-content .reference-body em {
+  font-style: italic;
+  color: rgb(var(--color-text));
+}
+.prose-content .reference-link {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: rgb(var(--color-accent));
+  text-decoration: none;
+  white-space: nowrap;
+}
+.prose-content .reference-link:hover {
+  text-decoration: underline;
+}
+.prose-content .reference-back {
+  margin-left: 0.4em;
+  color: rgb(var(--color-text-muted));
+  text-decoration: none;
+  font-size: 0.85em;
+}
+.prose-content .reference-back:hover {
+  color: rgb(var(--color-accent));
+}
+
 .prose-content hr {
   margin: 2.5rem 0;
   border: none;

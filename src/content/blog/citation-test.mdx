@@ -1,0 +1,42 @@
+---
+title: Citation test
+date: 2026-04-29
+status: draft
+description: Verifying citation-aware audio preprocessing — every transformation rule in one place.
+tags: [meta, test]
+references:
+  knuth1997:
+    authors: [Donald Knuth]
+    title: The Art of Computer Programming
+    venue: Addison-Wesley
+    year: 1997
+  patterson1985:
+    authors: [David A. Patterson]
+    title: Reduced Instruction Set Computers
+    venue: Communications of the ACM
+    year: 1985
+    doi: 10.1145/2465.214917
+  hennessy2017:
+    authors: [John L. Hennessy, David A. Patterson]
+    title: Computer Architecture, A Quantitative Approach
+    venue: Morgan Kaufmann
+    year: 2017
+  unused2024:
+    authors: [Test Author]
+    title: This entry is not cited and should be dropped with a warning
+    year: 2024
+---
+
+A short test of citation-aware audio preprocessing. Knuth famously argued that premature optimization is the root of all evil <Cite key="knuth1997" />, and yet Patterson showed that careful microarchitectural choices matter enormously <Cite key="patterson1985" />.
+
+The same key reused later <Cite key="knuth1997" /> should keep the same number. Multiple citations next to each other (<Cite key="patterson1985" /> <Cite key="hennessy2017" />) should not leave whitespace artifacts in the audio.
+
+<NoAudio>
+This entire paragraph is for the web reader only. It will not appear in the audio narration. The `<NoAudio>` wrapper is the surgical escape hatch — use it when you want a sentence visible on the page but skipped by TTS.
+</NoAudio>
+
+The implementation continues normally after that.
+
+<ReferencesList />
+
+This appendix paragraph is positioned after the references section and is excluded from audio. The audio preprocessor treats `<ReferencesList />` as the EOF marker, so anything past it (further reading, errata, postscripts) stays on the web but never gets narrated.

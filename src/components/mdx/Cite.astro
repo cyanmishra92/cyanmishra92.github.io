@@ -1,0 +1,22 @@
+---
+/**
+ * Defensive fallback. The `remark-citations` plugin (wired in
+ * astro.config.mjs) rewrites every <Cite key="..." /> into raw HTML
+ * with the proper number and anchor. This component only renders if
+ * the plugin somehow didn't run (shouldn't happen in normal builds).
+ *
+ * Renders an unresolved-citation marker so the omission is visible
+ * in development — never silently empty.
+ */
+interface Props {
+  key: string;
+  page?: string;
+  prefix?: string;
+}
+
+const { key } = Astro.props;
+---
+
+<sup class="cite cite-unresolved" title={`Unresolved citation: ${key}`}>
+  [<span>?</span>]
+</sup>

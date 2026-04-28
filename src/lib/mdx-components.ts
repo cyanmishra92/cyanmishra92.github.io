@@ -14,6 +14,9 @@ import Footnote from '@components/mdx/Footnote.astro';
 import Sidenote from '@components/mdx/Sidenote.astro';
 import Quote from '@components/mdx/Quote.astro';
 import Diagram from '@components/mdx/Diagram.astro';
+import Cite from '@components/mdx/Cite.astro';
+import ReferencesList from '@components/mdx/ReferencesList.astro';
+import NoAudio from '@components/mdx/NoAudio.astro';
 
 export const mdxComponents = {
   Figure,
@@ -24,4 +27,7 @@ export const mdxComponents = {
   Sidenote,
   Quote,
   Diagram,
+  Cite,
+  ReferencesList,
+  NoAudio,
 };
