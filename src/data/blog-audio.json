@@ -1,1 +1,26 @@
-{}
+{
+  "hello-world": {
+    "url": "/audio/2347441cdc34a3e3bb3cc78b36ae2234d62017040c6e0cbfcb17fd9e3a633e4c.mp3",
+    "mirror": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/2347441cdc34a3e3bb3cc78b36ae2234d62017040c6e0cbfcb17fd9e3a633e4c.mp3",
+    "duration": 88,
+    "voice": "echo",
+    "model": "tts-1-hd",
+    "preprocessorVersion": 2,
+    "scriptHash": "2347441cdc34a3e3bb3cc78b36ae2234d62017040c6e0cbfcb17fd9e3a633e4c",
+    "scriptLength": 1444,
+    "bytes": 1761120,
+    "generatedAt": "2026-04-28T15:25:42.163Z"
+  },
+  "who-ai-is-built-for": {
+    "url": "/audio/41a5a1665dfc7303f6e1b1da7c25296e4bd5c29c8e17af0986137c30c8ec6513.mp3",
+    "mirror": "https://pub-6e3d946e7ff9418d8cad68efbb0e1594.r2.dev/audio/41a5a1665dfc7303f6e1b1da7c25296e4bd5c29c8e17af0986137c30c8ec6513.mp3",
+    "duration": 1601,
+    "voice": "echo",
+    "model": "tts-1-hd",
+    "preprocessorVersion": 2,
+    "scriptHash": "41a5a1665dfc7303f6e1b1da7c25296e4bd5c29c8e17af0986137c30c8ec6513",
+    "scriptLength": 23501,
+    "bytes": 32016000,
+    "generatedAt": "2026-04-28T15:32:21.691Z"
+  }
+}
