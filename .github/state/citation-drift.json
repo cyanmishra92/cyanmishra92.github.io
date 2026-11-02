@@ -1,12 +1,12 @@
 {
-  "lastRun": "2026-10-26T11:57:13.856Z",
+  "lastRun": "2026-11-02T14:20:08.203Z",
   "threshold": {
     "ratio": 1.2,
     "absoluteDelta": 3
   },
   "totalPapers": 23,
   "drifted": [],
-  "inSync": 6,
-  "unknown": 17,
+  "inSync": 1,
+  "unknown": 22,
   "scholarUrl": "https://scholar.google.com/citations?user=oizH-wQAAAAJ"
 }
